@@ -16,16 +16,6 @@
 <meta property="og:image" content="https://coreflowrx.com/og-image.svg">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://coreflowrx.com/og-image.svg">
-<style>
- body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;color:#1a1a1a;background:#fff;line-height:1.6}
- .skip-link{position:absolute;left:-10000px;top:0;background:#0a2540;color:#fff;padding:.75rem 1rem;z-index:1000;text-decoration:none}.skip-link:focus{left:8px;top:8px}
- .container{max-width:1180px;margin:0 auto;padding:0 1rem}
- .site-header{border-bottom:1px solid #d8dee8;background:#fff;position:sticky;top:0;z-index:50}
- .site-header__inner{display:flex;align-items:center;justify-content:space-between;padding:.75rem 0;gap:1rem}
- .brand{display:inline-flex;align-items:center;gap:.5rem;font-weight:700;color:#0a2540;text-decoration:none;font-size:1.125rem}
- .hero{padding:3rem 0;background:linear-gradient(180deg,#f5f7fa 0,#fff 100%)}
- .hero h1{font-size:2.25rem;line-height:1.15;color:#0a2540;margin:0 0 1rem}
-</style>
 <link rel="stylesheet" href="styles.css">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":["MedicalBusiness","Pharmacy"],"name":"CoreFlow Specialty Infusion","url":"https://coreflowrx.com/about.html","telephone":"(843) 884-0101","address":{"@type":"PostalAddress","streetAddress":"498 Wando Park, Suite 1004","addressLocality":"Mount Pleasant","addressRegion":"SC","postalCode":"29464","addressCountry":"US"},"areaServed":{"@type":"State","name":"South Carolina"},"openingHoursSpecification":[{"@type":"OpeningHoursSpecification","dayOfWeek":["Monday","Tuesday","Wednesday","Thursday","Friday"],"opens":"08:00","closes":"17:00"}]}
@@ -56,8 +46,7 @@
  </div>
 </header>
 <main id="main">
-<section class="hero hero--image">
- <img class="hero__bg" src="hero-about.jpg" alt="" aria-hidden="true">
+<section class="hero hero--photo" style="background-image:url('hero-about.jpg')">
  <div class="container">
  <span class="hero__eyebrow">About CoreFlow</span>
  <h1 class="hero__title">Infusion care that puts value first.</h1>
@@ -65,15 +54,14 @@
  </div>
 </section>
 
-<section class="section">
- <div class="container" style="max-width:var(--max-width-narrow)">
- <p>We are a non-compounding, non-retail specialty infusion pharmacy. We receive commercially manufactured medications, maintain them under pharmaceutical-grade cold chain conditions, and dispatch employed registered nurses to patient homes for administration. That's our model. It's specific by design.</p>
- </div>
-</section>
+<div class="featured-image" aria-hidden="true">
+ <img src="accent-iv-drip.jpg" alt="" loading="lazy">
+</div>
 
 <section class="section">
  <div class="container">
- <h2 class="section-title">Why we built CoreFlow.</h2>
+ <p class="lead">We are a non-compounding, non-retail specialty infusion pharmacy. We receive commercially manufactured medications, maintain them under pharmaceutical-grade cold chain conditions, and dispatch employed registered nurses to patient homes for administration. That's our model. It's specific by design.</p>
+ <h2 class="section-title mt-6">Why we built CoreFlow.</h2>
  <p>Prescribers referring home infusion patients in South Carolina have historically faced the same set of problems: poor communication from pharmacy partners, inconsistent nursing quality, and referral processes that create more work than they eliminate.</p>
  <p>CoreFlow was built to solve those problems specifically — not to be a retail pharmacy, not to be a staffing agency, and not to be a compounding operation. We do one thing: specialty infusion in the home, done well, in South Carolina.</p>
  <p>Our structure is intentional. Employed nurses, not contracted. Pre-manufactured medications, not compounded. One state, not a national footprint that treats South Carolina as a market segment.</p>
