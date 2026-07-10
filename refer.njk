@@ -1,0 +1,84 @@
+---
+layout: layout.njk
+title: "Refer a Patient | CoreFlow Specialty Infusion"
+description: "Submit a secure patient referral to CoreFlow Specialty Infusion online. HIPAA-compliant intake. Or fax to (843) 884-0102."
+activeNav: refer
+permalink: "/refer.html"
+---
+<section class="hero">
+ <div class="container">
+ <span class="hero__eyebrow">Refer a Patient</span>
+ <h1 class="hero__title">Submit a Referral</h1>
+ <p class="hero__lead">We confirm receipt within one business day. If the referral is urgent, call us directly at <a href="tel:{{ site.phoneTel }}"><strong>{{ site.phone }}</strong></a>.</p>
+ </div>
+</section>
+
+<section class="section">
+ <div class="container">
+ <div class="grid grid--3">
+ <div class="card"><h3>Option 1: Submit Online</h3><p>Complete our secure, HIPAA-compliant referral form below.</p><a class="btn btn--secondary" href="#form">Go to form →</a></div>
+ <div class="card"><h3>Option 2: Fax a Cover Sheet</h3><p>Download our cover sheet and fax to <strong>{{ site.fax }}</strong>.</p><a class="btn btn--secondary" href="#fax-cover" download>Download (PDF) →</a></div>
+ <div class="card"><h3>Option 3: Call Us</h3><p><strong>{{ site.phone }}</strong> · Mon–Fri, 8 AM – 5 PM ET</p><a class="btn btn--secondary" href="tel:{{ site.phoneTel }}">Call now →</a></div>
+ </div>
+ </div>
+</section>
+
+<section class="section section--soft" id="form">
+ <div class="container">
+ <div class="split">
+ <div>
+ <h2 class="section-title">Online Referral Form</h2>
+ <p>Required fields are marked. </p>
+ <!-- =========================================================
+ FORM ENDPOINT — replace action with HIPAA-compliant backend (e.g., GHL embed)
+ This is a PHI-collecting form. BAA required.
+ ========================================================= -->
+ <form class="form form--2col" action="#" method="post" novalidate>
+ <fieldset style="border:0;padding:0;margin:0">
+ <legend style="font-weight:700;color:var(--color-navy-900);margin-bottom:.5rem">Referring office</legend>
+ <div class="form__row form__row--half">
+ <div class="form__row"><label for="r-prescriber">Prescriber name <span class="required" aria-hidden="true">*</span></label><input id="r-prescriber" name="prescriber" type="text" required></div>
+ <div class="form__row"><label for="r-npi">Prescriber NPI</label><input id="r-npi" name="npi" type="text" inputmode="numeric"></div>
+ </div>
+ <div class="form__row form__row--half">
+ <div class="form__row"><label for="r-office">Office / Clinic <span class="required" aria-hidden="true">*</span></label><input id="r-office" name="office" type="text" required autocomplete="organization"></div>
+ <div class="form__row"><label for="r-contact">Office contact name</label><input id="r-contact" name="contact_name" type="text" autocomplete="name"></div>
+ </div>
+ <div class="form__row form__row--half">
+ <div class="form__row"><label for="r-phone">Office phone <span class="required" aria-hidden="true">*</span></label><input id="r-phone" name="office_phone" type="tel" required autocomplete="tel"></div>
+ <div class="form__row"><label for="r-fax">Office fax</label><input id="r-fax" name="office_fax" type="tel"></div>
+ </div>
+ </fieldset>
+ <fieldset style="border:0;padding:0;margin:0">
+ <legend style="font-weight:700;color:var(--color-navy-900);margin-bottom:.5rem">Patient</legend>
+ <div class="form__row form__row--half">
+ <div class="form__row"><label for="p-name">Patient name <span class="required" aria-hidden="true">*</span></label><input id="p-name" name="patient_name" type="text" required></div>
+ <div class="form__row"><label for="p-dob">Date of birth <span class="required" aria-hidden="true">*</span></label><input id="p-dob" name="patient_dob" type="text" placeholder="MM/DD/YYYY" required></div>
+ </div>
+ <div class="form__row form__row--half">
+ <div class="form__row"><label for="p-phone">Patient phone</label><input id="p-phone" name="patient_phone" type="tel"></div>
+ <div class="form__row"><label for="p-zip">Patient ZIP <span class="required" aria-hidden="true">*</span></label><input id="p-zip" name="patient_zip" type="text" inputmode="numeric" required autocomplete="postal-code"></div>
+ </div>
+ <div class="form__row"><label for="p-dx">Diagnosis (ICD-10) <span class="required" aria-hidden="true">*</span></label><input id="p-dx" name="diagnosis" type="text" required></div>
+ <div class="form__row"><label for="p-therapy">Requested therapy / medication</label><input id="p-therapy" name="therapy" type="text"></div>
+ <div class="form__row"><label for="p-insurance">Primary insurance</label><input id="p-insurance" name="insurance" type="text"></div>
+ <div class="form__row"><label for="p-notes">Clinical notes / urgency</label><textarea id="p-notes" name="notes"></textarea></div>
+ </fieldset>
+ <div><button class="btn btn--primary" type="submit">Submit Referral →</button></div>
+ <p class="footnote mb-0">By submitting, you confirm authorization to share PHI with CoreFlow for the purposes of treatment coordination under HIPAA.</p>
+ </form>
+ </div>
+ <aside aria-label="Clinical intake contact">
+ <div class="card">
+ <h3>CoreFlow Clinical Intake</h3>
+ <p><strong>{{ site.phone }}</strong><br>Fax <strong>{{ site.fax }}</strong><br>Mon–Fri, 8 AM – 5 PM ET</p>
+ <p class="footnote">For urgent clinical matters outside business hours, call {{ site.phone }} and follow the prompts. </p>
+ <hr>
+ <address style="font-style:normal">{{ site.address.street }}<br>{{ site.address.city }}, {{ site.address.state }} {{ site.address.zip }}</address>
+ <a class="btn btn--secondary" href="#fax-cover" download>Download Fax Cover Sheet →</a>
+ </div>
+ </aside>
+ </div>
+ <p id="fax-cover" class="footnote mt-6"></p>
+ </div>
+</section>

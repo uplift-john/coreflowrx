@@ -1,48 +1,12 @@
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>For Prescribers | CoreFlow Specialty Infusion | Home Infusion Referrals SC</title>
-<meta name="description" content="Refer home infusion patients in South Carolina with confidence. Credentialed RNs, HIPAA-secure intake, clinical documentation you can trust.">
-<meta name="theme-color" content="#0a2540">
-<link rel="canonical" href="https://coreflowrx.com/providers.html">
-<link rel="icon" href="favicon.svg" type="image/svg+xml">
-<meta property="og:type" content="website">
-<meta property="og:title" content="For Prescribers | CoreFlow Specialty Infusion">
-<meta property="og:description" content="Refer home infusion patients in South Carolina with confidence.">
-<meta property="og:url" content="https://coreflowrx.com/providers.html">
-<meta property="og:image" content="https://coreflowrx.com/logo-stacked-color.png">
-<meta name="twitter:card" content="summary_large_image">
-<link rel="stylesheet" href="styles.css">
-<script type="application/ld+json">
-{"@context":"https://schema.org","@type":["MedicalBusiness","Pharmacy"],"name":"CoreFlow Specialty Infusion","url":"https://coreflowrx.com/providers.html","telephone":"(843) 884-0101","address":{"@type":"PostalAddress","streetAddress":"1205 Two Island Court, Suite 202","addressLocality":"Mount Pleasant","addressRegion":"SC","postalCode":"29466","addressCountry":"US"},"areaServed":{"@type":"State","name":"South Carolina"},"openingHoursSpecification":[{"@type":"OpeningHoursSpecification","dayOfWeek":["Monday","Tuesday","Wednesday","Thursday","Friday"],"opens":"08:00","closes":"17:00"}]}
-</script>
-</head>
-<body>
-<a href="#main" class="skip-link">Skip to main content</a>
-<header class="site-header">
- <div class="container site-header__inner">
- <a class="brand" href="index.html" aria-label="CoreFlow Specialty Infusion — Home"><img class="brand__mark" src="logo-horizontal-color.png" alt="CoreFlow Specialty Infusion" height="46"></a>
- <div>
- <a class="header-phone" href="tel:8438840101">(843) 884-0101</a>
- <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Open menu" onclick="var n=document.getElementById('primary-nav');var open=n.classList.toggle('is-open');this.setAttribute('aria-expanded',open);this.setAttribute('aria-label',open?'Close menu':'Open menu');"><span class="nav-toggle__icon" aria-hidden="true"></span></button>
- </div>
- <nav class="primary-nav" id="primary-nav" aria-label="Primary">
- <ul class="primary-nav__list">
- <li><a href="providers.html" aria-current="page">For Prescribers</a></li>
- <li><a href="patients.html">For Patients</a></li>
- <li><a href="payers.html">For Payers</a></li>
- <li><a href="about.html">About</a></li>
- <li><a href="careers.html">Careers</a></li>
- <li><a href="contact.html">Contact</a></li>
- <li><a class="btn btn--primary" href="refer.html">Refer a Patient →</a></li>
- </ul>
- </nav>
- </div>
-</header>
-<main id="main">
-
+---
+layout: layout.njk
+title: "For Prescribers | CoreFlow Specialty Infusion | Home Infusion Referrals SC"
+description: "Refer home infusion patients in South Carolina with confidence. Credentialed RNs, HIPAA-secure intake, clinical documentation you can trust."
+ogTitle: "For Prescribers | CoreFlow Specialty Infusion"
+ogDescription: "Refer home infusion patients in South Carolina with confidence."
+activeNav: providers
+permalink: "/providers.html"
+---
 <section class="hero hero--photo" style="background-image:url('hero-providers.jpg')">
  <div class="container">
  <span class="hero__eyebrow">For Prescribers</span>
@@ -68,8 +32,8 @@
  <p class="lead">Choose whichever fits your workflow. All three reach the same clinical intake team.</p>
  <div class="grid grid--3 mt-6">
  <div class="card"><h3>Online</h3><p>Submit a secure, HIPAA-compliant referral form at coreflowrx.com/refer. Confirmation within one business day.</p><a class="btn btn--secondary" href="refer.html">Submit Online →</a></div>
- <div class="card"><h3>Fax</h3><p>Download our referral cover sheet and fax to <strong>(843) 884-0102</strong>. Include current orders, diagnosis, and insurance information.</p><a class="btn btn--secondary" href="refer.html#fax-cover">Download Cover Sheet →</a></div>
- <div class="card"><h3>Phone</h3><p><strong>(843) 884-0101</strong><br>Mon–Fri, 8 AM – 5 PM ET<br>For urgent or time-sensitive referrals.</p><a class="btn btn--secondary" href="tel:8438840101">Call now →</a></div>
+ <div class="card"><h3>Fax</h3><p>Download our referral cover sheet and fax to <strong>{{ site.fax }}</strong>. Include current orders, diagnosis, and insurance information.</p><a class="btn btn--secondary" href="refer.html#fax-cover">Download Cover Sheet →</a></div>
+ <div class="card"><h3>Phone</h3><p><strong>{{ site.phone }}</strong><br>Mon–Fri, 8 AM – 5 PM ET<br>For urgent or time-sensitive referrals.</p><a class="btn btn--secondary" href="tel:{{ site.phoneTel }}">Call now →</a></div>
  </div>
  </div>
 </section>
@@ -173,7 +137,7 @@
  <div class="card"><h3>Rheumatology and immunology</h3><p>Biologic infusions for appropriate indications per your prescribing authority and plan coverage.</p></div>
  <div class="card"><h3>Hydration and supportive care</h3><p>IV hydration for hyperemesis gravidarum, Crohn's disease, and post-surgical dehydration.</p></div>
  </div>
- <p class="footnote mt-4"><em>All therapies subject to formulary availability and payer authorization. Call (843) 884-0101 to confirm prior to referral.</em></p>
+ <p class="footnote mt-4"><em>All therapies subject to formulary availability and payer authorization. Call {{ site.phone }} to confirm prior to referral.</em></p>
  </div>
 </section>
 
@@ -183,26 +147,8 @@
  <p>Submit online, fax, or call — whichever works best for your office.</p>
  <div class="cta-row" style="justify-content:center">
  <a class="btn btn--primary" href="refer.html">Refer a Patient →</a>
- <a class="btn btn--secondary" href="tel:8438840101">Call (843) 884-0101 →</a>
+ <a class="btn btn--secondary" href="tel:{{ site.phoneTel }}">Call {{ site.phone }} →</a>
  </div>
- <p class="mt-4">Fax <strong>(843) 884-0102</strong> · Mon–Fri, 8 AM – 5 PM ET</p>
+ <p class="mt-4">Fax <strong>{{ site.fax }}</strong> · Mon–Fri, 8 AM – 5 PM ET</p>
  </div>
 </section>
-
-</main>
-<footer class="site-footer">
- <div class="container">
- <div class="site-footer__grid">
- <div>
- <h2 style="font-size:1.125rem">CoreFlow Specialty Infusion</h2>
- <address>1205 Two Island Court, Suite 202<br>Mount Pleasant, SC 29466<br><a href="tel:8438840101">(843) 884-0101</a> · Fax (843) 884-0102<br>Mon–Fri, 8 AM – 5 PM ET</address>
- </div>
- <nav aria-label="Prescribers"><h3 style="font-size:1rem">Prescribers</h3><ul><li><a href="refer.html">Refer a Patient</a></li><li><a href="providers.html">For Prescribers</a></li><li><a href="payers.html">For Payers</a></li></ul></nav>
- <nav aria-label="Patients"><h3 style="font-size:1rem">Patients</h3><ul><li><a href="patients.html">For Patients &amp; Caregivers</a></li><li><a href="contact.html">Contact</a></li></ul></nav>
- <nav aria-label="Company"><h3 style="font-size:1rem">Company</h3><ul><li><a href="about.html">About</a></li><li><a href="careers.html">Careers</a></li><li><a href="privacy.html">Privacy</a></li><li><a href="non-discrimination.html">Non-Discrimination</a></li><li><a href="accessibility.html">Accessibility</a></li></ul></nav>
- </div>
- <p class="site-footer__legal">© 2026 CoreFlow Specialty Infusion. All rights reserved.<br>Licensed by the South Carolina Board of Pharmacy · Permit #PH-042891</p>
- </div>
-</footer>
-</body>
-</html>

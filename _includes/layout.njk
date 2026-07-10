@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{{ title }}</title>
+<meta name="description" content="{{ description }}">
+<meta name="theme-color" content="{{ site.themeColor }}">
+<link rel="canonical" href="{{ site.url }}{{ page.url }}">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="favicon.svg">
+<meta property="og:type" content="website">
+<meta property="og:title" content="{{ ogTitle or title }}">
+<meta property="og:description" content="{{ ogDescription or description }}">
+<meta property="og:url" content="{{ site.url }}{{ page.url }}">
+<meta property="og:image" content="{{ site.ogImage }}">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="{{ site.ogImage }}">
+<style>
+ body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;color:#1a1a1a;background:#fff;line-height:1.6}
+ .skip-link{position:absolute;left:-10000px;top:0;background:#0a2540;color:#fff;padding:.75rem 1rem;z-index:1000;text-decoration:none}.skip-link:focus{left:8px;top:8px}
+ .container{max-width:1180px;margin:0 auto;padding:0 1rem}
+ .site-header{border-bottom:1px solid #d8dee8;background:#fff;position:sticky;top:0;z-index:50}
+ .site-header__inner{display:flex;align-items:center;justify-content:space-between;padding:.75rem 0;gap:1rem}
+ .brand{display:inline-flex;align-items:center;gap:.5rem;font-weight:700;color:#0a2540;text-decoration:none;font-size:1.125rem}
+ .hero{padding:3rem 0;background:linear-gradient(180deg,#f5f7fa 0,#fff 100%)}
+ .hero h1{font-size:2.25rem;line-height:1.15;color:#0a2540;margin:0 0 1rem}
+</style>
+<link rel="stylesheet" href="styles.css">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":["MedicalBusiness","Pharmacy"],"name":"{{ site.name }}","url":"{{ site.url }}{{ page.url }}","telephone":"{{ site.phone }}","address":{"@type":"PostalAddress","streetAddress":"{{ site.address.street }}","addressLocality":"{{ site.address.city }}","addressRegion":"{{ site.address.state }}","postalCode":"{{ site.address.zip }}","addressCountry":"US"},"areaServed":{"@type":"State","name":"South Carolina"},"openingHoursSpecification":[{"@type":"OpeningHoursSpecification","dayOfWeek":["Monday","Tuesday","Wednesday","Thursday","Friday"],"opens":"08:00","closes":"17:00"}]}
+</script>
+<!-- ANALYTICS — Plausible (swap-in spot) -->
+<!-- <script defer data-domain="coreflowrx.com" src="https://plausible.io/js/script.js"></script> -->
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to main content</a>
+<header class="site-header">
+ <div class="container site-header__inner">
+ <a class="brand" href="index.html" aria-label="{{ site.name }} — Home"{% if activeNav == "home" %} aria-current="page"{% endif %}><img class="brand__mark" src="{{ site.logo }}" alt="{{ site.name }}" height="46"></a>
+ <div>
+ <a class="header-phone" href="tel:{{ site.phoneTel }}">{{ site.phone }}</a>
+ <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Open menu" onclick="var n=document.getElementById('primary-nav');var open=n.classList.toggle('is-open');this.setAttribute('aria-expanded',open);this.setAttribute('aria-label',open?'Close menu':'Open menu');"><span class="nav-toggle__icon" aria-hidden="true"></span></button>
+ </div>
+ <nav class="primary-nav" id="primary-nav" aria-label="Primary">
+ <ul class="primary-nav__list">
+ <li><a href="providers.html"{% if activeNav == "providers" %} aria-current="page"{% endif %}>For Prescribers</a></li>
+ <li><a href="patients.html"{% if activeNav == "patients" %} aria-current="page"{% endif %}>For Patients</a></li>
+ <li><a href="payers.html"{% if activeNav == "payers" %} aria-current="page"{% endif %}>For Payers</a></li>
+ <li><a href="about.html"{% if activeNav == "about" %} aria-current="page"{% endif %}>About</a></li>
+ <li><a href="careers.html"{% if activeNav == "careers" %} aria-current="page"{% endif %}>Careers</a></li>
+ <li><a href="contact.html"{% if activeNav == "contact" %} aria-current="page"{% endif %}>Contact</a></li>
+ <li><a class="btn btn--primary" href="refer.html"{% if activeNav == "refer" %} aria-current="page"{% endif %}>Refer a Patient →</a></li>
+ </ul>
+ </nav>
+ </div>
+</header>
+<main id="main">
+{{ content | safe }}
+</main>
+<footer class="site-footer">
+ <div class="container">
+ <div class="site-footer__grid">
+ <div>
+ <h2 style="font-size:1.125rem">{{ site.name }}</h2>
+ <address>{{ site.address.street }}<br>{{ site.address.city }}, {{ site.address.state }} {{ site.address.zip }}<br><a href="tel:{{ site.phoneTel }}">{{ site.phone }}</a> · Fax {{ site.fax }}<br>{{ site.hours }}</address>
+ </div>
+ <nav aria-label="Prescribers"><h3 style="font-size:1rem">Prescribers</h3><ul><li><a href="refer.html">Refer a Patient</a></li><li><a href="providers.html">For Prescribers</a></li><li><a href="payers.html">For Payers</a></li></ul></nav>
+ <nav aria-label="Patients"><h3 style="font-size:1rem">Patients</h3><ul><li><a href="patients.html">For Patients &amp; Caregivers</a></li><li><a href="contact.html">Contact</a></li></ul></nav>
+ <nav aria-label="Company"><h3 style="font-size:1rem">Company</h3><ul><li><a href="about.html">About</a></li><li><a href="careers.html">Careers</a></li><li><a href="privacy.html">Privacy</a></li><li><a href="non-discrimination.html">Non-Discrimination</a></li><li><a href="accessibility.html">Accessibility</a></li></ul></nav>
+ </div>
+ <p class="site-footer__legal">© 2026 {{ site.name }}. All rights reserved.<br>{{ site.legalLine }}</p>
+ </div>
+</footer>
+</body>
+</html>

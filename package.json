@@ -1,0 +1,13 @@
+{
+  "name": "coreflow-rx",
+  "version": "1.0.0",
+  "description": "CoreFlow Specialty Infusion marketing site, built with Eleventy.",
+  "private": true,
+  "scripts": {
+    "build": "eleventy",
+    "serve": "eleventy --serve"
+  },
+  "devDependencies": {
+    "@11ty/eleventy": "^3.0.0"
+  }
+}

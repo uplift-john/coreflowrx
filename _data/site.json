@@ -1,0 +1,19 @@
+{
+  "name": "CoreFlow Specialty Infusion",
+  "url": "https://coreflowrx.com",
+  "phone": "(843) 884-0101",
+  "phoneTel": "8438840101",
+  "fax": "(843) 884-0102",
+  "hours": "Mon–Fri, 8 AM – 5 PM ET",
+  "themeColor": "#0a2540",
+  "logo": "logo-horizontal-color.png",
+  "ogImage": "https://coreflowrx.com/logo-stacked-color.png",
+  "ceo": "Jason Clapsaddle",
+  "address": {
+    "street": "1205 Two Island Court, Suite 202",
+    "city": "Mount Pleasant",
+    "state": "SC",
+    "zip": "29466"
+  },
+  "legalLine": "Licensed by the South Carolina Board of Pharmacy · Permit #PH-042891"
+}
