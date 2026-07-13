@@ -28,7 +28,7 @@ MUSC has authorized the relationship. User-approved wording (John, 2026-07-13):
 
 1. Homepage proof bar: "**Trusted by MUSC Health** — Selected as a home infusion partner by South Carolina's academic medical center."
 2. About narrative: "That commitment is part of why MUSC Health trusts CoreFlow as a home infusion partner and why we hold ourselves to the standards a health system of that caliber expects."
-3. About callout: "A trusted MUSC Health home infusion partner" + "CoreFlow works with MUSC Health as a trusted home infusion partner. That trust reflects the clinical standards, communication, and reliability we bring to every referral." (Items 2–3 authored by John in Claude Design; their TODO comments are retained pending FINAL MUSC/legal sign-off.)
+3. About callout: "A trusted MUSC Health home infusion partner" + "CoreFlow works with MUSC Health as a trusted home infusion partner. That trust reflects the clinical standards, communication, and reliability we bring to every referral." (All three confirmed final by John, 2026-07-13.)
 
 - **FAIL** if any other specific MUSC claim ships, e.g.: `chose CoreFlow`, `Chosen by MUSC Health`, `preferred home infusion partner for MUSC Health`, or any concrete MUSC phrasing beyond the sentences above.
   - Suggested: `grep -rniE "musc" _site/` and inspect every hit.
@@ -38,6 +38,8 @@ MUSC has authorized the relationship. User-approved wording (John, 2026-07-13):
 - Every fictional/sample testimonial — on **both** the patients and providers pages — must carry a visible HTML-comment flag marking it as SAMPLE / NOT a real quote / replace before launch. FAIL if any attributed quote lacks the flag.
 - No placeholder credentialing data may go live. **FAIL** on: dummy `1234567890` NPI/NCPDP values, an incomplete permit number (e.g. `Permit Add #`), or garbled/placeholder payer names (e.g. `HITS, IRN, MHITS`). These must be replaced with real, confirmed values or withheld behind "available upon request".
   - Suggested: `grep -rniE "1234567890|permit add #|HITS, IRN, MHITS" _site/`
+- Staff names are withheld until CoreFlow is ready to publish them (John, 2026-07-13): every clinician/officer listing must use the `[NAME]` placeholder, keeping real credentials/titles. The CEO (Jason Clapsaddle) is the only publishable name. **FAIL** if the old fictional names appear anywhere — they were on providers, about, AND privacy (Privacy Officer), so sweep every page, not just team sections.
+  - Suggested: `grep -rniE "Sarah Mitchell|Rachel Simmons" _site/`
 
 ## Check 5 — Geography guardrail
 CoreFlow is filing additional state licenses; do not lock the brand to one state or name out-of-state markets publicly.
