@@ -1,3 +1,7 @@
 docs/
 .claude/
 design-export/
+functions/
+scripts/
+.dev.vars
+.dev.vars.example

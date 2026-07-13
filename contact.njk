@@ -33,10 +33,13 @@ permalink: "/contact.html"
  <div class="container container--narrow">
  <h2 class="section-title">Send us a message.</h2>
  <!-- =========================================================
- FORM ENDPOINT — replace action with your backend / Formspree / Netlify Forms
+ FORM ENDPOINT — POSTs to /api/lead (Cloudflare Pages Function → GoHighLevel).
  No PHI collected on this form.
+ JS enhances with inline success/error; without JS the endpoint 303-redirects
+ to /thanks.html.
  ========================================================= -->
- <form class="form" action="#" method="post" novalidate>
+ <form class="form" action="/api/lead" method="post" data-lead-form="contact" data-thanks-message="We respond to general inquiries within two business days.">
+ <input type="hidden" name="form" value="contact">
  <div class="form__row"><label for="c-name">Full name <span class="required" aria-hidden="true">*</span></label><input id="c-name" name="name" type="text" required autocomplete="name"></div>
  <div class="form__row"><label for="c-email">Email address <span class="required" aria-hidden="true">*</span></label><input id="c-email" name="email" type="email" required autocomplete="email"></div>
  <div class="form__row"><label for="c-phone">Phone number</label><input id="c-phone" name="phone" type="tel" autocomplete="tel"></div>
@@ -44,8 +47,13 @@ permalink: "/contact.html"
  <select id="c-role" name="role"><option>Patient or caregiver</option><option>Prescriber or office staff</option><option>Payer or health plan</option><option>Job applicant</option><option>Other</option></select>
  </div>
  <div class="form__row"><label for="c-msg">Message <span class="required" aria-hidden="true">*</span></label><textarea id="c-msg" name="message" required></textarea></div>
+ <div class="visually-hidden" aria-hidden="true">
+ <label for="c-website">Leave this field empty</label>
+ <input id="c-website" name="website" type="text" tabindex="-1" autocomplete="off">
+ </div>
  <div><button class="btn btn--primary" type="submit">Submit Your Message →</button></div>
  </form>
+ {% include "form-enhance.njk" %}
  <p class="mt-4">We respond to general inquiries within two business days. For urgent clinical matters, please call <a href="tel:{{ site.phoneTel }}">{{ site.phone }}</a>.</p>
  </div>
 </section>

@@ -1,0 +1,8 @@
+# Copy to .dev.vars (git-ignored) for local `wrangler pages dev`.
+# Production: set as Cloudflare Pages secrets instead:
+#   npx wrangler pages secret put GHL_TOKEN --project-name <pages-project>
+#   npx wrangler pages secret put GHL_LOCATION_ID --project-name <pages-project>
+# GHL_TOKEN is a GoHighLevel *Private Integration* token with scopes:
+#   contacts.write, locations/customFields.readonly, locations/customFields.write
+GHL_TOKEN="your-private-integration-token-here"
+GHL_LOCATION_ID="your-ghl-location-id-here"

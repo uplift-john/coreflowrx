@@ -42,10 +42,13 @@ permalink: "/careers.html"
  <div class="container container--narrow">
  <h2 class="section-title">Apply or send us your information.</h2>
  <!-- =========================================================
- FORM ENDPOINT — replace action with your backend / Formspree / Netlify Forms
+ FORM ENDPOINT — POSTs to /api/lead (Cloudflare Pages Function → GoHighLevel).
  No PHI collected. Do not collect SSN or other sensitive identifiers.
+ JS enhances with inline success/error; without JS the endpoint 303-redirects
+ to /thanks.html.
  ========================================================= -->
- <form class="form" action="#" method="post" novalidate>
+ <form class="form" action="/api/lead" method="post" data-lead-form="careers" data-thanks-message="We review every submission. If your background matches a current or upcoming need, we'll be in touch.">
+ <input type="hidden" name="form" value="careers">
  <div class="form__row"><label for="ap-name">Full name <span class="required" aria-hidden="true">*</span></label><input id="ap-name" name="name" type="text" required autocomplete="name"></div>
  <div class="form__row"><label for="ap-email">Email address <span class="required" aria-hidden="true">*</span></label><input id="ap-email" name="email" type="email" required autocomplete="email"></div>
  <div class="form__row"><label for="ap-phone">Phone number</label><input id="ap-phone" name="phone" type="tel" autocomplete="tel"></div>
@@ -58,8 +61,13 @@ permalink: "/careers.html"
  </div>
  <div class="form__row"><label for="ap-source">How did you hear about CoreFlow?</label><input id="ap-source" name="source" type="text"></div>
  <div class="form__row"><label for="ap-msg">Brief message (optional)</label><textarea id="ap-msg" name="message"></textarea></div>
+ <div class="visually-hidden" aria-hidden="true">
+ <label for="ap-website">Leave this field empty</label>
+ <input id="ap-website" name="website" type="text" tabindex="-1" autocomplete="off">
+ </div>
  <div><button class="btn btn--primary" type="submit">Submit Your Application →</button></div>
  </form>
+ {% include "form-enhance.njk" %}
  <p class="mt-4">We review every submission. If your background matches a current or upcoming need, we'll be in touch.</p>
  </div>
 </section>

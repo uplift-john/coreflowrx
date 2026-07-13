@@ -1,0 +1,66 @@
+{# Shared progressive-enhancement for the NON-PHI lead forms (payer/careers/contact).
+   Intercepts submit on form[data-lead-form], POSTs JSON to /api/lead, and shows
+   inline success/error. With JS off, the form posts url-encoded to /api/lead and
+   the endpoint 303-redirects to /thanks.html — no JS required.
+   PHI note: the referral form (refer.njk) must NOT use this include — GHL has no BAA. #}
+<script>
+(function () {
+  "use strict";
+  var form = document.querySelector("form[data-lead-form]");
+  if (!form || !window.fetch) return;
+
+  var status = document.createElement("p");
+  status.className = "form-status";
+  status.setAttribute("role", "status");
+  status.setAttribute("aria-live", "polite");
+  form.appendChild(status);
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var button = form.querySelector('button[type="submit"]');
+    var data = { form: form.getAttribute("data-lead-form") };
+    new FormData(form).forEach(function (value, key) {
+      if (typeof value === "string") data[key] = value;
+    });
+
+    // Native validation first
+    if (!form.checkValidity || !form.checkValidity()) {
+      if (form.reportValidity) form.reportValidity();
+      return;
+    }
+
+    status.textContent = "Sending…";
+    status.style.color = "";
+    if (button) button.disabled = true;
+
+    fetch("/api/lead", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      body: JSON.stringify(data)
+    })
+      .then(function (resp) { return resp.json().catch(function () { return {}; }).then(function (body) { return { resp: resp, body: body }; }); })
+      .then(function (r) {
+        if (r.resp.ok && r.body.ok) {
+          var thanks = document.createElement("div");
+          thanks.className = "card";
+          thanks.setAttribute("role", "status");
+          thanks.innerHTML = "<h3>Thank you — we received your submission.</h3><p>" +
+            (form.getAttribute("data-thanks-message") || "A member of our team will respond within two business days.") + "</p>";
+          form.parentNode.replaceChild(thanks, form);
+          thanks.focus && thanks.setAttribute("tabindex", "-1");
+          thanks.focus();
+        } else {
+          status.textContent = (r.body && r.body.error) ||
+            "Something went wrong sending your message. Please try again, or call us instead.";
+          status.style.color = "#b00020";
+          if (button) button.disabled = false;
+        }
+      })
+      .catch(function () {
+        status.textContent = "Something went wrong sending your message. Please try again, or call us instead.";
+        status.style.color = "#b00020";
+        if (button) button.disabled = false;
+      });
+  });
+})();
+</script>

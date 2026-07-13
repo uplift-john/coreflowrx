@@ -30,8 +30,17 @@ permalink: "/refer.html"
  <h2 class="section-title">Online Referral Form</h2>
  <p>Required fields are marked. </p>
  <!-- =========================================================
- FORM ENDPOINT — replace action with HIPAA-compliant backend (e.g., GHL embed)
- This is a PHI-collecting form. BAA required.
+ ⚠ PHI FORM — DO NOT CONNECT TO GOHIGHLEVEL OR /api/lead ⚠
+ This form collects PHI (patient name, DOB, ZIP, diagnosis/ICD-10,
+ clinical notes). GoHighLevel has NO signed BAA for this account, so
+ submissions must never be sent to GHL or any other non-BAA endpoint.
+ The submission is intentionally left gated (action="#": it goes nowhere).
+ Referrals currently arrive via secure fax and phone (listed on this page).
+ TODO (John to decide — see forms/ghl-integration PR report):
+   (a) keep referrals fax/phone only, or
+   (b) convert this page to a NON-PHI "request a referral packet /
+       callback" prescriber lead (prescriber contact info only), or
+   (c) embed a BAA-covered HIPAA intake tool for full online referrals.
  ========================================================= -->
  <form class="form form--2col" action="#" method="post" novalidate>
  <fieldset style="border:0;padding:0;margin:0">

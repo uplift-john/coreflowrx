@@ -61,10 +61,13 @@ permalink: "/payers.html"
  <h2 class="section-title">Inquire about network participation.</h2>
  <p>Complete the form below and a member of our team will respond within two business days.</p>
  <!-- =========================================================
- FORM ENDPOINT — replace action with your backend / Formspree / Netlify Forms
+ FORM ENDPOINT — POSTs to /api/lead (Cloudflare Pages Function → GoHighLevel).
  No PHI is collected on this form; HIPAA BAA not required.
+ JS enhances with inline success/error; without JS the endpoint 303-redirects
+ to /thanks.html.
  ========================================================= -->
- <form class="form form--2col" action="#" method="post" novalidate>
+ <form class="form form--2col" action="/api/lead" method="post" data-lead-form="payer" data-thanks-message="A member of our credentialing team will respond within two business days.">
+ <input type="hidden" name="form" value="payer">
  <div class="form__row form__row--half">
  <div class="form__row"><label for="payer-org">Organization name <span class="required" aria-hidden="true">*</span></label><input id="payer-org" name="organization" type="text" required autocomplete="organization"></div>
  <div class="form__row"><label for="payer-name">Contact name <span class="required" aria-hidden="true">*</span></label><input id="payer-name" name="name" type="text" required autocomplete="name"></div>
@@ -83,8 +86,13 @@ permalink: "/payers.html"
  <select id="payer-nature" name="inquiry_type"><option>Network participation</option><option>Credentialing</option><option>Clinical information</option><option>Other</option></select>
  </div>
  <div class="form__row"><label for="payer-message">Message (optional)</label><textarea id="payer-message" name="message"></textarea></div>
+ <div class="visually-hidden" aria-hidden="true">
+ <label for="payer-website">Leave this field empty</label>
+ <input id="payer-website" name="website" type="text" tabindex="-1" autocomplete="off">
+ </div>
  <div><button class="btn btn--primary" type="submit">Submit Network Inquiry →</button></div>
  </form>
+ {% include "form-enhance.njk" %}
  </div>
 </section>
 
