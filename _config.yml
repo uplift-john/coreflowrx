@@ -1,0 +1,12 @@
+# GitHub Pages (Jekyll) config — this repo's Pages deployment is vestigial
+# (the real site is built by Eleventy on Cloudflare). Its only job is to
+# make sure internal files are never published. Consider disabling Pages
+# entirely in the repo settings.
+exclude:
+  - docs/
+  - .claude/
+  - design-export/
+  - node_modules/
+  - _includes/
+  - _data/
+  - _site/

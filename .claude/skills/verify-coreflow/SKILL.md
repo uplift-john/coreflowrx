@@ -16,7 +16,7 @@ Run `npx @11ty/eleventy`. Requires zero errors and zero broken templates. The si
 CoreFlow is **pre-launch and pursuing** URAC Specialty Pharmacy v5.0 and ACHC IRX-NO797 — it does **not** hold them.
 
 - **FAIL** if any present-tense accreditation claim appears, e.g.: `dual-accredited`, `Accreditation awarded`, `Dual accreditation awarded`, `Accredited under URAC`, `URAC & ACHC Accredited` (when not qualified by "pursuing").
-  - Suggested: `grep -rniE "dual-accredited|accreditation awarded|accredited under (urac|achc)|urac & achc accredited" _site/`
+  - Suggested: `grep -rniE "dual-accredited|accreditation awarded|accredited under (urac|achc)|urac (&|&amp;) achc accredited" _site/` (built HTML encodes `&` as `&amp;` — always grep both forms)
 - **PASS** requires, on every page that mentions accreditation:
   1. The claim is phrased as **pursuing** URAC/ACHC, **and**
   2. an anticipated timeframe of **Q4 2026** is present, **and**
@@ -24,16 +24,22 @@ CoreFlow is **pre-launch and pursuing** URAC Specialty Pharmacy v5.0 and ACHC IR
   - Suggested: confirm every file under `_site/` that matches `URAC|ACHC` also contains the disclaimer string.
 
 ## Check 3 — MUSC placeholder
-MUSC has authorized the relationship but the exact public wording is TBD.
+MUSC has authorized the relationship. User-approved wording (John, 2026-07-13):
 
-- **FAIL** if any specific MUSC claim ships, e.g.: `chose CoreFlow`, `Chosen by MUSC Health`, `preferred home infusion partner for MUSC Health`, or any other concrete MUSC phrasing.
+1. Homepage proof bar: "**Trusted by MUSC Health** — Selected as a home infusion partner by South Carolina's academic medical center."
+2. About narrative: "That commitment is part of why MUSC Health trusts CoreFlow as a home infusion partner and why we hold ourselves to the standards a health system of that caliber expects."
+3. About callout: "A trusted MUSC Health home infusion partner" + "CoreFlow works with MUSC Health as a trusted home infusion partner. That trust reflects the clinical standards, communication, and reliability we bring to every referral." (All three confirmed final by John, 2026-07-13.)
+
+- **FAIL** if any other specific MUSC claim ships, e.g.: `chose CoreFlow`, `Chosen by MUSC Health`, `preferred home infusion partner for MUSC Health`, or any concrete MUSC phrasing beyond the sentences above.
   - Suggested: `grep -rniE "musc" _site/` and inspect every hit.
-- **PASS** requires every such claim to be the literal token **`[MUSC_RELATIONSHIP_LANGUAGE]`** until official wording is confirmed. The token may remain visible in the built HTML on purpose.
+- **PASS** requires every MUSC mention to be either (a) one of the approved sentences verbatim, or (b) the literal token **`[MUSC_RELATIONSHIP_LANGUAGE]`** where wording is still pending (providers intro + callout, payers card). The token may remain visible in the built HTML on purpose.
 
 ## Check 4 — Legal flags
 - Every fictional/sample testimonial — on **both** the patients and providers pages — must carry a visible HTML-comment flag marking it as SAMPLE / NOT a real quote / replace before launch. FAIL if any attributed quote lacks the flag.
 - No placeholder credentialing data may go live. **FAIL** on: dummy `1234567890` NPI/NCPDP values, an incomplete permit number (e.g. `Permit Add #`), or garbled/placeholder payer names (e.g. `HITS, IRN, MHITS`). These must be replaced with real, confirmed values or withheld behind "available upon request".
   - Suggested: `grep -rniE "1234567890|permit add #|HITS, IRN, MHITS" _site/`
+- Staff names are withheld until CoreFlow is ready to publish them (John, 2026-07-13): every clinician/officer listing must use the `[NAME]` placeholder, keeping real credentials/titles. The CEO (Jason Clapsaddle) is the only publishable name. **FAIL** if the old fictional names appear anywhere — they were on providers, about, AND privacy (Privacy Officer), so sweep every page, not just team sections.
+  - Suggested: `grep -rniE "Sarah Mitchell|Rachel Simmons" _site/`
 
 ## Check 5 — Geography guardrail
 CoreFlow is filing additional state licenses; do not lock the brand to one state or name out-of-state markets publicly.
@@ -55,6 +61,13 @@ For each of the 8 pages, open the built HTML and confirm:
 - No empty required sections (hero, CTA, primary body).
 - All internal links resolve to a built page (no 404 targets).
 - The primary conversion action — a prescriber referral CTA — is present and links correctly on Home and Providers.
+
+## Check 8 — No internal content published
+Eleventy renders **every** markdown/template file under the input dir into `_site/` unless ignored. Internal docs must never ship to the public site.
+
+- **FAIL** if the build output contains anything under `_site/docs/`, `_site/.claude/`, or any other internal file (briefs, reviews, transcripts, skills). This actually happened once: `docs/CoreFlow-Copy-Review.md` was served live at coreflowrx.com/docs/CoreFlow-Copy-Review/.
+  - Suggested: `ls -d _site/docs _site/.claude 2>/dev/null && echo FAIL || echo PASS`
+- When adding any new non-site file to the repo (docs, notes, transcripts), add its directory to `.eleventyignore` in the same commit.
 
 ## Output format
 Print a table: rows = the 8 pages, columns = Checks 1–7, cells = PASS/FAIL (with a one-line note on any FAIL). Add a final summary line: overall PASS only if every cell is PASS.
