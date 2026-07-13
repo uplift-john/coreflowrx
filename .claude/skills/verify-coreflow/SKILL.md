@@ -24,11 +24,13 @@ CoreFlow is **pre-launch and pursuing** URAC Specialty Pharmacy v5.0 and ACHC IR
   - Suggested: confirm every file under `_site/` that matches `URAC|ACHC` also contains the disclaimer string.
 
 ## Check 3 — MUSC placeholder
-MUSC has authorized the relationship but the exact public wording is TBD.
+MUSC has authorized the relationship. The ONLY approved public wording (confirmed by John, 2026-07-13, for the homepage proof bar) is:
 
-- **FAIL** if any specific MUSC claim ships, e.g.: `chose CoreFlow`, `Chosen by MUSC Health`, `preferred home infusion partner for MUSC Health`, or any other concrete MUSC phrasing.
+> **Trusted by MUSC Health** — Selected as a home infusion partner by South Carolina's academic medical center.
+
+- **FAIL** if any other specific MUSC claim ships, e.g.: `chose CoreFlow`, `Chosen by MUSC Health`, `preferred home infusion partner for MUSC Health`, or any concrete MUSC phrasing beyond the approved sentence above.
   - Suggested: `grep -rniE "musc" _site/` and inspect every hit.
-- **PASS** requires every such claim to be the literal token **`[MUSC_RELATIONSHIP_LANGUAGE]`** until official wording is confirmed. The token may remain visible in the built HTML on purpose.
+- **PASS** requires every MUSC mention to be either (a) the approved wording verbatim, or (b) the literal token **`[MUSC_RELATIONSHIP_LANGUAGE]`** where wording is still pending (providers intro + callout, payers card, about narrative + callout). The token may remain visible in the built HTML on purpose.
 
 ## Check 4 — Legal flags
 - Every fictional/sample testimonial — on **both** the patients and providers pages — must carry a visible HTML-comment flag marking it as SAMPLE / NOT a real quote / replace before launch. FAIL if any attributed quote lacks the flag.
