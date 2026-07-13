@@ -16,7 +16,7 @@ Run `npx @11ty/eleventy`. Requires zero errors and zero broken templates. The si
 CoreFlow is **pre-launch and pursuing** URAC Specialty Pharmacy v5.0 and ACHC IRX-NO797 — it does **not** hold them.
 
 - **FAIL** if any present-tense accreditation claim appears, e.g.: `dual-accredited`, `Accreditation awarded`, `Dual accreditation awarded`, `Accredited under URAC`, `URAC & ACHC Accredited` (when not qualified by "pursuing").
-  - Suggested: `grep -rniE "dual-accredited|accreditation awarded|accredited under (urac|achc)|urac & achc accredited" _site/`
+  - Suggested: `grep -rniE "dual-accredited|accreditation awarded|accredited under (urac|achc)|urac (&|&amp;) achc accredited" _site/` (built HTML encodes `&` as `&amp;` — always grep both forms)
 - **PASS** requires, on every page that mentions accreditation:
   1. The claim is phrased as **pursuing** URAC/ACHC, **and**
   2. an anticipated timeframe of **Q4 2026** is present, **and**
@@ -55,6 +55,13 @@ For each of the 8 pages, open the built HTML and confirm:
 - No empty required sections (hero, CTA, primary body).
 - All internal links resolve to a built page (no 404 targets).
 - The primary conversion action — a prescriber referral CTA — is present and links correctly on Home and Providers.
+
+## Check 8 — No internal content published
+Eleventy renders **every** markdown/template file under the input dir into `_site/` unless ignored. Internal docs must never ship to the public site.
+
+- **FAIL** if the build output contains anything under `_site/docs/`, `_site/.claude/`, or any other internal file (briefs, reviews, transcripts, skills). This actually happened once: `docs/CoreFlow-Copy-Review.md` was served live at coreflowrx.com/docs/CoreFlow-Copy-Review/.
+  - Suggested: `ls -d _site/docs _site/.claude 2>/dev/null && echo FAIL || echo PASS`
+- When adding any new non-site file to the repo (docs, notes, transcripts), add its directory to `.eleventyignore` in the same commit.
 
 ## Output format
 Print a table: rows = the 8 pages, columns = Checks 1–7, cells = PASS/FAIL (with a one-line note on any FAIL). Add a final summary line: overall PASS only if every cell is PASS.
