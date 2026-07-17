@@ -1,2 +1,8 @@
 node_modules/
 _site/
+.dev.vars
+.wrangler/
+
+# Business docs — never commit
+*_SOW-*.docx
+*_SOW-*.pdf
