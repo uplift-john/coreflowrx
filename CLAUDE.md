@@ -97,10 +97,11 @@ Hosting is **Cloudflare Workers** (worker `coreflowrx`, account john@coreflowrx.
 johnmoye82@gmail.com personal account): a static-assets Worker serving `_site/` per `wrangler.jsonc`.
 Production is coreflowrx.com (alias coreflowrx.john-057.workers.dev). No GitHub Actions workflow.
 
-**Auto-builds are currently broken** (Workers Builds stopped triggering on pushes 2026-07-13; needs
-reconnecting in the Cloudflare dashboard). Until fixed, publishing requires a manual deploy after
-pushing to `main`: `npm run deploy` (builds then `npx wrangler deploy`; needs `npx wrangler login`
-as john@coreflowrx.com). Feature branches are **not live** until merged to `main` and deployed.
+**Workers Builds** builds and deploys automatically on every push to `main` (repo reconnected
+2026-07-17 after a 4-day silent outage — if a push ever stops producing a "Workers Builds"
+check-run on the commit, that's the failure signature; reconnect the repo in the dashboard).
+Manual fallback: `npm run deploy` (builds then `npx wrangler deploy`; needs `npx wrangler login`
+as john@coreflowrx.com). Feature branches are **not live** until merged to `main`.
 
 The assets-only Worker runs no server code: `functions/api/lead.js` on the parked forms branch is a
 Cloudflare *Pages* Function and will NOT run under this Worker — port it to a Worker `main` module
@@ -127,10 +128,9 @@ own, and work left on a side branch never ships. So every change runs start-to-f
 5. Preview the affected page.
 6. Commit and push: `git add <the files you changed>` → `git commit -m "clear message"` →
    `git push origin main`.
-7. Deploy: `npm run deploy` (required while auto-builds are broken — see Deploy section; a push
-   alone does NOT publish).
-8. Confirm the change is live on coreflowrx.com (fetch the page and check the actual bytes —
-   "site is up" is not "deploy happened").
+7. Confirm the change is live on coreflowrx.com (fetch the page and check the actual bytes —
+   "site is up" is not "deploy happened"; the commit should also get a green "Workers Builds"
+   check-run). If the build never triggers, see the Deploy section for the manual fallback.
 
 **Never leave a finished change uncommitted, and never do site work on a side branch expecting it
 to go live — only `main` deploys.** This is what keeps the local repo, GitHub, and the live site
