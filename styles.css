@@ -135,7 +135,8 @@ address{font-style:normal}
 @media(min-width:768px){.featured-image img{height:340px}}
 
 /* ── Accent image strip ── */
-.image-strip{height:240px;overflow:hidden}
+.image-strip{height:240px;overflow:hidden;position:relative}
+.image-strip::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(70,126,154,.72),rgba(70,126,154,.28) 55%,rgba(255,255,255,.12));pointer-events:none}
 .image-strip img{width:100%;height:100%;object-fit:cover;display:block}
 @media(min-width:768px){.image-strip{height:320px}}
 .section-title{font-size:1.5rem;color:var(--color-navy-900);margin-bottom:var(--space-4)}
@@ -143,7 +144,7 @@ address{font-style:normal}
 .proof-bar{background:var(--color-navy-900);color:var(--color-white);padding:var(--space-6) 0}
 .proof-bar__list{list-style:none;padding:0;margin:0;display:grid;gap:var(--space-4)}
 .proof-bar__list li{display:flex;align-items:flex-start;gap:var(--space-3);font-size:.875rem;line-height:1.5}
-.proof-bar__list strong{display:block;color:var(--color-amber-400);font-size:.9375rem}
+.proof-bar__list strong{display:block;color:#7cb286;font-size:.9375rem}
 @media(min-width:768px){.proof-bar__list{grid-template-columns:repeat(3,1fr)}}
 @media(min-width:1024px){.proof-bar__list{grid-template-columns:repeat(5,1fr)}}
 .card{background:var(--color-white);border:1px solid var(--color-gray-200);border-radius:var(--radius-md);padding:var(--space-6);box-shadow:var(--shadow-sm);transition:box-shadow var(--duration) var(--ease)}
