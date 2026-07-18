@@ -1,7 +1,12 @@
 node_modules/
 _site/
-.dev.vars
-.wrangler/
+
+# wrangler files
+.wrangler
+.dev.vars*
+!.dev.vars.example
+.env*
+!.env.example
 
 # Business docs — never commit
 *_SOW-*.docx
