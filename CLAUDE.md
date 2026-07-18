@@ -93,10 +93,18 @@ PASS/FAIL table. Do not declare a copy change done on a successful edit alone. K
   language is fine on provider/payer pages.
 
 ## Deploy
-Hosting is **Cloudflare Pages**, which builds from the **`main`** branch and republishes on every
-push to `main`. Pages Functions in `functions/` run the form handler. No GitHub Actions workflow.
-Feature branches (e.g. `forms/ghl-integration`) get preview builds but are **not live** until merged
-to `main`.
+Hosting is **Cloudflare Workers** (worker `coreflowrx`, account john@coreflowrx.com — NOT the
+johnmoye82@gmail.com personal account): a static-assets Worker serving `_site/` per `wrangler.jsonc`.
+Production is coreflowrx.com (alias coreflowrx.john-057.workers.dev). No GitHub Actions workflow.
+
+**Auto-builds are currently broken** (Workers Builds stopped triggering on pushes 2026-07-13; needs
+reconnecting in the Cloudflare dashboard). Until fixed, publishing requires a manual deploy after
+pushing to `main`: `npm run deploy` (builds then `npx wrangler deploy`; needs `npx wrangler login`
+as john@coreflowrx.com). Feature branches are **not live** until merged to `main` and deployed.
+
+The assets-only Worker runs no server code: `functions/api/lead.js` on the parked forms branch is a
+Cloudflare *Pages* Function and will NOT run under this Worker — port it to a Worker `main` module
+(or restore a Pages project) before shipping the forms work.
 
 ## Gotchas
 - Input dir is the repo root, so **any stray `.md`/template renders into `_site/` unless ignored**
@@ -119,7 +127,10 @@ own, and work left on a side branch never ships. So every change runs start-to-f
 5. Preview the affected page.
 6. Commit and push: `git add <the files you changed>` → `git commit -m "clear message"` →
    `git push origin main`.
-7. Confirm the Cloudflare deploy published and the change is live.
+7. Deploy: `npm run deploy` (required while auto-builds are broken — see Deploy section; a push
+   alone does NOT publish).
+8. Confirm the change is live on coreflowrx.com (fetch the page and check the actual bytes —
+   "site is up" is not "deploy happened").
 
 **Never leave a finished change uncommitted, and never do site work on a side branch expecting it
 to go live — only `main` deploys.** This is what keeps the local repo, GitHub, and the live site
