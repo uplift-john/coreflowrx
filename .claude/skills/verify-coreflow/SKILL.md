@@ -24,15 +24,16 @@ CoreFlow is **pre-launch and pursuing** URAC Specialty Pharmacy v5.0 and ACHC IR
   - Suggested: confirm every file under `_site/` that matches `URAC|ACHC` also contains the disclaimer string.
 
 ## Check 3 — MUSC placeholder
-MUSC has authorized the relationship. User-approved wording (John, 2026-07-13):
+MUSC has authorized the relationship. User-approved wording:
 
-1. Homepage proof bar: "**Trusted by MUSC Health** — Selected as a home infusion partner by South Carolina's academic medical center."
+1. Homepage proof bar: "**Trusted by MUSC Health** — Selected as a home infusion partner by South Carolina's academic medical center." (Also approved reused as the providers callout, split as heading + text, John 2026-07-20.)
 2. About narrative: "That commitment is part of why MUSC Health trusts CoreFlow as a home infusion partner and why we hold ourselves to the standards a health system of that caliber expects."
-3. About callout: "A trusted MUSC Health home infusion partner" + "CoreFlow works with MUSC Health as a trusted home infusion partner. That trust reflects the clinical standards, communication, and reliability we bring to every referral." (All three confirmed final by John, 2026-07-13.)
+3. About callout: "A trusted MUSC Health home infusion partner" + "CoreFlow works with MUSC Health as a trusted home infusion partner. That trust reflects the clinical standards, communication, and reliability we bring to every referral." (1–3 confirmed final by John, 2026-07-13.)
+4. Payers card: "MUSC Health selected CoreFlow as a home infusion partner. When an academic health system extends that trust, it sets the bar for how we handle every referral and we build to meet it." (Authored by John in Claude Design and explicitly approved for publication, 2026-07-20.)
 
 - **FAIL** if any other specific MUSC claim ships, e.g.: `chose CoreFlow`, `Chosen by MUSC Health`, `preferred home infusion partner for MUSC Health`, or any concrete MUSC phrasing beyond the sentences above.
   - Suggested: `grep -rniE "musc" _site/` and inspect every hit.
-- **PASS** requires every MUSC mention to be either (a) one of the approved sentences verbatim, or (b) the literal token **`[MUSC_RELATIONSHIP_LANGUAGE]`** where wording is still pending (providers intro + callout, payers card). The token may remain visible in the built HTML on purpose.
+- **PASS** requires every MUSC mention to be either (a) one of the approved sentences verbatim, or (b) the literal token **`[MUSC_RELATIONSHIP_LANGUAGE]`** where wording is still pending. As of 2026-07-20 no page uses the token (providers intro dropped it; providers callout uses sentence 1; payers card uses sentence 4) — its reappearance is fine only as a deliberate placeholder, never as a regression.
 
 ## Check 4 — Legal flags
 - Every fictional/sample testimonial — on **both** the patients and providers pages — must carry a visible HTML-comment flag marking it as SAMPLE / NOT a real quote / replace before launch. FAIL if any attributed quote lacks the flag.
