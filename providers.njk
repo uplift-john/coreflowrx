@@ -6,6 +6,7 @@ ogTitle: "For Prescribers | CoreFlow Specialty Infusion"
 ogDescription: "Refer home infusion patients in South Carolina with confidence."
 activeNav: providers
 permalink: "/providers.html"
+robots: "noindex, nofollow"
 ---
 <section class="hero hero--photo" style="background-image:url('hero-providers.jpg')">
  <div class="container">
@@ -14,8 +15,9 @@ permalink: "/providers.html"
  <p class="hero__lead">CoreFlow Specialty Infusion is a South Carolina specialty infusion pharmacy purpose-built to make the referral process easier for your office and the clinical experience better for your patient.</p>
  <div class="hero__cta">
  <a class="btn btn--onDark" href="refer.html">Refer a Patient →</a>
- <a class="btn btn--ghost" href="refer.html#fax-cover">Download Fax Cover Sheet →</a>
+ <a class="btn btn--ghost" href="refer.html#form">See referral options →</a>
  </div>
+ {% include "physician-order-notice.njk" %}
  </div>
 </section>
 
@@ -30,9 +32,9 @@ permalink: "/providers.html"
  <h2 class="section-title">Three ways to send a referral.</h2>
  <p class="lead">Choose whichever fits your workflow. All three reach the same clinical intake team.</p>
  <div class="grid grid--3 mt-6">
- <div class="card"><h3>Online</h3><p>Submit a secure, HIPAA-compliant referral form at coreflowrx.com/refer. Confirmation within one business day.</p><a class="btn btn--secondary" href="refer.html">Submit Online →</a></div>
- <div class="card"><h3>Fax</h3><p>Download our referral cover sheet and fax to <strong>{{ site.fax }}</strong>. Include current orders, diagnosis, and insurance information.</p><a class="btn btn--secondary" href="refer.html#fax-cover">Download Cover Sheet →</a></div>
- <div class="card"><h3>Phone</h3><p><strong>{{ site.phone }}</strong><br>Mon–Fri, 8 AM – 5 PM ET<br>For urgent or time-sensitive referrals.</p><a class="btn btn--secondary" href="tel:{{ site.phoneTel }}">Call now →</a></div>
+ <div class="card"><h3>Online</h3><p>Submit a secure referral form at coreflowrx.com/refer, hosted by Formstack under a signed BAA for HIPAA-compliant intake. Confirmation within one business day.</p><a class="btn btn--secondary" href="refer.html">Submit Online →</a></div>
+ <div class="card"><h3>Fax</h3><p>Fax your referral and current orders to <strong>{{ site.fax }}</strong>. Include diagnosis and insurance information. Call us for a cover sheet.</p><a class="btn btn--secondary" href="tel:{{ site.phoneTel }}">Call for a cover sheet →</a></div>
+ <div class="card"><h3>Phone</h3><p><strong>{{ site.phone }}</strong><br>{{ site.hours }}<br>For urgent or time-sensitive referrals.</p><a class="btn btn--secondary" href="tel:{{ site.phoneTel }}">Call now →</a></div>
  </div>
  </div>
 </section>
@@ -102,7 +104,7 @@ permalink: "/providers.html"
 <section class="section section--soft">
  <div class="container">
  <h2 class="section-title">What prescribers say.</h2>
- <!-- SAMPLE / FICTIONAL testimonial for internal review only — NOT a real prescriber quote. Replace with a real, consented testimonial before any public launch. -->
+ <!-- PLACEHOLDER — not a real patient or provider quote. Page is noindexed. Replace with consented quote before removing noindex. -->
  <blockquote>
  <p><em>"CoreFlow's intake team has been the easiest pharmacy partner I've worked with in my career. They confirm the referral quickly, keep my office updated, and the clinical notes come back the same day."</em></p>
  <p>— Dr. James W., Rheumatology, Charleston, SC</p>
@@ -148,6 +150,6 @@ permalink: "/providers.html"
  <a class="btn btn--primary" href="refer.html">Refer a Patient →</a>
  <a class="btn btn--secondary" href="tel:{{ site.phoneTel }}">Call {{ site.phone }} →</a>
  </div>
- <p class="mt-4">Fax <strong>{{ site.fax }}</strong> · Mon–Fri, 8 AM – 5 PM ET</p>
+ <p class="mt-4">Fax <strong>{{ site.fax }}</strong> · {{ site.hours }}</p>
  </div>
 </section>

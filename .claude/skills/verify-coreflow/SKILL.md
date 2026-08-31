@@ -57,8 +57,9 @@ CoreFlow is filing additional state licenses; do not lock the brand to one state
 
 ## Check 7 — Render integrity
 For each of the 8 pages, open the built HTML and confirm:
-- No leaked Nunjucks artifacts — no raw `{{` or `}}` in the output.
-  - Suggested: `grep -rnE "\{\{|\}\}" _site/*.html`
+- No leaked Nunjucks artifacts — no raw `{{ … }}` or `{% … %}` in the output.
+  - Suggested: `grep -rnE "\{\{|\{%|%\}" _site/*.html`
+  - Note: match the opening `{{`/`{%`, **not** bare `}}` — the Plausible analytics snippet legitimately contains `||{}};` (a `}}`), so grepping bare `}}` false-positives. A real leak always carries the opening `{{`/`{%`.
 - No empty required sections (hero, CTA, primary body).
 - All internal links resolve to a built page (no 404 targets).
 - The primary conversion action — a prescriber referral CTA — is present and links correctly on Home and Providers.
@@ -66,18 +67,19 @@ For each of the 8 pages, open the built HTML and confirm:
 ## Check 8 — No internal content published (ALLOWLIST)
 Eleventy's input dir is the repo root, so **every** markdown/template file renders into `_site/` unless ignored, and internal docs must never ship. Do **not** rely on a denylist of known-bad paths — a denylist only catches leaks someone already thought of, and the next internal file postdates the list (this is exactly how `AGENTS.md` and `.agents/` leaked: they were added after the old denylist was written). Instead, **allowlist** the legitimate output and FAIL on anything else, named or not.
 
-- **Known-good routes** (the only pages that may ship — add one here *only* when you deliberately add a page): `index about accessibility careers contact non-discrimination patients payers privacy providers refer`.
-- **Allowed file types** (assets, governed by the passthrough globs in `.eleventy.js` — no per-file maintenance): `html css jpg jpeg png svg ico webp gif txt xml`.
+- **Known-good routes** (the only pages that may ship — add one here *only* when you deliberately add a page): `index about accessibility careers contact non-discrimination notice-of-privacy-practices patients payers privacy providers refer terms thanks 404`.
+- **Allowed file types** (assets, governed by the passthrough globs in `.eleventy.js` — no per-file maintenance): `html css js jpg jpeg png svg ico webp gif txt xml`.
+- **Allowed extensionless files** (deploy config, passthrough-copied): `_headers` (and `_redirects` if added).
 - **FAIL** if any built `*.html` maps to a route not in the allowlist, or any file has an extension outside the allowed set. Past incident: `docs/CoreFlow-Copy-Review.md` shipped live at coreflowrx.com/docs/CoreFlow-Copy-Review/; the 2026-08-20 preflight caught `AGENTS.md` → `_site/AGENTS/` and `.agents/…/SKILL.md` → `_site/.agents/…/` one commit before first publish.
   - Suggested:
     ```sh
-    PAGES="index about accessibility careers contact non-discrimination patients payers privacy providers refer"
+    PAGES="index about accessibility careers contact non-discrimination notice-of-privacy-practices patients payers privacy providers refer terms thanks 404"
     bad=""
     for f in $(find _site -name '*.html'); do
       route=${f#_site/}; route=${route%/index.html}; route=${route%.html}
       case " $PAGES " in *" $route "*) ;; *) bad="$bad $f" ;; esac
     done
-    for f in $(find _site -type f ! -name '*.html' ! -name '*.css' ! -name '*.jpg' ! -name '*.jpeg' ! -name '*.png' ! -name '*.svg' ! -name '*.ico' ! -name '*.webp' ! -name '*.gif' ! -name '*.txt' ! -name '*.xml'); do
+    for f in $(find _site -type f ! -name '*.html' ! -name '*.css' ! -name '*.js' ! -name '_headers' ! -name '*.jpg' ! -name '*.jpeg' ! -name '*.png' ! -name '*.svg' ! -name '*.ico' ! -name '*.webp' ! -name '*.gif' ! -name '*.txt' ! -name '*.xml'); do
       bad="$bad $f"
     done
     [ -z "$bad" ] && echo PASS || echo "FAIL — unexpected:$bad"
@@ -93,8 +95,28 @@ Eleventy's input dir is the repo root, so **every** markdown/template file rende
 - **FAIL** if the two files differ.
   - Suggested: `diff -q .claude/skills/verify-coreflow/SKILL.md .agents/skills/verify-coreflow/SKILL.md && echo PASS || echo FAIL`
 
+## Check 10 — Contact facts match the single source of truth
+Contact facts live only in `_data/site.json` and must render identically everywhere. A wrong fax number shipped live once (a referring office faxing PHI reaches the wrong recipient) — this check exists so it cannot recur silently.
+
+- **FAIL** if any contact fact rendered into `_site/` disagrees with `_data/site.json`, or if a phone/fax-shaped string appears in built HTML that is not the value in `site.json` (i.e. a hardcoded number bypassing `{{ site.* }}`).
+  - The current values are `fax (843) 279-3185`, `phone (854) 888-9070`. The retired-but-owned number `(854) 209-2494` and the stale `(843) 884-0102` must never appear.
+  - Suggested:
+    ```sh
+    grep -rniE "854[)._ -]*209[)._ -]*2494|2092494|843[)._ -]*884[)._ -]*0102|8840102" _site/ && echo "FAIL — stale number in build" || echo PASS
+    # every phone-shaped string in built HTML must be one of the site.json values
+    grep -rhoE "\(8[0-9]{2}\) [0-9]{3}-[0-9]{4}" _site/*.html | sort -u
+    ```
+    Every line the second command prints must be a value in `site.json`.
+
+## Check 11 — Internal link & anchor integrity
+No internal link may 404 and no anchor may point at a missing id — the `#fax-cover` dead buttons and empty `action="#"` forms shipped once because nothing checked.
+
+- **FAIL** if `node scripts/check-links.mjs` exits non-zero (dead internal link, missing fragment id, or empty `href="#"`/`action="#"`).
+  - Suggested: `npm run check-links` (or `node scripts/check-links.mjs`) — must print PASS.
+  - Also: `grep -rn 'action="#"' *.njk _includes/*.njk` must return nothing.
+
 ## Output format
-Print a table: rows = the 8 pages, columns = Checks 1–7, cells = PASS/FAIL (with a one-line note on any FAIL). Checks 8 and 9 are build-level, not per-page — report each as a single PASS/FAIL line beneath the table. Add a final summary line: overall PASS only if every cell **and** both build-level checks are PASS.
+Print a table: rows = the 8 pages, columns = Checks 1–7, cells = PASS/FAIL (with a one-line note on any FAIL). Checks 8, 9, 10, and 11 are build-level, not per-page — report each as a single PASS/FAIL line beneath the table. Add a final summary line: overall PASS only if every cell **and** all four build-level checks are PASS. (There are 11 checks total.)
 
 ## When you find a recurring issue
 If the same class of problem appears twice across runs, add a new grep-able check to this file so future runs catch it automatically — improve the system, not just the instance.

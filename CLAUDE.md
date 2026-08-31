@@ -68,14 +68,22 @@ Accessibility target is **WCAG 2.1 AA** — keep the existing patterns (skip lin
 reduced-motion + print styles, descriptive alt text; decorative images get `alt=""`).
 
 ## Forms & the HIPAA guardrail (critical)
-`functions/api/lead.js` is a Cloudflare Pages Function (`POST /api/lead`) that upserts contacts
-into **GoHighLevel / LeadConnector**. It handles **only three NON-PHI forms**: `payer`, `careers`,
-`contact` (chosen by a hidden `form` field). Secrets `GHL_TOKEN` and `GHL_LOCATION_ID` come from
-`.dev.vars` locally (git-ignored) or Cloudflare Pages secrets in prod; without them it dry-runs.
+**Current state (Pass A, 2026-08-31): all forms are third-party hosted embeds — there is no
+first-party form backend.** The patient referral (`refer.njk`) is a **Formstack** Copilot workflow
+iframe (Formstack holds the signed BAA — the only PHI-carrying form). The three NON-PHI forms —
+`contact`, `careers`, `payers` — are **GoHighLevel / LeadConnector** hosted-form iframes
+(`api.leadconnectorhq.com/widget/form/...`), each with a visible "do not submit PHI" notice on
+contact and careers. `_headers` carries the CSP that allowlists these frame origins.
+
+The old first-party path — `functions/api/lead.js`, a Cloudflare **Pages** Function posting to GHL —
+is **retired**. Production is an assets-only Worker (`wrangler.jsonc`), so it never executed. It is
+preserved on the unmerged `forms/ghl-integration` branch and at annotated tag
+`archive/ghl-integration-fn` (push with `git push origin archive/ghl-integration-fn`). Do not revive
+it without porting to a Worker module first.
 
 **Never wire the patient referral form (`refer.njk`) to `/api/lead` or any GoHighLevel endpoint.**
 GoHighLevel has **no signed BAA**, and `refer.njk` collects PHI. Referral intake must stay
-phone/fax or a BAA-covered path only. This is a hard rule.
+phone/fax or a BAA-covered path (Formstack) only. This is a hard rule.
 
 ## Content & compliance rules
 Copy is legally constrained. **After any content/copy change, run the `verify-coreflow` skill**

@@ -14,7 +14,8 @@ permalink: "/contact.html"
  {{ site.address.street }}<br>
  {{ site.address.city }}, {{ site.address.state }} {{ site.address.zip }}<br><br>
  <a href="tel:{{ site.phoneTel }}"><strong>{{ site.phone }}</strong></a> · Fax <strong>{{ site.fax }}</strong><br>
- Mon–Fri, 8 AM – 5 PM ET
+ <a href="mailto:{{ site.email }}">{{ site.email }}</a><br>
+ {{ site.hours }}
  </address>
  </div>
 </section>
@@ -32,20 +33,16 @@ permalink: "/contact.html"
 <section class="section" id="form">
  <div class="container container--narrow">
  <h2 class="section-title">Send us a message.</h2>
- <!-- =========================================================
- FORM ENDPOINT — replace action with your backend / Formspree / Netlify Forms
- No PHI collected on this form.
- ========================================================= -->
- <form class="form" action="#" method="post" novalidate>
- <div class="form__row"><label for="c-name">Full name <span class="required" aria-hidden="true">*</span></label><input id="c-name" name="name" type="text" required autocomplete="name"></div>
- <div class="form__row"><label for="c-email">Email address <span class="required" aria-hidden="true">*</span></label><input id="c-email" name="email" type="email" required autocomplete="email"></div>
- <div class="form__row"><label for="c-phone">Phone number</label><input id="c-phone" name="phone" type="tel" autocomplete="tel"></div>
- <div class="form__row"><label for="c-role">I am a…</label>
- <select id="c-role" name="role"><option>Patient or caregiver</option><option>Prescriber or office staff</option><option>Payer or health plan</option><option>Job applicant</option><option>Other</option></select>
- </div>
- <div class="form__row"><label for="c-msg">Message <span class="required" aria-hidden="true">*</span></label><textarea id="c-msg" name="message" required></textarea></div>
- <div><button class="btn btn--primary" type="submit">Submit Your Message →</button></div>
- </form>
+ <p class="form-phi-notice"><strong>Please do not include patient health information (PHI) in this form.</strong> This general-inquiry form is not a HIPAA-covered channel. To refer a patient, use our <a href="refer.html">secure referral page</a>.</p>
+ <!-- Contact form hosted by GoHighLevel (non-PHI). -->
+ <iframe
+   src="https://api.leadconnectorhq.com/widget/form/CIEOp6h30UGmLYnh62U0"
+   title="CoreFlow Rx contact form"
+   sandbox="allow-forms allow-scripts allow-same-origin allow-popups"
+   frameborder="0"
+   scrolling="no"
+   style="width:100%;border:0;min-height:700px"></iframe>
+ <p class="form-fallback">Having trouble loading the form? <a href="https://api.leadconnectorhq.com/widget/form/CIEOp6h30UGmLYnh62U0" target="_blank" rel="noopener">Open the contact form directly →</a></p>
  <p class="mt-4">We respond to general inquiries within two business days. For urgent clinical matters, please call <a href="tel:{{ site.phoneTel }}">{{ site.phone }}</a>.</p>
  </div>
 </section>

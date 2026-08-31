@@ -11,7 +11,7 @@ CoreFlow Specialty Infusion ("CoreFlow Rx") — home/specialty infusion pharmacy
 Mount Pleasant SC, serving South Carolina. CEO Jason Clapsaddle. Audiences:
 prescribers, patients/caregivers, payers. Positioning: fast in-home infusion,
 credentialed RNs, closed-loop reporting, local not-mail-order. Site:
-coreflowrx.com. Phone (854) 888-9070 · fax (843) 884-0102 (single source of
+coreflowrx.com. Phone (854) 888-9070 · fax (843) 279-3185 (single source of
 truth: `_data/site.json`). Copy is legally constrained (accreditation
 "pursuing, anticipated Q4 2026" + exact disclaimer; MUSC placeholder token; no
 dummy regulated data) — any copy change must pass the `verify-coreflow` skill.

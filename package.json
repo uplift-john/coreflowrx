@@ -6,6 +6,8 @@
   "scripts": {
     "build": "eleventy",
     "serve": "eleventy --serve",
+    "check-links": "node scripts/check-links.mjs",
+    "verify": "eleventy && node scripts/check-links.mjs",
     "deploy": "npm run build && wrangler deploy",
     "preview": "npm run build && wrangler dev"
   },

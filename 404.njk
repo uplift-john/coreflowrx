@@ -1,0 +1,33 @@
+---
+layout: layout.njk
+title: "Page Not Found | CoreFlow Specialty Infusion"
+description: "The page you were looking for could not be found."
+permalink: "/404.html"
+eleventyExcludeFromCollections: true
+---
+<section class="hero">
+ <div class="container container--narrow">
+ <span class="hero__eyebrow">404</span>
+ <h1 class="hero__title">We couldn't find that page.</h1>
+ <p class="hero__lead">The link may be out of date, or the page may have moved. Here's how to get where you're going.</p>
+ </div>
+</section>
+
+<section class="section">
+ <div class="container container--narrow">
+ <div class="cta-row">
+ <a class="btn btn--primary" href="refer.html">Refer a Patient →</a>
+ <a class="btn btn--secondary" href="tel:{{ site.phoneTel }}">Call {{ site.phone }}</a>
+ </div>
+ <nav aria-label="Site" class="mt-4">
+ <ul>
+ <li><a href="index.html">Home</a></li>
+ <li><a href="providers.html">For Prescribers</a></li>
+ <li><a href="patients.html">For Patients &amp; Caregivers</a></li>
+ <li><a href="payers.html">For Payers</a></li>
+ <li><a href="about.html">About</a></li>
+ <li><a href="contact.html">Contact</a></li>
+ </ul>
+ </nav>
+ </div>
+</section>

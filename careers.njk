@@ -41,25 +41,16 @@ permalink: "/careers.html"
 <section class="section" id="apply">
  <div class="container container--narrow">
  <h2 class="section-title">Apply or send us your information.</h2>
- <!-- =========================================================
- FORM ENDPOINT — replace action with your backend / Formspree / Netlify Forms
- No PHI collected. Do not collect SSN or other sensitive identifiers.
- ========================================================= -->
- <form class="form" action="#" method="post" novalidate>
- <div class="form__row"><label for="ap-name">Full name <span class="required" aria-hidden="true">*</span></label><input id="ap-name" name="name" type="text" required autocomplete="name"></div>
- <div class="form__row"><label for="ap-email">Email address <span class="required" aria-hidden="true">*</span></label><input id="ap-email" name="email" type="email" required autocomplete="email"></div>
- <div class="form__row"><label for="ap-phone">Phone number</label><input id="ap-phone" name="phone" type="tel" autocomplete="tel"></div>
- <div class="form__row"><label for="ap-role">Role interest</label>
- <select id="ap-role" name="role"><option>Registered Nurse</option><option>Pharmacist</option><option>Care Coordinator</option><option>Other</option></select>
- </div>
- <div class="form__row"><label for="ap-license">Current SC license number and type</label><input id="ap-license" name="license" type="text"><span class="hint">Do not include SSN or other sensitive identifiers.</span></div>
- <div class="form__row"><label for="ap-crni">CRNI credential?</label>
- <select id="ap-crni" name="crni"><option>Yes</option><option>In progress</option><option>No</option></select>
- </div>
- <div class="form__row"><label for="ap-source">How did you hear about CoreFlow?</label><input id="ap-source" name="source" type="text"></div>
- <div class="form__row"><label for="ap-msg">Brief message (optional)</label><textarea id="ap-msg" name="message"></textarea></div>
- <div><button class="btn btn--primary" type="submit">Submit Your Application →</button></div>
- </form>
+ <p class="form-phi-notice"><strong>Please don't include SSN, patient health information, or other sensitive identifiers</strong> in this form. It's for employment inquiries only and is not a HIPAA-covered channel.</p>
+ <!-- Careers form hosted by GoHighLevel (non-PHI). -->
+ <iframe
+   src="https://api.leadconnectorhq.com/widget/form/U98M1fF1bo9SkxntsZrn"
+   title="CoreFlow Rx careers application form"
+   sandbox="allow-forms allow-scripts allow-same-origin allow-popups"
+   frameborder="0"
+   scrolling="no"
+   style="width:100%;border:0;min-height:900px"></iframe>
+ <p class="form-fallback">Having trouble loading the form? <a href="https://api.leadconnectorhq.com/widget/form/U98M1fF1bo9SkxntsZrn" target="_blank" rel="noopener">Open the application form directly →</a></p>
  <p class="mt-4">We review every submission. If your background matches a current or upcoming need, we'll be in touch.</p>
  </div>
 </section>

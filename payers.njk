@@ -60,31 +60,15 @@ permalink: "/payers.html"
  <div class="container container--narrow">
  <h2 class="section-title">Inquire about network participation.</h2>
  <p>Complete the form below and a member of our team will respond within two business days.</p>
- <!-- =========================================================
- FORM ENDPOINT — replace action with your backend / Formspree / Netlify Forms
- No PHI is collected on this form; HIPAA BAA not required.
- ========================================================= -->
- <form class="form form--2col" action="#" method="post" novalidate>
- <div class="form__row form__row--half">
- <div class="form__row"><label for="payer-org">Organization name <span class="required" aria-hidden="true">*</span></label><input id="payer-org" name="organization" type="text" required autocomplete="organization"></div>
- <div class="form__row"><label for="payer-name">Contact name <span class="required" aria-hidden="true">*</span></label><input id="payer-name" name="name" type="text" required autocomplete="name"></div>
- </div>
- <div class="form__row form__row--half">
- <div class="form__row"><label for="payer-title">Title / Role</label><input id="payer-title" name="title" type="text" autocomplete="organization-title"></div>
- <div class="form__row"><label for="payer-email">Email address <span class="required" aria-hidden="true">*</span></label><input id="payer-email" name="email" type="email" required autocomplete="email"></div>
- </div>
- <div class="form__row form__row--half">
- <div class="form__row"><label for="payer-phone">Phone number</label><input id="payer-phone" name="phone" type="tel" autocomplete="tel"></div>
- <div class="form__row"><label for="payer-plan">Plan type</label>
- <select id="payer-plan" name="plan_type"><option>Commercial</option><option>Medicare Advantage</option><option>Medicaid Managed Care</option><option>Other</option></select>
- </div>
- </div>
- <div class="form__row"><label for="payer-nature">Nature of inquiry</label>
- <select id="payer-nature" name="inquiry_type"><option>Network participation</option><option>Credentialing</option><option>Clinical information</option><option>Other</option></select>
- </div>
- <div class="form__row"><label for="payer-message">Message (optional)</label><textarea id="payer-message" name="message"></textarea></div>
- <div><button class="btn btn--primary" type="submit">Submit Network Inquiry →</button></div>
- </form>
+ <!-- Payer / network inquiry form hosted by GoHighLevel (non-PHI). -->
+ <iframe
+   src="https://api.leadconnectorhq.com/widget/form/qEu3dsqV0VxyTkevwGW8"
+   title="CoreFlow Rx payer network inquiry form"
+   sandbox="allow-forms allow-scripts allow-same-origin allow-popups"
+   frameborder="0"
+   scrolling="no"
+   style="width:100%;border:0;min-height:900px"></iframe>
+ <p class="form-fallback">Having trouble loading the form? <a href="https://api.leadconnectorhq.com/widget/form/qEu3dsqV0VxyTkevwGW8" target="_blank" rel="noopener">Open the network inquiry form directly →</a></p>
  </div>
 </section>
 

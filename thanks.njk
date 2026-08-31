@@ -1,0 +1,26 @@
+---
+layout: layout.njk
+title: "Thank You | CoreFlow Specialty Infusion"
+description: "Your submission was received. CoreFlow Specialty Infusion confirms receipt within one business day."
+permalink: "/thanks.html"
+eleventyExcludeFromCollections: true
+---
+<section class="hero">
+ <div class="container container--narrow">
+ <span class="hero__eyebrow">Received</span>
+ <h1 class="hero__title">Thank you — we have your submission.</h1>
+ <p class="hero__lead">A member of our team will follow up. For referrals, <strong>we confirm receipt within one business day.</strong></p>
+ </div>
+</section>
+
+<section class="section">
+ <div class="container container--narrow">
+ <div class="card">
+ <h2>Need something sooner?</h2>
+ <p>If your request is urgent or time-sensitive, please call us directly — you'll reach a person during business hours.</p>
+ <p><a class="btn btn--primary" href="tel:{{ site.phoneTel }}">Call {{ site.phone }} →</a></p>
+ <p class="footnote">{{ site.hours }} · Fax {{ site.fax }} · <a href="mailto:{{ site.email }}">{{ site.email }}</a></p>
+ </div>
+ <p class="mt-4"><a href="index.html">← Back to home</a> · <a href="refer.html">Refer a patient</a></p>
+ </div>
+</section>

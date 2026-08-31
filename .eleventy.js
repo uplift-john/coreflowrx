@@ -1,6 +1,8 @@
 module.exports = function (eleventyConfig) {
   // Static assets: copy through untouched to _site/
   eleventyConfig.addPassthroughCopy("styles.css");
+  eleventyConfig.addPassthroughCopy("site.js");
+  eleventyConfig.addPassthroughCopy("_headers");
   eleventyConfig.addPassthroughCopy("robots.txt");
   eleventyConfig.addPassthroughCopy("sitemap.xml");
   eleventyConfig.addPassthroughCopy("*.jpg");
@@ -12,7 +14,6 @@ module.exports = function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy("*.gif");
 
   // Not site content — don't render these as pages.
-  eleventyConfig.ignores.add("DESIGN-ENHANCEMENT-PROMPT.md");
   eleventyConfig.ignores.add("README.md");
 
   return {

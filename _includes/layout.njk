@@ -5,14 +5,15 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{{ title }}</title>
 <meta name="description" content="{{ description }}">
+{% if robots %}<meta name="robots" content="{{ robots }}">{% endif %}
 <meta name="theme-color" content="{{ site.themeColor }}">
-<link rel="canonical" href="{{ site.url }}{{ page.url }}">
+<link rel="canonical" href="{{ (site.url + page.url) | replace('.html', '') }}">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="favicon.svg">
 <meta property="og:type" content="website">
 <meta property="og:title" content="{{ ogTitle or title }}">
 <meta property="og:description" content="{{ ogDescription or description }}">
-<meta property="og:url" content="{{ site.url }}{{ page.url }}">
+<meta property="og:url" content="{{ (site.url + page.url) | replace('.html', '') }}">
 <meta property="og:image" content="{{ site.ogImage }}">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="{{ site.ogImage }}">
@@ -28,10 +29,14 @@
 </style>
 <link rel="stylesheet" href="styles.css">
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":["MedicalBusiness","Pharmacy"],"name":"{{ site.name }}","url":"{{ site.url }}{{ page.url }}","telephone":"{{ site.phone }}","address":{"@type":"PostalAddress","streetAddress":"{{ site.address.street }}","addressLocality":"{{ site.address.city }}","addressRegion":"{{ site.address.state }}","postalCode":"{{ site.address.zip }}","addressCountry":"US"},"areaServed":{"@type":"State","name":"South Carolina"},"openingHoursSpecification":[{"@type":"OpeningHoursSpecification","dayOfWeek":["Monday","Tuesday","Wednesday","Thursday","Friday"],"opens":"08:00","closes":"17:00"}]}
+{"@context":"https://schema.org","@type":["MedicalBusiness","Pharmacy"],"name":"{{ site.name }}","url":"{{ (site.url + page.url) | replace('.html', '') }}","telephone":"{{ site.phone }}","faxNumber":"{{ site.fax }}","email":"{{ site.email }}","address":{"@type":"PostalAddress","streetAddress":"{{ site.address.street }}","addressLocality":"{{ site.address.city }}","addressRegion":"{{ site.address.state }}","postalCode":"{{ site.address.zip }}","addressCountry":"US"},"areaServed":{"@type":"State","name":"South Carolina"},"openingHoursSpecification":[{"@type":"OpeningHoursSpecification","dayOfWeek":["Monday","Tuesday","Wednesday","Thursday","Friday"],"opens":"08:30","closes":"16:30"}]}
 </script>
-<!-- ANALYTICS — Plausible (swap-in spot) -->
-<!-- <script defer data-domain="coreflowrx.com" src="https://plausible.io/js/script.js"></script> -->
+<!-- Privacy-friendly analytics by Plausible -->
+<script async src="https://plausible.io/js/pa-egVEd85UQF5ji98mPTW2a.js"></script>
+<script>
+window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+plausible.init()
+</script>
 </head>
 <body>
 <a href="#main" class="skip-link">Skip to main content</a>
@@ -40,7 +45,7 @@
  <a class="brand" href="index.html" aria-label="{{ site.name }} — Home"{% if activeNav == "home" %} aria-current="page"{% endif %}><img class="brand__mark" src="{{ site.logo }}" alt="{{ site.name }}" height="46"></a>
  <div>
  <a class="header-phone" href="tel:{{ site.phoneTel }}">{{ site.phone }}</a>
- <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Open menu" onclick="var n=document.getElementById('primary-nav');var open=n.classList.toggle('is-open');this.setAttribute('aria-expanded',open);this.setAttribute('aria-label',open?'Close menu':'Open menu');"><span class="nav-toggle__icon" aria-hidden="true"></span></button>
+ <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Open menu"><span class="nav-toggle__icon" aria-hidden="true"></span></button>
  </div>
  <nav class="primary-nav" id="primary-nav" aria-label="Primary">
  <ul class="primary-nav__list">
@@ -63,14 +68,16 @@
  <div class="site-footer__grid">
  <div>
  <h2 style="font-size:1.125rem">{{ site.name }}</h2>
- <address>{{ site.address.street }}<br>{{ site.address.city }}, {{ site.address.state }} {{ site.address.zip }}<br><a href="tel:{{ site.phoneTel }}">{{ site.phone }}</a> · Fax {{ site.fax }}<br>{{ site.hours }}</address>
+ <address>{{ site.address.street }}<br>{{ site.address.city }}, {{ site.address.state }} {{ site.address.zip }}<br><a href="tel:{{ site.phoneTel }}">{{ site.phone }}</a> · Fax {{ site.fax }}<br><a href="mailto:{{ site.email }}">{{ site.email }}</a><br>{{ site.hours }}</address>
  </div>
  <nav aria-label="Prescribers"><h3 style="font-size:1rem">Prescribers</h3><ul><li><a href="refer.html">Refer a Patient</a></li><li><a href="providers.html">For Prescribers</a></li><li><a href="payers.html">For Payers</a></li></ul></nav>
  <nav aria-label="Patients"><h3 style="font-size:1rem">Patients</h3><ul><li><a href="patients.html">For Patients &amp; Caregivers</a></li><li><a href="contact.html">Contact</a></li></ul></nav>
- <nav aria-label="Company"><h3 style="font-size:1rem">Company</h3><ul><li><a href="about.html">About</a></li><li><a href="careers.html">Careers</a></li><li><a href="privacy.html">Privacy</a></li><li><a href="non-discrimination.html">Non-Discrimination</a></li><li><a href="accessibility.html">Accessibility</a></li></ul></nav>
+ <nav aria-label="Company"><h3 style="font-size:1rem">Company</h3><ul><li><a href="about.html">About</a></li><li><a href="careers.html">Careers</a></li><li><a href="contact.html">Contact</a></li></ul></nav>
+ <nav aria-label="Legal"><h3 style="font-size:1rem">Legal</h3><ul><li><a href="privacy.html">Privacy Policy</a></li><li><a href="terms.html">Terms &amp; Conditions</a></li><li><a href="notice-of-privacy-practices.html">Notice of Privacy Practices</a></li><li><a href="non-discrimination.html">Non-Discrimination</a></li><li><a href="accessibility.html">Accessibility</a></li></ul></nav>
  </div>
  <p class="site-footer__legal">© 2026 {{ site.name }}. All rights reserved.<br>{{ site.legalLine }}</p>
  </div>
 </footer>
+<script src="site.js" defer></script>
 </body>
 </html>
