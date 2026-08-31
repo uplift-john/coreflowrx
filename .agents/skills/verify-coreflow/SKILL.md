@@ -1,0 +1,1 @@
+../../../.claude/skills/verify-coreflow/SKILL.md

@@ -1,4 +1,6 @@
 docs/
 .claude/
+.agents/
+AGENTS.md
 design-export/
 CLAUDE.md
