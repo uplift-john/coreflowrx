@@ -27,3 +27,16 @@ Branch: `stage2/p0-hotfix` (from `main` @ `988e2ec`). Reviewers run read-only ag
   - Optional HHS OCR portal link (Role 4).
   - Vendor (Formstack/GHL) accessibility re-verification (Role 7).
   - Testimonial replacement before removing noindex (Roles 1, 4).
+
+## Pass A.1 follow-up — legal pages (subset review, 2026-09-01)
+
+Scope: `terms.njk` + `privacy.njk` published from John's carrier-review draft (`coreflow-terms-and-privacy.md`). Subset review per instruction (Design/UX/Clinical skipped — no layout or clinical content).
+
+| Role | Verdict | Notes |
+|---|---|---|
+| Compliance & Data Protection | **PASS** | All A2P carrier elements present; HELP/STOP/START render bold; mobile non-sharing attestation verbatim; no contradiction (mobile-never-shared vs. HIPAA TPO-disclosure scoped to different data categories); no PHI-to-GHL; 3 docs cross-link. Minors → blockers.md (GHL/no-BAA boundary now a public commitment; off-repo form-consent + Access-bypass registration items). |
+| Marketing Copy | **PASS** | Faithful to draft; contact facts correct; consistent with Formstack-BAA / Plausible-only / GHL-non-PHI; no implementation notes leaked. Minors (no change): "accreditation-as-obligation" wording is the approved draft text; on-page address blocks dropped the fax line (fax still renders in footer + JSON-LD). |
+| Accessibility (WCAG 2.1 AA) | **PASS** | Heading hierarchy correct/unskipped (h1→h2→h3 SMS subsections); real lists; links have discernible text; emphasis via `<strong>` not color. Minors (optional): SMS pairs could be `<dl>`; patient callout could be a note div vs blockquote. |
+| Build & Deploy QA Verifier | **PASS** | Clean build (15 pages); draft `.md` build-excluded (leak guard holds); all 11 verify-coreflow checks PASS; link check PASS; no unsubstituted placeholders; both pages render full; `_site` untracked. |
+
+**Result: 4/4 PASS, zero blockers.** No fixes required.
