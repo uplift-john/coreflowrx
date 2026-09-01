@@ -2,6 +2,5 @@ docs/
 .claude/
 .agents/
 AGENTS.md
-design-export/
 scripts/
 CLAUDE.md

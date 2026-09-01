@@ -28,8 +28,8 @@ Eleventy's input dir is `.`, so **page templates live in the repo root** as `*.n
   `#175868`, legalLine (SC BoP Permit #PH-042891). Edit facts here, not in page markup.
 - Assets (hero JPGs, logos, `favicon.svg`, `styles.css`, `robots.txt`, `sitemap.xml`) live in the
   root and are passthrough-copied.
-- `_site/` = build output — **never edit by hand**. `docs/`, `design-export/`, `functions/`,
-  `scripts/`, `.claude/` are internal and excluded from the build via `.eleventyignore`.
+- `_site/` = build output — **never edit by hand**. `docs/`, `scripts/`, `.claude/`, `.agents/`
+  are internal and excluded from the build via `.eleventyignore`.
 
 ### Page front-matter convention
 ```yaml
@@ -118,10 +118,16 @@ Cloudflare *Pages* Function and will NOT run under this Worker — port it to a 
 ## Gotchas
 - Input dir is the repo root, so **any stray `.md`/template renders into `_site/` unless ignored**
   — when you add a new non-site folder, add it to `.eleventyignore` in the same commit. (A past
-  incident shipped an internal doc live.)
-- `DESIGN-ENHANCEMENT-PROMPT.md` is **stale/historical** (old palette, wrong phone number, Unsplash
-  images). Ignore it — trust `styles.css` v3.0 + `_data/site.json`.
-- `_config.yml` is a vestigial Jekyll/GitHub Pages file; the real build is Eleventy. Don't rely on it.
+  incident shipped an internal doc live.) The `verify-coreflow` Check 8 allowlist is the backstop:
+  an unignored draft fails the check by route, not by name.
+- **Eleventy does NOT prune `_site/`.** It only writes; it never deletes. So a file that leaked
+  into `_site/` on an earlier build **lingers there** after you fix/ignore the source, and shows up
+  as a phantom Check 8 (or link-check) failure on a local run. **Clean `_site/` before trusting a
+  local verify** (`rm -rf _site && npx @11ty/eleventy`). Fresh CI/Workers builds start from an empty
+  tree, so they're unaffected — this only bites local verification.
+- Publish PDFs (and any document) **by exact filename**, never a wildcard: add both an
+  `addPassthroughCopy("name.pdf")` line in `.eleventy.js` and the exact filename to the Check 8
+  allowlist. A `*.pdf` glob would silently ship any confidential PDF left at the repo root.
 
 ## Publishing — how a change goes live (do this EVERY time)
 This site deploys from the **`main`** branch: a change is **not live until it is committed and

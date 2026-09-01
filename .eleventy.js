@@ -12,6 +12,11 @@ module.exports = function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy("*.ico");
   eleventyConfig.addPassthroughCopy("*.webp");
   eleventyConfig.addPassthroughCopy("*.gif");
+  // PDFs are documents, not bulk assets — publish each ONE by exact name, never a
+  // wildcard. A *.pdf glob would silently ship any confidential PDF (BAA, contract,
+  // insurance card) left at the repo root. Add a line here AND to the Check 8
+  // allowlist when you deliberately publish a new document.
+  eleventyConfig.addPassthroughCopy("coreflow-fax-cover-sheet.pdf");
 
   // Not site content — don't render these as pages.
   eleventyConfig.ignores.add("README.md");

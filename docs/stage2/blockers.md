@@ -20,8 +20,8 @@ Everything here is either awaiting your input, an off-repo action only you can p
 - HTML-comment TODOs (not publicly visible), left in place: `payers.njk:22` & `providers.njk:71` (MUSC wording confirmation); `payers.njk:46` (credentialing data — NPI/NCPDP/permit confirmation before launch); `providers.njk:95` (clinician names).
 
 ## 4. Contact-fact cleanups you should know about
-- Fax corrected to **(843) 279-3185** everywhere (site + build + the stale `design-export/` snapshot + `docs/GHL-BUILD-CONTEXT.md`). Zero occurrences of the old numbers remain.
-- **`design-export/`** is a stale, unreferenced, build-excluded HTML snapshot (9 files). I fixed its fax to satisfy the "zero stale numbers" rule, but **recommend you delete `design-export/` entirely** — it duplicates outdated site content and is a future landmine. Say the word and I'll remove it.
+- Fax corrected to **(843) 279-3185** everywhere (site + build + `docs/GHL-BUILD-CONTEXT.md`). Zero occurrences of the old numbers remain.
+- **`design-export/` — DELETED (Pass A.1, 2026-09-01).** The stale, unreferenced, build-excluded HTML snapshot (9 files) was removed and its `.eleventyignore` line dropped in the same commit. (An old process doc, `docs/UPDATE-BRIEF.md`, still describes regenerating a `design-export/` bundle as a Claude Design handoff step — historical; ignore unless you resume that workflow.)
 - **Fax cover sheet PDF: NOT shipped.** The vendor PDF at the provided URL prints the **wrong** fax `(854) 209-2494` (and wrong hours). Per A12 I did not distribute it; the "Download Cover Sheet" buttons were replaced with "Call for a cover sheet". **Regenerate the PDF with `(843) 279-3185` and `8:30 AM–4:30 PM ET`**, then the download buttons can be restored.
 
 ## 5. Security-headers follow-ups (from Role 3 review)

@@ -70,6 +70,7 @@ Eleventy's input dir is the repo root, so **every** markdown/template file rende
 - **Known-good routes** (the only pages that may ship — add one here *only* when you deliberately add a page): `index about accessibility careers contact non-discrimination notice-of-privacy-practices patients payers privacy providers refer terms thanks 404`.
 - **Allowed file types** (assets, governed by the passthrough globs in `.eleventy.js` — no per-file maintenance): `html css js jpg jpeg png svg ico webp gif txt xml`.
 - **Allowed extensionless files** (deploy config, passthrough-copied): `_headers` (and `_redirects` if added).
+- **Allowed published documents — by EXACT filename, never by extension** (PDFs are documents, not bulk assets; a bare `pdf` type would silently ship a confidential PDF left at root): `coreflow-fax-cover-sheet.pdf`. Add a filename here *and* an exact `addPassthroughCopy(...)` line in `.eleventy.js` only when you deliberately publish a new document.
 - **FAIL** if any built `*.html` maps to a route not in the allowlist, or any file has an extension outside the allowed set. Past incident: `docs/CoreFlow-Copy-Review.md` shipped live at coreflowrx.com/docs/CoreFlow-Copy-Review/; the 2026-08-20 preflight caught `AGENTS.md` → `_site/AGENTS/` and `.agents/…/SKILL.md` → `_site/.agents/…/` one commit before first publish.
   - Suggested:
     ```sh
@@ -79,13 +80,13 @@ Eleventy's input dir is the repo root, so **every** markdown/template file rende
       route=${f#_site/}; route=${route%/index.html}; route=${route%.html}
       case " $PAGES " in *" $route "*) ;; *) bad="$bad $f" ;; esac
     done
-    for f in $(find _site -type f ! -name '*.html' ! -name '*.css' ! -name '*.js' ! -name '_headers' ! -name '*.jpg' ! -name '*.jpeg' ! -name '*.png' ! -name '*.svg' ! -name '*.ico' ! -name '*.webp' ! -name '*.gif' ! -name '*.txt' ! -name '*.xml'); do
+    for f in $(find _site -type f ! -name '*.html' ! -name '*.css' ! -name '*.js' ! -name '_headers' ! -name '*.jpg' ! -name '*.jpeg' ! -name '*.png' ! -name '*.svg' ! -name '*.ico' ! -name '*.webp' ! -name '*.gif' ! -name '*.txt' ! -name '*.xml' ! -name 'coreflow-fax-cover-sheet.pdf'); do
       bad="$bad $f"
     done
     [ -z "$bad" ] && echo PASS || echo "FAIL — unexpected:$bad"
     ```
 - When a leak IS found, protect the source in **whichever** of the repo's **two** ignore mechanisms fits, and — if it's a genuinely new page — add its route to `PAGES` above, in the same commit:
-  - `.eleventyignore` — for directories and some root files (currently `docs/`, `.claude/`, `.agents/`, `AGENTS.md`, `design-export/`, `CLAUDE.md`).
+  - `.eleventyignore` — for directories and some root files (currently `docs/`, `.claude/`, `.agents/`, `AGENTS.md`, `scripts/`, `CLAUDE.md`).
   - `.eleventy.js` `ignores.add(...)` — for root files (currently `DESIGN-ENHANCEMENT-PROMPT.md`, `README.md`).
   There are two lists; a file is unprotected unless it is in one of them. This split is a trap — check both.
 
