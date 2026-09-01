@@ -10,7 +10,7 @@ Everything here is either awaiting your input, an off-repo action only you can p
 - **GoHighLevel:** the three widget IDs in `contact/careers/payers` are taken from the exec prompt — confirm they're the current live forms.
 - **Cloudflare 404:** wire the built `/404.html` as the custom error page (Workers/Pages error handling) — see A15.
 - **Cloudflare Access:** if/when you enable it, add **bypass policies for `/terms` and `/privacy`** (carrier reviewers fetch these anonymously) and a **service token** for the uptime monitor. See `access-runbook.md`.
-- **workers.dev alias:** confirm whether `coreflowrx.john-057.workers.dev` is enabled and disable it (Access on the custom domain won't protect it). **Unresolved — needs your dashboard check.**
+- **workers.dev alias — CONFIRMED ENABLED (2026-09-01):** `coreflowrx.john-057.workers.dev` returns HTTP 200 and serves the full site. Access on the custom domain won't protect it, so **disable it before enabling Access** (Workers & Pages → coreflowrx → Settings → Domains & Routes). Harmless while Access is off (canonical points to coreflowrx.com).
 - **Push the archive tag:** `git push origin archive/ghl-integration-fn` (created locally; preserves the retired Pages Function branch tip).
 
 ## 3. Placeholders reported, NOT filled (per A8 — staff names withheld)
