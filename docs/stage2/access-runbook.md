@@ -11,7 +11,18 @@ Cloudflare Access is a **dashboard task**. The agent did not and will not touch 
 1. **Anonymous access to legal pages.** Carrier / A2P reviewers must fetch `/terms` and `/privacy` **without logging in**. If Access gates the whole site, add **Bypass policies** for these paths (and ideally `/notice-of-privacy-practices` and `/non-discrimination`), or SMS registration review fails.
    - Access → your application → Policies → add a **Bypass** policy with an Include rule matching `Everyone` scoped to those paths (or a path-based app).
 2. **Uptime monitor service token.** The Pass B deploy/uptime monitor (B10) hits `/` and `/refer`. With Access on, those redirect to a login and the monitor reports a false outage. Create an Access **service token** and store `CF-Access-Client-Id` / `CF-Access-Client-Secret` as repo/CI secrets; add a service-token policy to the app so the monitor authenticates.
-3. **workers.dev alias — CONFIRMED ENABLED (2026-09-01).** `curl -sI https://coreflowrx.john-057.workers.dev` returns **HTTP 200 and serves the full site** (same `<title>`). Access on the custom domain does **not** protect this `*.workers.dev` URL, so once Access is on it is an **unprotected bypass of the gate**. **Disable it before/when you enable Access** (Workers & Pages → coreflowrx → Settings → Domains & Routes → disable the workers.dev route). While Access is off it's only a duplicate public URL; canonical tags point to coreflowrx.com so SEO impact is minimal.
+3. **workers.dev alias — was ENABLED, now DISABLED.**
+   - 2026-09-01, earlier: `curl -sI https://coreflowrx.john-057.workers.dev` returned HTTP 200 and served the full site.
+   - 2026-09-01, later: returns HTTP 404. Route disabled.
+   - Access on the custom domain does **not** protect a `*.workers.dev` URL, so this must stay disabled. **Re-verify before every Access enablement** — a `wrangler deploy` or a recreated Worker can re-enable it silently, and the repo has no visibility into it.
+   - Verification command: `curl -sI https://coreflowrx.john-057.workers.dev | head -1`
+
+## Post-Access verification (run after enabling Access)
+Three of these must pass and the alias must 404. Three checks passing and one failing is the pattern that catches this class of problem — the gate looks fine from the front door while a side door stays open.
+- `curl -sI https://coreflowrx.com | head -1` → expect **302** to a `*.cloudflareaccess.com` login.
+- `curl -sI https://coreflowrx.com/terms | head -1` → expect **direct 200** (bypass policy working).
+- `curl -sI https://coreflowrx.com/privacy | head -1` → expect **direct 200** (bypass policy working).
+- `curl -sI https://coreflowrx.john-057.workers.dev | head -1` → expect **404** (alias stays disabled; a 200 here means Access is bypassable).
 
 ## Do NOT do in the repo
 - No Access-related headers or redirects were added to the repo (Access is enforced at the edge, not in markup). Keep it that way.
