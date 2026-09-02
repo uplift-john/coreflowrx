@@ -116,8 +116,18 @@ No internal link may 404 and no anchor may point at a missing id — the `#fax-c
   - Suggested: `npm run check-links` (or `node scripts/check-links.mjs`) — must print PASS.
   - Also: `grep -rn 'action="#"' *.njk _includes/*.njk` must return nothing.
 
+## Check 12 — Published document integrity (SHA-256 pin, then geometry)
+For any PDF this repo publishes, **text extraction is necessary but not sufficient** — a document can extract every string perfectly and still be unreadable. The first fax cover sheet did exactly this: the physician-order box overlapped the confidentiality notice, so both were visually garbled, yet `pdftotext` read every word (they were all present, just overlapping). This defect is invisible to any text/grep check.
+
+- **FAIL** if `python3 scripts/check-pdf-geometry.py _site/coreflow-fax-cover-sheet.pdf` exits non-zero.
+  - **PRIMARY — SHA-256 pin.** The published PDF must match the known-good hash `f3ac2e3e44d83459887253f354255f0430e43787ab3f1b3610fe57674599bc3b`. This is the real guard: if the hash matches, the geometry cannot have drifted at all — what ships is exactly the reviewed file. Pin/verify by **hash, not filename or timestamp** (the defective and correct cover sheets had confusingly similar names; a third "…update.pdf" of unknown provenance also existed — see blockers.md).
+  - **SECONDARY — geometry.** Asserts the "CONFIDENTIALITY" notice sits clearly below the "A valid physician order" box (gap ≥ 25pt; correct ≈ 37, defective overlap ≈ 15) plus the text (correct fax, no stale numbers). This only earns its keep when the PDF is **legitimately replaced** (new hash).
+  - **Scope it honestly:** the geometry check detects **one specific collision** between two named anchor words. It is **not** a general "this PDF renders correctly" check — a *different* overlap (e.g. the ENCLOSED checkboxes over the NOTES rules) passes it cleanly. A green Check 12 means "the pinned file (or a replacement whose order-box/notice separation is intact)", never "the document is visually fine."
+  - **On a legitimate redesign:** update `EXPECTED_SHA256` **and re-derive the anchor words + threshold** for the new layout — the current threshold is calibrated against the current layout. Do not just re-run.
+  - Requires `pdfplumber` (`python3 -m pip install pdfplumber`). The script **exits 2 and refuses to pass** if the dependency is missing — never let this check silently skip.
+
 ## Output format
-Print a table: rows = the 8 pages, columns = Checks 1–7, cells = PASS/FAIL (with a one-line note on any FAIL). Checks 8, 9, 10, and 11 are build-level, not per-page — report each as a single PASS/FAIL line beneath the table. Add a final summary line: overall PASS only if every cell **and** all four build-level checks are PASS. (There are 11 checks total.)
+Print a table: rows = the 8 pages, columns = Checks 1–7, cells = PASS/FAIL (with a one-line note on any FAIL). Checks 8, 9, 10, 11, and 12 are build-level, not per-page — report each as a single PASS/FAIL line beneath the table. Add a final summary line: overall PASS only if every cell **and** all five build-level checks are PASS. (There are 12 checks total.)
 
 ## When you find a recurring issue
 If the same class of problem appears twice across runs, add a new grep-able check to this file so future runs catch it automatically — improve the system, not just the instance.

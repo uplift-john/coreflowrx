@@ -128,6 +128,13 @@ Cloudflare *Pages* Function and will NOT run under this Worker — port it to a 
 - Publish PDFs (and any document) **by exact filename**, never a wildcard: add both an
   `addPassthroughCopy("name.pdf")` line in `.eleventy.js` and the exact filename to the Check 8
   allowlist. A `*.pdf` glob would silently ship any confidential PDF left at the repo root.
+- **For any PDF this repo publishes, text extraction is necessary but NOT sufficient.** A document
+  can extract every string correctly (so `pdftotext`/grep pass) and still be visually unreadable —
+  the first fax cover sheet had the physician-order box overlapping the confidentiality notice, an
+  overlap invisible to text extraction. **Verify geometry or render it.** `verify-coreflow` Check 12
+  (`scripts/check-pdf-geometry.py`, needs `pdfplumber`) asserts box position, not just presence, and
+  refuses to silently skip if the dependency is missing. Pin published PDFs by SHA-256, not filename
+  or timestamp.
 
 ## Publishing — how a change goes live (do this EVERY time)
 This site deploys from the **`main`** branch: a change is **not live until it is committed and

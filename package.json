@@ -7,7 +7,8 @@
     "build": "eleventy",
     "serve": "eleventy --serve",
     "check-links": "node scripts/check-links.mjs",
-    "verify": "eleventy && node scripts/check-links.mjs",
+    "check-pdf": "python3 scripts/check-pdf-geometry.py _site/coreflow-fax-cover-sheet.pdf",
+    "verify": "eleventy && node scripts/check-links.mjs && python3 scripts/check-pdf-geometry.py _site/coreflow-fax-cover-sheet.pdf",
     "deploy": "npm run build && wrangler deploy",
     "preview": "npm run build && wrangler dev"
   },
