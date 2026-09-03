@@ -48,7 +48,10 @@ PDF = sys.argv[1] if len(sys.argv) > 1 else "_site/coreflow-fax-cover-sheet.pdf"
 # PRIMARY assertion: the published cover sheet must be exactly this reviewed file.
 # If you deliberately replace the cover sheet, update this hash AND re-derive the
 # geometry anchors/threshold below for the new layout.
-EXPECTED_SHA256 = "f3ac2e3e44d83459887253f354255f0430e43787ab3f1b3610fe57674599bc3b"
+# 2026-09-03: branded "final" cover sheet (CoreFlow Rx logo/header). Same anchors
+# as before ("A valid physician order" + "CONFIDENTIALITY NOTICE"); gap is now
+# ~75.7pt (was 37.1 in the prior unbranded version), so MIN_GAP=25 still holds.
+EXPECTED_SHA256 = "7598d9373bae76e22d994191e3854f885a64a8561030482b9ba879c87bd76012"
 
 # SECONDARY assertion, calibrated for the CURRENT layout only:
 MIN_GAP = 25.0  # correct file gap is 37.1; defective is 14.8. 25 splits them with margin.
