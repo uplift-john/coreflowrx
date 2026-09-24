@@ -239,3 +239,18 @@ blockquote p{margin-bottom:var(--space-2)} blockquote p:last-child{margin-bottom
 }
 @media print{.site-header,.site-footer,.nav-toggle,.btn,.hero__cta,.cta-row{display:none!important}body{color:#000;background:#fff;font-size:11pt;line-height:1.5}.container{max-width:100%;padding:0}.section{padding:1rem 0}a{color:#000;text-decoration:underline}.callout-dark{background:#eee!important;color:#000!important}.callout-dark h2,.callout-dark p{color:#000!important}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:0.01ms!important;animation-iteration-count:1!important;transition-duration:0.01ms!important}}
+
+/* Physician-order notice sits inside the dark hero on providers.njk.
+   Scoped to .onDark so the same include stays dark-on-light elsewhere
+   (refer.njk) — never restyle the include itself. */
+.onDark,
+.onDark p,
+.onDark strong,
+.onDark span {
+  color: #fff;
+}
+
+.onDark a {
+  color: #fff;
+  text-decoration: underline;
+}
