@@ -6,11 +6,23 @@ activeNav: patients
 permalink: "/patients.html"
 robots: "noindex, nofollow"
 ---
+{#- NOINDEX — READ BEFORE REMOVING, AND SEE docs/stage2/blockers.md.
+    The `robots` line below was added for ONE reason: this page carried a
+    fabricated testimonial, and noindex contained the risk of an invented
+    endorsement being indexed. THAT TESTIMONIAL WAS DELETED on 2026-09-29, and
+    verify-coreflow Check 15 now makes it impossible to reintroduce the markup.
+    The stated precondition is therefore gone.
+
+    It was NOT removed in the same pass because that is John's call, not the
+    agent's — this page is a primary audience page and re-indexing it is an SEO
+    decision with a business consequence. The recommendation is to delete the
+    `robots` line and add the page to sitemap.xml. Do both in one commit.
+-#}
 <section class="hero hero--photo" style="background-image:url('hero-patients.jpg')">
  <div class="container">
  <span class="hero__eyebrow">For Patients &amp; Caregivers</span>
  <h1 class="hero__title">Expert infusion care. In your home.</h1>
- <p class="hero__lead">If your doctor has prescribed infusion therapy, you may not need to go to a hospital or clinic to receive it. CoreFlow sends a registered nurse to your home to give you your treatment at a time that works for you.</p>
+ <p class="hero__lead">If your doctor has prescribed infusion therapy, you may not need to go to a hospital or clinic to receive it. CoreFlow arranges for a registered nurse to come to your home and give you your treatment at a time that works for you.</p>
  <div class="hero__cta">
  <a class="btn btn--onDark" href="tel:{{ site.phoneTel }}">Call us: {{ site.phone }}</a>
  <a class="btn btn--ghost" href="contact.html">Contact us →</a>
@@ -24,9 +36,9 @@ robots: "noindex, nofollow"
  <p class="lead">You don't need to do anything complicated. Here's the process, step by step.</p>
  <div class="grid grid--3 mt-6">
  <div class="card"><div class="card__head"><span class="card__step" aria-hidden="true">1</span><svg class="card__icon" aria-hidden="true" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3v4a1 1 0 0 0 1 1h4"></path><path d="M17 21H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7l5 5v11a2 2 0 0 1-2 2z"></path><path d="M9 13h6"></path><path d="M9 17h4"></path></svg></div><h3>Your doctor sends us a referral.</h3><p>Online, by fax, or by phone. You don't have to set this up yourself.</p></div>
- <div class="card"><div class="card__head"><span class="card__step" aria-hidden="true">2</span><svg class="card__icon" aria-hidden="true" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.81.36 1.6.7 2.34a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.82-1.31a2 2 0 0 1 2.11-.45c.74.34 1.53.57 2.34.7A2 2 0 0 1 22 16.92z"></path></svg></div><h3>We call you quickly.</h3><p>Usually within a day or two. We introduce ourselves, answer your questions, and find an appointment time that works for you. If you want to start right away, we can often set up your first visit within a day of your insurance being approved. If you'd rather wait for a day that fits your schedule, that's completely fine.</p></div>
+ <div class="card"><div class="card__head"><span class="card__step" aria-hidden="true">2</span><svg class="card__icon" aria-hidden="true" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.81.36 1.6.7 2.34a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.82-1.31a2 2 0 0 1 2.11-.45c.74.34 1.53.57 2.34.7A2 2 0 0 1 22 16.92z"></path></svg></div><h3>We call to introduce ourselves.</h3><p>We introduce ourselves, answer your questions, and find an appointment time that works for you. If you want to start right away, we work to get your first visit on the books as soon as your insurance is approved. If you'd rather wait for a time that fits your schedule, that's completely fine.</p></div>
  <div class="card"><div class="card__head"><span class="card__step" aria-hidden="true">3</span><svg class="card__icon" aria-hidden="true" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="M9 12l2 2 4-4"></path></svg></div><h3>We check your insurance.</h3><p>We confirm coverage before your first visit and tell you what to expect.</p></div>
- <div class="card"><div class="card__head"><span class="card__step" aria-hidden="true">4</span><svg class="card__icon" aria-hidden="true" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5V21H3z"></path></svg></div><h3>A nurse comes to you.</h3><p>Your CoreFlow nurse arrives at your home with everything needed to safely give you your treatment.</p></div>
+ <div class="card"><div class="card__head"><span class="card__step" aria-hidden="true">4</span><svg class="card__icon" aria-hidden="true" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5V21H3z"></path></svg></div><h3>A nurse comes to you.</h3><p>Your infusion nurse arrives at your home with everything needed to safely give you your treatment.</p></div>
  <div class="card"><div class="card__head"><span class="card__step" aria-hidden="true">5</span><svg class="card__icon" aria-hidden="true" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"></path><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg></div><h3>Your doctor stays informed.</h3><p>After each visit, we send a report to your doctor so they always know how you're doing.</p></div>
  </div>
  <p class="lead mt-6">That's it. You focus on getting better. We handle the rest.</p>
@@ -40,9 +52,9 @@ robots: "noindex, nofollow"
 <section class="section section--soft">
  <div class="container">
  <h2 class="section-title">Nurses who come to you.</h2>
- <p>Every CoreFlow nurse is credentialed and supervised under our clinical standards.</p>
- <p>Our nurses are trained in infusion therapy. Many are working toward or have already earned their Certified Registered Nurse Infusion (CRNI) credential, a specialty certification for nurses who specialize in IV treatment.</p>
- <p>Your nurse is part of your community. They live and work near you. When someone from your own community sets up your treatment in your living room and stays with you through it, it stops feeling like a medical appointment and starts feeling like care.</p>
+ <p>Every nurse who cares for you is credentialed and works under CoreFlow's clinical standards.</p>
+ <p>The nursing team caring for you is made up of experienced infusion nurses. They are trained in IV treatment and in the therapy your doctor prescribed.</p>
+ <p>Every nurse we contract with works in the community they serve. Yours lives and works near you. When someone from your own community sets up your treatment in your living room and stays with you through it, it stops feeling like a medical appointment and starts feeling like care.</p>
  <p>When your nurse arrives, they will:</p>
  <ul>
  <li>Bring all needed supplies and medication</li>
@@ -52,7 +64,7 @@ robots: "noindex, nofollow"
  <li>Answer your questions before they leave</li>
  <li>Send a report to your doctor</li>
  </ul>
- <p>You will meet your nurse before your first infusion. If you have concerns about a specific nurse, let us know.</p>
+ <p>We arrange for you to meet your nurse before your first infusion whenever we can. If you have concerns about a specific nurse, let us know.</p>
  </div>
 </section>
 
@@ -62,8 +74,8 @@ robots: "noindex, nofollow"
  <details><summary><strong>Will my insurance cover home infusion?</strong></summary><p>Many insurance plans, including commercial plans, Medicare Advantage, and Medicaid managed care, cover home infusion therapy. We verify your benefits before your first visit and tell you what's covered. Call us at <a href="tel:{{ site.phoneTel }}">{{ site.phone }}</a> with questions.</p></details>
  <details><summary><strong>Do I have to be home alone during the treatment?</strong></summary><p>No. A caregiver, family member, or friend is welcome to be present. In some cases, having a caregiver at home is required. We'll let you know if that applies to you.</p></details>
  <details><summary><strong>What do I need to have at home?</strong></summary><p>Our intake team will walk you through this. Most patients need a comfortable place to sit or lie down, a small amount of refrigerator space for medication storage, and access to running water.</p></details>
- <details><summary><strong>How long does each treatment take?</strong></summary><p>It depends on the type of therapy your doctor prescribed. Some infusions take 30 minutes. Others take a few hours. Your nurse will tell you what to expect.</p></details>
- <details><summary><strong>What if something goes wrong during treatment?</strong></summary><p>Your nurse is trained to handle infusion-related reactions and complications. If a medical emergency occurs, they will call 911 and stay with you until help arrives. You will never be alone during your treatment.</p></details>
+ <details><summary><strong>How long does each treatment take?</strong></summary><p>It depends on the type of therapy your doctor prescribed. Some are short and some are longer. Your nurse will tell you what to expect before your visit and will stay with you the whole time.</p></details>
+ <details><summary><strong>What if something goes wrong during treatment?</strong></summary><p>Your nurse is trained to handle infusion-related reactions and complications. If a medical emergency occurs, they will call 911 and stay with you until help arrives. Your nurse stays with you for the whole visit.</p></details>
  <details><summary><strong>Can I keep seeing my regular doctor?</strong></summary><p>Yes. CoreFlow works with your existing doctors. We do not replace your primary care provider or specialist. We report back to them after every visit.</p></details>
  <details><summary><strong>How do I get started?</strong></summary><p>Ask your doctor to refer you to CoreFlow, or call us at <a href="tel:{{ site.phoneTel }}">{{ site.phone }}</a> and we can help connect you with your care team.</p></details>
  </div>
@@ -78,19 +90,10 @@ robots: "noindex, nofollow"
  </div>
 </section>
 
-<section class="section">
- <div class="container">
- <h2 class="section-title">What patients say about home infusion with CoreFlow.</h2>
- <!-- PLACEHOLDER — not a real patient or provider quote. Page is noindexed. Replace with consented quote before removing noindex. -->
- <blockquote><p><em>"After my diagnosis, the idea of driving to an infusion center every few weeks felt overwhelming. My CoreFlow nurse comes right to my living room, sets everything up, and stays with me the whole time. She knows my name, my history, and my dog. It stopped feeling like a medical appointment and started feeling like care."</em></p><p>— Margaret R., Summerville, SC</p></blockquote>
- <p>Have a story to share? Call <a href="tel:{{ site.phoneTel }}">{{ site.phone }}</a> or ask your care coordinator.</p>
- </div>
-</section>
-
 <section class="section text-center">
  <div class="container container--narrow">
  <h2 class="section-title">Ready to ask your doctor about home infusion?</h2>
- <blockquote style="text-align:left"><p><em>"I'd like to ask about CoreFlow for my infusion therapy. Can you refer me to them?"</em></p></blockquote>
+ <p class="note-box note-box--script">Here is one way to ask: <em>I'd like to ask about CoreFlow for my infusion therapy. Can you refer me to them?</em></p>
  <p>You can also call us with questions anytime.</p>
  <p><strong>{{ site.phone }}</strong><br>{{ site.hours }}</p>
  <div class="cta-row" style="justify-content:center">

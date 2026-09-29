@@ -1,6 +1,15 @@
 # Cloudflare _headers — served from the deploy root (_site/_headers).
 # Security headers for CoreFlow Rx. See docs/stage2/access-runbook.md for the
 # CSP roll-out plan (Report-Only now; flip to enforcing after browser verification).
+#
+# 2026-09-29: the last blocker to enforcing is cleared — the inline Plausible
+# bootstrap moved into site.js, so script-src 'self' https://plausible.io no
+# longer needs 'unsafe-inline'. The JSON-LD block is type="application/ld+json",
+# which is data and not subject to script-src. Wildcard vendor subdomains and
+# the unused form-action origins are dropped (the forms are cross-origin
+# iframes; the parent's form-action does not apply inside them).
+# Report-Only has no report-uri/report-to, so it currently reports NOWHERE —
+# either add an endpoint or flip to enforcing. See docs/stage2/blockers.md.
 
 /*
   X-Content-Type-Options: nosniff
@@ -8,4 +17,4 @@
   Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=()
   Strict-Transport-Security: max-age=86400; includeSubDomains
   X-Frame-Options: SAMEORIGIN
-  Content-Security-Policy-Report-Only: default-src 'self'; script-src 'self' https://plausible.io; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://plausible.io; frame-src https://copilot.formstack.com https://*.formstack.com https://api.leadconnectorhq.com https://*.leadconnectorhq.com; frame-ancestors 'self'; base-uri 'self'; form-action 'self' https://api.leadconnectorhq.com https://copilot.formstack.com; object-src 'none'
+  Content-Security-Policy-Report-Only: default-src 'self'; script-src 'self' https://plausible.io; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://plausible.io; frame-src https://copilot.formstack.com https://api.leadconnectorhq.com; frame-ancestors 'self'; base-uri 'self'; form-action 'self'; object-src 'none'

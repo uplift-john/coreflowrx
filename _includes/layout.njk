@@ -24,6 +24,7 @@
  .site-header{border-bottom:1px solid #d8dee8;background:#fff;position:sticky;top:0;z-index:50}
  .site-header__inner{display:flex;align-items:center;justify-content:space-between;padding:.75rem 0;gap:1rem}
  .brand{display:inline-flex;align-items:center;gap:.5rem;font-weight:700;color:#175868;text-decoration:none;font-size:1.125rem}
+ .brand__mark{height:48px;width:auto}
  .hero{padding:3rem 0;background:linear-gradient(180deg,#f5f7fa 0,#fff 100%)}
  .hero h1{font-size:2.25rem;line-height:1.15;color:#175868;margin:0 0 1rem}
 </style>
@@ -31,31 +32,53 @@
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":["MedicalBusiness","Pharmacy"],"name":"{{ site.name }}","url":"{{ (site.url + page.url) | replace('.html', '') }}","telephone":"{{ site.phone }}","faxNumber":"{{ site.fax }}","email":"{{ site.email }}","address":{"@type":"PostalAddress","streetAddress":"{{ site.address.street }}","addressLocality":"{{ site.address.city }}","addressRegion":"{{ site.address.state }}","postalCode":"{{ site.address.zip }}","addressCountry":"US"},"areaServed":{"@type":"State","name":"South Carolina"},"openingHoursSpecification":[{"@type":"OpeningHoursSpecification","dayOfWeek":["Monday","Tuesday","Wednesday","Thursday","Friday"],"opens":"08:30","closes":"16:30"}]}
 </script>
-<!-- Privacy-friendly analytics by Plausible -->
+<!-- Privacy-friendly analytics by Plausible. The bootstrap lives in site.js,
+     NOT inline: the planned enforcing CSP is script-src 'self' https://plausible.io
+     with no 'unsafe-inline', and an inline bootstrap would be blocked. -->
 <script async src="https://plausible.io/js/pa-egVEd85UQF5ji98mPTW2a.js"></script>
-<script>
-window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
-plausible.init()
-</script>
 </head>
 <body>
 <a href="#main" class="skip-link">Skip to main content</a>
 <header class="site-header">
  <div class="container site-header__inner">
- <a class="brand" href="index.html" aria-label="{{ site.name }} — Home"{% if activeNav == "home" %} aria-current="page"{% endif %}><img class="brand__mark" src="{{ site.logo }}" alt="{{ site.name }}" height="46"></a>
- <div>
- <a class="header-phone" href="tel:{{ site.phoneTel }}">{{ site.phone }}</a>
+ <a class="brand" href="index.html" aria-label="{{ site.name }} — Home"{% if activeNav == "home" %} aria-current="page"{% endif %}><img class="brand__mark" src="{{ site.logo }}" alt="{{ site.name }}" width="{{ site.logoWidth }}" height="{{ site.logoHeight }}"></a>
+ {#- Contact values come from _data/site.json only — never hardcode them here.
+     Phone is tel:, fax is deliberately plain text (a fax number must never be
+     dialled as a voice call), email is mailto:. Below 768px only the phone
+     survives in the bar; fax and email stay in the footer and on /contact. -#}
+ <ul class="header-contact" aria-label="How to reach CoreFlow">
+ <li class="header-contact__item header-contact__item--phone">
+ <a class="header-contact__link" href="tel:{{ site.phoneTel }}">
+ <svg class="header-contact__icon" aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.81.36 1.6.7 2.34a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.82-1.31a2 2 0 0 1 2.11-.45c.74.34 1.53.57 2.34.7A2 2 0 0 1 22 16.92z"></path></svg>
+ <span class="header-contact__label">Call</span>
+ <span class="header-contact__value">{{ site.phone }}</span>
+ </a>
+ </li>
+ <li class="header-contact__item header-contact__item--fax">
+ <span class="header-contact__link">
+ <svg class="header-contact__icon" aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V2h12v7"></path><rect x="2" y="9" width="20" height="9" rx="2"></rect><path d="M6 14h12v8H6z"></path></svg>
+ <span class="header-contact__label">Fax</span>
+ <span class="header-contact__value">{{ site.fax }}</span>
+ </span>
+ </li>
+ <li class="header-contact__item header-contact__item--email">
+ <a class="header-contact__link" href="mailto:{{ site.email }}">
+ <svg class="header-contact__icon" aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"></rect><path d="m2 7 10 6 10-6"></path></svg>
+ <span class="header-contact__label">Email</span>
+ <span class="header-contact__value">{{ site.email }}</span>
+ </a>
+ </li>
+ </ul>
  <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Open menu"><span class="nav-toggle__icon" aria-hidden="true"></span></button>
- </div>
  <nav class="primary-nav" id="primary-nav" aria-label="Primary">
  <ul class="primary-nav__list">
  <li><a href="providers.html"{% if activeNav == "providers" %} aria-current="page"{% endif %}>For Prescribers</a></li>
+ <li><a href="diseases-we-treat.html"{% if activeNav == "diseases" %} aria-current="page"{% endif %}>Diseases We Treat</a></li>
+ <li><a href="drugs-we-provide.html"{% if activeNav == "drugs" %} aria-current="page"{% endif %}>Drugs We Provide</a></li>
  <li><a href="patients.html"{% if activeNav == "patients" %} aria-current="page"{% endif %}>For Patients</a></li>
- <li><a href="payers.html"{% if activeNav == "payers" %} aria-current="page"{% endif %}>For Payers</a></li>
  <li><a href="about.html"{% if activeNav == "about" %} aria-current="page"{% endif %}>About</a></li>
- <li><a href="careers.html"{% if activeNav == "careers" %} aria-current="page"{% endif %}>Careers</a></li>
  <li><a href="contact.html"{% if activeNav == "contact" %} aria-current="page"{% endif %}>Contact</a></li>
- <li style="color: #DEEBF0; text-shadow: 0px 4px 12px #FFFFFF26"><a class="btn btn--primary refer-cta" href="refer.html" style="color:#ffffff"{% if activeNav == "refer" %} aria-current="page"{% endif %}>Refer a Patient →</a></li>
+ <li class="primary-nav__cta"><a class="btn btn--primary" href="refer.html"{% if activeNav == "refer" %} aria-current="page"{% endif %}>Refer a Patient →</a></li>
  </ul>
  </nav>
  </div>
@@ -70,7 +93,7 @@ plausible.init()
  <h2 style="font-size:1.125rem">{{ site.name }}</h2>
  <address>{{ site.address.street }}<br>{{ site.address.city }}, {{ site.address.state }} {{ site.address.zip }}<br><a href="tel:{{ site.phoneTel }}">{{ site.phone }}</a> · Fax {{ site.fax }}<br><a href="mailto:{{ site.email }}">{{ site.email }}</a><br>{{ site.hours }}</address>
  </div>
- <nav aria-label="Prescribers"><h3 style="font-size:1rem">Prescribers</h3><ul><li><a href="refer.html">Refer a Patient</a></li><li><a href="providers.html">For Prescribers</a></li><li><a href="payers.html">For Payers</a></li></ul></nav>
+ <nav aria-label="Prescribers"><h3 style="font-size:1rem">Prescribers</h3><ul><li><a href="refer.html">Refer a Patient</a></li><li><a href="providers.html">For Prescribers</a></li><li><a href="diseases-we-treat.html">Diseases We Treat</a></li><li><a href="drugs-we-provide.html">Drugs We Provide</a></li><li><a href="payers.html">For Payers &amp; Health Plans</a></li></ul></nav>
  <nav aria-label="Patients"><h3 style="font-size:1rem">Patients</h3><ul><li><a href="patients.html">For Patients &amp; Caregivers</a></li><li><a href="contact.html">Contact</a></li></ul></nav>
  <nav aria-label="Company"><h3 style="font-size:1rem">Company</h3><ul><li><a href="about.html">About</a></li><li><a href="careers.html">Careers</a></li><li><a href="contact.html">Contact</a></li></ul></nav>
  <nav aria-label="Legal"><h3 style="font-size:1rem">Legal</h3><ul><li><a href="privacy.html">Privacy Policy</a></li><li><a href="terms.html">Terms &amp; Conditions</a></li><li><a href="notice-of-privacy-practices.html">Notice of Privacy Practices</a></li><li><a href="non-discrimination.html">Non-Discrimination</a></li><li><a href="accessibility.html">Accessibility</a></li></ul></nav>
@@ -79,5 +102,6 @@ plausible.init()
  </div>
 </footer>
 <script src="site.js" defer></script>
+{% if pageScript %}<script src="{{ pageScript }}" defer></script>{% endif %}
 </body>
 </html>

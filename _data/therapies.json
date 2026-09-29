@@ -1,0 +1,423 @@
+{
+  "_source": "CoreFlow intake spreadsheet, received 2026-09. NOT clinically vetted. Every clinical flag is itemised in docs/stage2/blockers.md.",
+  "_statusRules": {
+    "confirmed": "Renders on /drugs-we-provide as a therapy CoreFlow provides, and is in the type-ahead index.",
+    "unconfirmed": "Renders NOWHERE and is not in the search index. Present here only so the flag is tracked in one place. Flip to \"confirmed\" once Greg/John sign off — no template change is needed."
+  },
+  "_extensionPoint": "products[] is the brand-level slot. IVIG ships as the generic entry the intake map supplied; when Greg names the specific immunoglobulin products, add them to products[] and they render as sub-items. No rebuild, no template edit.",
+  "specialties": [
+    {
+      "id": "dermatology",
+      "name": "Dermatology"
+    },
+    {
+      "id": "gastroenterology",
+      "name": "Gastroenterology"
+    },
+    {
+      "id": "immunology",
+      "name": "Immunology"
+    },
+    {
+      "id": "neurology",
+      "name": "Neurology"
+    },
+    {
+      "id": "oncology",
+      "name": "Oncology"
+    },
+    {
+      "id": "pulmonology",
+      "name": "Pulmonology"
+    },
+    {
+      "id": "rheumatology",
+      "name": "Rheumatology"
+    }
+  ],
+  "therapies": [
+    {
+      "name": "IVIG",
+      "generic": "immune globulin",
+      "class": "Immunoglobulin",
+      "aliases": [
+        "ivig",
+        "immune globulin",
+        "immunoglobulin",
+        "gamma globulin",
+        "igg"
+      ],
+      "specialties": [
+        "dermatology",
+        "neurology",
+        "oncology",
+        "rheumatology"
+      ],
+      "status": "confirmed",
+      "products": [],
+      "_tagNotes": [
+        "gastroenterology removed: no established GI indication for immune globulin"
+      ]
+    },
+    {
+      "name": "Remicade",
+      "generic": "infliximab",
+      "class": "Infliximab",
+      "aliases": [
+        "infliximab"
+      ],
+      "specialties": [
+        "dermatology",
+        "gastroenterology",
+        "rheumatology"
+      ],
+      "status": "confirmed",
+      "products": []
+    },
+    {
+      "name": "Inflectra",
+      "generic": "infliximab-dyyb",
+      "class": "Infliximab",
+      "aliases": [
+        "infliximab",
+        "infliximab-dyyb"
+      ],
+      "specialties": [
+        "dermatology",
+        "gastroenterology",
+        "rheumatology"
+      ],
+      "status": "confirmed",
+      "products": []
+    },
+    {
+      "name": "Avsola",
+      "generic": "infliximab-axxq",
+      "class": "Infliximab",
+      "aliases": [
+        "infliximab",
+        "infliximab-axxq"
+      ],
+      "specialties": [
+        "dermatology",
+        "gastroenterology",
+        "rheumatology"
+      ],
+      "status": "confirmed",
+      "products": []
+    },
+    {
+      "name": "Renflexis",
+      "generic": "infliximab-abda",
+      "class": "Infliximab",
+      "aliases": [
+        "infliximab",
+        "infliximab-abda"
+      ],
+      "specialties": [
+        "dermatology",
+        "gastroenterology",
+        "rheumatology"
+      ],
+      "status": "confirmed",
+      "products": []
+    },
+    {
+      "name": "Rituxan",
+      "generic": "rituximab",
+      "class": "Rituximab",
+      "aliases": [
+        "rituximab"
+      ],
+      "specialties": [
+        "dermatology",
+        "neurology",
+        "oncology",
+        "rheumatology"
+      ],
+      "status": "confirmed",
+      "products": [],
+      "_tagNotes": [
+        "gastroenterology removed: no rituximab indication in IBD; the UC trials failed"
+      ]
+    },
+    {
+      "name": "Ruxience",
+      "generic": "rituximab-pvvr",
+      "class": "Rituximab",
+      "aliases": [
+        "rituximab",
+        "rituximab-pvvr"
+      ],
+      "specialties": [
+        "oncology",
+        "rheumatology"
+      ],
+      "status": "confirmed",
+      "products": []
+    },
+    {
+      "name": "Actemra",
+      "generic": "tocilizumab",
+      "class": "Tocilizumab",
+      "aliases": [
+        "tocilizumab"
+      ],
+      "specialties": [
+        "rheumatology"
+      ],
+      "status": "confirmed",
+      "products": []
+    },
+    {
+      "name": "Uplizna",
+      "generic": "inebilizumab",
+      "class": "Anti-CD19",
+      "aliases": [
+        "inebilizumab"
+      ],
+      "specialties": [
+        "neurology",
+        "rheumatology"
+      ],
+      "status": "confirmed",
+      "products": []
+    },
+    {
+      "name": "Briumvi",
+      "generic": "ublituximab",
+      "class": "Anti-CD20",
+      "aliases": [
+        "ublituximab"
+      ],
+      "specialties": [
+        "neurology"
+      ],
+      "status": "confirmed",
+      "products": []
+    },
+    {
+      "name": "Ocrevus",
+      "generic": "ocrelizumab",
+      "class": "Anti-CD20",
+      "aliases": [
+        "ocrelizumab"
+      ],
+      "specialties": [
+        "neurology"
+      ],
+      "status": "confirmed",
+      "products": []
+    },
+    {
+      "name": "Soliris",
+      "generic": "eculizumab",
+      "class": "Complement inhibitor",
+      "aliases": [
+        "eculizumab"
+      ],
+      "specialties": [
+        "neurology",
+        "oncology"
+      ],
+      "status": "unconfirmed",
+      "products": [],
+      "flag": "Indications are PNH and aHUS, which are hematology — there is no hematology row in CoreFlow’s seven specialties, so the oncology tag was a stand-in. Also carries a REMS with meningococcal vaccination requirements: confirm CoreFlow is REMS-certified."
+    },
+    {
+      "name": "Ultomiris",
+      "generic": "ravulizumab",
+      "class": "Complement inhibitor",
+      "aliases": [
+        "ravulizumab"
+      ],
+      "specialties": [
+        "oncology"
+      ],
+      "status": "unconfirmed",
+      "products": [],
+      "flag": "Same as Soliris: PNH/aHUS are hematology, not oncology, and it carries the same REMS certification requirement. Its gMG/NMOSD neurology indications were also untagged while Soliris’ were tagged, which shows the specialty column was not applied systematically."
+    },
+    {
+      "name": "Vyepti",
+      "generic": "eptinezumab",
+      "class": "CGRP inhibitor",
+      "aliases": [
+        "eptinezumab"
+      ],
+      "specialties": [
+        "neurology"
+      ],
+      "status": "confirmed",
+      "products": []
+    },
+    {
+      "name": "Vyvgart",
+      "generic": "efgartigimod alfa",
+      "class": "FcRn antagonist",
+      "aliases": [
+        "efgartigimod"
+      ],
+      "specialties": [
+        "neurology"
+      ],
+      "status": "confirmed",
+      "products": []
+    },
+    {
+      "name": "Vyvgart Hytrulo",
+      "generic": "efgartigimod alfa / hyaluronidase",
+      "class": "FcRn antagonist",
+      "aliases": [
+        "efgartigimod",
+        "hytrulo"
+      ],
+      "specialties": [
+        "neurology"
+      ],
+      "status": "unconfirmed",
+      "products": [],
+      "flag": "Subcutaneous administration. The same IV-vs-SC question held back Skyrizi, Stelara, Xolair, Fasenra, Tezspire and Simponi Aria — it was not applied here. Confirm whether SC administration is in scope at all, then apply one answer to all seven."
+    },
+    {
+      "name": "Simponi Aria",
+      "generic": "golimumab",
+      "class": "Golimumab",
+      "aliases": [
+        "golimumab",
+        "aria simponi"
+      ],
+      "specialties": [
+        "dermatology",
+        "gastroenterology",
+        "rheumatology"
+      ],
+      "status": "unconfirmed",
+      "flag": "Intake map reads \"Aria Simponi\" — transposed. Separately, Simponi Aria (IV golimumab) has neither a dermatology nor a gastroenterology indication, though the map tags both; subcutaneous Simponi has the UC indication, the IV does not. Fix the tags before flipping.",
+      "products": []
+    },
+    {
+      "name": "Ilumya",
+      "generic": "tildrakizumab",
+      "class": "Interleukin inhibitor",
+      "aliases": [
+        "tildrakizumab"
+      ],
+      "specialties": [
+        "dermatology",
+        "gastroenterology",
+        "rheumatology"
+      ],
+      "status": "unconfirmed",
+      "flag": "No IV formulation exists — tildrakizumab is subcutaneous. Omit unless CoreFlow dispenses SC. Also tagged GI and rheumatology in the intake map; it is plaque-psoriasis only.",
+      "products": []
+    },
+    {
+      "name": "Skyrizi",
+      "generic": "risankizumab",
+      "class": "Interleukin inhibitor",
+      "aliases": [
+        "risankizumab"
+      ],
+      "specialties": [
+        "dermatology",
+        "gastroenterology",
+        "rheumatology"
+      ],
+      "status": "unconfirmed",
+      "flag": "IV and subcutaneous forms both exist. Confirm which CoreFlow provides.",
+      "products": []
+    },
+    {
+      "name": "Stelara",
+      "generic": "ustekinumab",
+      "class": "Interleukin inhibitor",
+      "aliases": [
+        "ustekinumab"
+      ],
+      "specialties": [
+        "dermatology",
+        "gastroenterology",
+        "rheumatology"
+      ],
+      "status": "unconfirmed",
+      "flag": "IV and subcutaneous forms both exist. Confirm which CoreFlow provides.",
+      "products": []
+    },
+    {
+      "name": "Xolair",
+      "generic": "omalizumab",
+      "class": "Omalizumab",
+      "aliases": [
+        "omalizumab"
+      ],
+      "specialties": [
+        "dermatology",
+        "gastroenterology",
+        "pulmonology"
+      ],
+      "status": "unconfirmed",
+      "flag": "No IV formulation exists — omalizumab is subcutaneous. Omit unless CoreFlow dispenses SC. Also tagged gastroenterology with no GI indication.",
+      "products": []
+    },
+    {
+      "name": "Fasenra",
+      "generic": "benralizumab",
+      "class": "Anti-IL-5",
+      "aliases": [
+        "benralizumab"
+      ],
+      "specialties": [
+        "pulmonology"
+      ],
+      "status": "unconfirmed",
+      "flag": "No IV formulation exists — benralizumab is subcutaneous. Omit unless CoreFlow dispenses SC.",
+      "products": []
+    },
+    {
+      "name": "Tezspire",
+      "generic": "tezepelumab",
+      "class": "Anti-TSLP",
+      "aliases": [
+        "tezepelumab"
+      ],
+      "specialties": [
+        "pulmonology"
+      ],
+      "status": "unconfirmed",
+      "flag": "No IV formulation exists — tezepelumab is subcutaneous. Omit unless CoreFlow dispenses SC.",
+      "products": []
+    },
+    {
+      "name": "Leqembi",
+      "generic": "lecanemab",
+      "class": "Anti-amyloid",
+      "aliases": [
+        "lecanemab"
+      ],
+      "specialties": [
+        "neurology"
+      ],
+      "status": "unconfirmed",
+      "flag": "Confirm CoreFlow dispenses this therapy.",
+      "products": []
+    },
+    {
+      "name": "Leqvio",
+      "generic": "inclisiran",
+      "class": "Lipid-lowering",
+      "aliases": [
+        "inclisiran"
+      ],
+      "specialties": [
+        "immunology",
+        "pulmonology"
+      ],
+      "status": "unconfirmed",
+      "flag": "Inclisiran is a subcutaneous lipid-lowering agent with no immunology or pulmonology relevance — there is no outcome in which this entry becomes correct. Recommend DELETING the entry outright rather than holding it. Raise the two empty specialties separately.",
+      "products": []
+    }
+  ],
+  "_clinicalReview": "Reviewed 2026-09-29. Entries were only ever moved toward \"unconfirmed\" — nothing was added or re-tagged into a new claim. Two known gaps are deliberately NOT fixed here because fixing them would mean asserting a clinical fact nobody has confirmed: (1) IVIG is not tagged \"immunology\", which is why the Immunology row renders empty — almost certainly wrong for an IVIG-heavy pharmacy, but it is Greg’s call; (2) no specific immunoglobulin products are named. Both are at the top of docs/stage2/blockers.md.",
+  "_missingField": "There is no \"route\" field. Route is the single question that disqualified seven entries, yet no card states it. Add route once Greg confirms IV vs SC scope, and render it."
+}

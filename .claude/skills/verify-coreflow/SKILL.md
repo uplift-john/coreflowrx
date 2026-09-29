@@ -7,7 +7,9 @@ description: Verify CoreFlow Specialty Infusion site copy and compliance end-to-
 
 Never report a change complete based on a successful edit alone. Run **every** check below against the freshly built `_site/` output (not just the `.njk` source). If any check fails, fix the issue and rerun from Check 1 — do not hand back partially verified work.
 
-Produce a **PASS/FAIL table by check and by page** at the end. Do not declare done until every row is PASS. The 8 pages are: `index`, `providers`, `patients`, `payers`, `refer`, `about`, `careers`, `contact`.
+Produce a **PASS/FAIL table by check and by page** at the end. Do not declare done until every row is PASS. The 10 primary pages are: `index`, `providers`, `patients`, `payers`, `refer`, `about`, `careers`, `contact`, `diseases-we-treat`, `drugs-we-provide`.
+
+Most of the content checks are now **scripted**, one script per check under `scripts/`, and `npm run verify` runs the build plus all of them in order. Read the count from this file: **there are 17 checks.** Run the scripts rather than re-deriving the greps — and never merge two checks into one script, because a merged check can be passed by weakening either half.
 
 ## Check 1 — Build
 Run `npx @11ty/eleventy`. Requires zero errors and zero broken templates. The site must build to `_site/`. If the build fails, nothing else can pass — fix first.
@@ -23,20 +25,17 @@ CoreFlow is **pre-launch and pursuing** URAC Specialty Pharmacy v5.0 and ACHC IR
   3. the exact disclaimer appears verbatim: **`Accreditation has been initiated and has not yet been awarded.`**
   - Suggested: confirm every file under `_site/` that matches `URAC|ACHC` also contains the disclaimer string.
 
-## Check 3 — MUSC placeholder
-MUSC has authorized the relationship. User-approved wording:
+## Check 3 — MUSC appears only in individual employment history
+**This check was INVERTED on 2026-09-29 and the previous version must not be restored.** It used to whitelist four approved MUSC *relationship* sentences plus a `[MUSC_RELATIONSHIP_LANGUAGE]` token. The posture is now the opposite: MUSC is named **only** when describing where a named team member previously worked, inside that person's bio. No partnership framing, no relationship statement, no logo, no "in collaboration with", no implied affiliation. The approved-sentence list and the token are **gone** — do not reintroduce either.
 
-1. Homepage proof bar: "**Trusted by MUSC Health** — Selected as a home infusion partner by South Carolina's academic medical center." (Also approved reused as the providers callout, split as heading + text, John 2026-07-20.)
-2. About narrative: "That commitment is part of why MUSC Health trusts CoreFlow as a home infusion partner and why we hold ourselves to the standards a health system of that caliber expects."
-3. About callout: "A trusted MUSC Health home infusion partner" + "CoreFlow works with MUSC Health as a trusted home infusion partner. That trust reflects the clinical standards, communication, and reliability we bring to every referral." (1–3 confirmed final by John, 2026-07-13.)
-4. Payers card: "MUSC Health selected CoreFlow as a home infusion partner. When an academic health system extends that trust, it sets the bar for how we handle every referral and we build to meet it." (Authored by John in Claude Design and explicitly approved for publication, 2026-07-20.)
-
-- **FAIL** if any other specific MUSC claim ships, e.g.: `chose CoreFlow`, `Chosen by MUSC Health`, `preferred home infusion partner for MUSC Health`, or any concrete MUSC phrasing beyond the sentences above.
-  - Suggested: `grep -rniE "musc" _site/` and inspect every hit.
-- **PASS** requires every MUSC mention to be either (a) one of the approved sentences verbatim, or (b) the literal token **`[MUSC_RELATIONSHIP_LANGUAGE]`** where wording is still pending. As of 2026-07-20 no page uses the token (providers intro dropped it; providers callout uses sentence 1; payers card uses sentence 4) — its reappearance is fine only as a deliberate placeholder, never as a regression.
+- **PASS** requires every `musc` occurrence in built HTML to sit inside an element whose class list contains `bio`, and zero MUSC references in source templates (including HTML comments — that is how the last wording TODO survived three passes).
+- Permitted example, inside a bio: "…most recently managing prior authorization operations for infusion services at MUSC."
+- **FAIL** on anything else.
+  - Run: `npm run check-musc` (`scripts/check-musc-bio-only.mjs`) — must print PASS.
+- **Does not cover:** a logo or image of MUSC; an unnamed but obvious reference ("South Carolina's academic medical center"); or whether the employment history in a bio is true. Those are the Compliance reviewer's.
 
 ## Check 4 — Legal flags
-- Every fictional/sample testimonial — on **both** the patients and providers pages — must carry a visible HTML-comment flag marking it as SAMPLE / NOT a real quote / replace before launch. FAIL if any attributed quote lacks the flag.
+- **Testimonials: superseded by Check 15.** The old rule here asked for an HTML-comment flag on each sample quote. Flagging a fabricated quote is no longer sufficient — as of 2026-09-29 the fabricated testimonials are **deleted** and Check 15 forbids the markup entirely. Do not re-add a "flag it" allowance.
 - No placeholder credentialing data may go live. **FAIL** on: dummy `1234567890` NPI/NCPDP values, an incomplete permit number (e.g. `Permit Add #`), or garbled/placeholder payer names (e.g. `HITS, IRN, MHITS`). These must be replaced with real, confirmed values or withheld behind "available upon request".
   - Suggested: `grep -rniE "1234567890|permit add #|HITS, IRN, MHITS" _site/`
 - Staff names are withheld until CoreFlow is ready to publish them (John, 2026-07-13): every clinician/officer listing must use the `[NAME]` placeholder, keeping real credentials/titles. The CEO (Jason Clapsaddle) is the only publishable name. **FAIL** if the old fictional names appear anywhere — they were on providers, about, AND privacy (Privacy Officer), so sweep every page, not just team sections.
@@ -51,12 +50,12 @@ CoreFlow is filing additional state licenses; do not lock the brand to one state
   - Suggested: `grep -rniE "charlotte|chapel hill|durham|augusta|savannah|atlanta|49 others|serve one state" _site/`
 
 ## Check 6 — Voice
-- Prescriber and payer pages **may** use clinical terminology (CRNI, URAC, ACHC IRX-NO797, USP 659/1079, cold chain).
+- Prescriber and payer pages **may** use clinical terminology (URAC, ACHC IRX-NO797, USP 659/1079, cold chain). **CRNI is no longer permitted on any page** — see Check 16. The old wording listed it as allowed; that is stale.
 - Patient pages must stay ~8th-grade reading level, short sentences, and keep a **human phone number visible**. FAIL if a patient page drops the phone number or drifts into jargon/bureaucratic tone.
 - Overall tone across the site: expert, modern, trustworthy — never salesy, buzzword-heavy, or bureaucratic.
 
 ## Check 7 — Render integrity
-For each of the 8 pages, open the built HTML and confirm:
+For each of the 10 primary pages, open the built HTML and confirm:
 - No leaked Nunjucks artifacts — no raw `{{ … }}` or `{% … %}` in the output.
   - Suggested: `grep -rnE "\{\{|\{%|%\}" _site/*.html`
   - Note: match the opening `{{`/`{%`, **not** bare `}}` — the Plausible analytics snippet legitimately contains `||{}};` (a `}}`), so grepping bare `}}` false-positives. A real leak always carries the opening `{{`/`{%`.
@@ -67,14 +66,16 @@ For each of the 8 pages, open the built HTML and confirm:
 ## Check 8 — No internal content published (ALLOWLIST)
 Eleventy's input dir is the repo root, so **every** markdown/template file renders into `_site/` unless ignored, and internal docs must never ship. Do **not** rely on a denylist of known-bad paths — a denylist only catches leaks someone already thought of, and the next internal file postdates the list (this is exactly how `AGENTS.md` and `.agents/` leaked: they were added after the old denylist was written). Instead, **allowlist** the legitimate output and FAIL on anything else, named or not.
 
-- **Known-good routes** (the only pages that may ship — add one here *only* when you deliberately add a page): `index about accessibility careers contact non-discrimination notice-of-privacy-practices patients payers privacy providers refer terms thanks 404`.
+- **Known-good routes** (the only pages that may ship — add one here *only* when you deliberately add a page): `index about accessibility careers contact diseases-we-treat drugs-we-provide non-discrimination notice-of-privacy-practices patients payers privacy providers refer terms thanks 404`.
+- Run: `npm run check-leaks` (`scripts/check-leak-allowlist.mjs`) — the allowlist now lives in that script as well as here. **Keep the two in sync**; the script is what fails the build.
+- **Images now pass by EXACT FILENAME too, not by extension** (added 2026-09-29). `.eleventy.js` globs `*.png`/`*.jpg`, so a screenshot of an insurance card or a payer contract left at the repo root would have published silently and passed a type-based check — the same failure mode the PDF rule exists to prevent. The `IMAGES` set in `scripts/check-leak-allowlist.mjs` is the allowlist; the failure message prints the exact line to add when a new image is deliberately published.
 - **Allowed file types** (assets, governed by the passthrough globs in `.eleventy.js` — no per-file maintenance): `html css js jpg jpeg png svg ico webp gif txt xml`.
 - **Allowed extensionless files** (deploy config, passthrough-copied): `_headers` (and `_redirects` if added).
 - **Allowed published documents — by EXACT filename, never by extension** (PDFs are documents, not bulk assets; a bare `pdf` type would silently ship a confidential PDF left at root): `coreflow-fax-cover-sheet.pdf`. Add a filename here *and* an exact `addPassthroughCopy(...)` line in `.eleventy.js` only when you deliberately publish a new document.
 - **FAIL** if any built `*.html` maps to a route not in the allowlist, or any file has an extension outside the allowed set. Past incident: `docs/CoreFlow-Copy-Review.md` shipped live at coreflowrx.com/docs/CoreFlow-Copy-Review/; the 2026-08-20 preflight caught `AGENTS.md` → `_site/AGENTS/` and `.agents/…/SKILL.md` → `_site/.agents/…/` one commit before first publish.
   - Suggested:
     ```sh
-    PAGES="index about accessibility careers contact non-discrimination notice-of-privacy-practices patients payers privacy providers refer terms thanks 404"
+    PAGES="index about accessibility careers contact diseases-we-treat drugs-we-provide non-discrimination notice-of-privacy-practices patients payers privacy providers refer terms thanks 404"
     bad=""
     for f in $(find _site -name '*.html'); do
       route=${f#_site/}; route=${route%/index.html}; route=${route%.html}
@@ -99,7 +100,11 @@ Eleventy's input dir is the repo root, so **every** markdown/template file rende
 ## Check 10 — Contact facts match the single source of truth
 Contact facts live only in `_data/site.json` and must render identically everywhere. A wrong fax number shipped live once (a referring office faxing PHI reaches the wrong recipient) — this check exists so it cannot recur silently.
 
-- **FAIL** if any contact fact rendered into `_site/` disagrees with `_data/site.json`, or if a phone/fax-shaped string appears in built HTML that is not the value in `site.json` (i.e. a hardcoded number bypassing `{{ site.* }}`).
+**Email is a TWO-ROLE split (John, 2026-09-29).** `site.email` = `info@coreflowrx.com` is the public support address. `site.emailLegal` = `help@coreflowrx.com` is the address already registered in the carrier-facing A2P/10DLC documents, and Terms, Privacy and the Notice of Privacy Practices must keep it so the registered text does not move. Inside `<main>`, those three routes use **only** `emailLegal` and every other route uses **only** `email`. The site-wide footer is chrome, not page content, and carries the public address on every page including the legal ones — that is intended, and the rule is scoped to `<main>` for exactly that reason. Two addresses on one site is only safe if nothing drifts, so the split is enforced rather than trusted.
+
+- **FAIL** if any contact fact rendered into `_site/` disagrees with `_data/site.json`, or if a phone/fax-shaped string appears in built HTML that is not the value in `site.json` (i.e. a hardcoded number bypassing `{{ site.* }}`), or if either email role is used on the wrong page.
+  - Run: `npm run check-contact` (`scripts/check-contact-facts.mjs`) — must print PASS.
+  - **Does not cover:** whether either mailbox is monitored, or whether the A2P campaign record matches. Both are off-repo — see `docs/stage2/blockers.md`.
   - The current values are `fax (843) 279-3185`, `phone (854) 888-9070`. The retired-but-owned number `(854) 209-2494` and the stale `(843) 884-0102` must never appear.
   - Suggested:
     ```sh
@@ -113,7 +118,7 @@ Contact facts live only in `_data/site.json` and must render identically everywh
 No internal link may 404 and no anchor may point at a missing id — the `#fax-cover` dead buttons and empty `action="#"` forms shipped once because nothing checked.
 
 - **FAIL** if `node scripts/check-links.mjs` exits non-zero (dead internal link, missing fragment id, or empty `href="#"`/`action="#"`).
-  - Suggested: `npm run check-links` (or `node scripts/check-links.mjs`) — must print PASS.
+  - Run: `npm run check-links` (or `node scripts/check-links.mjs`) — must print PASS.
   - Also: `grep -rn 'action="#"' *.njk _includes/*.njk` must return nothing.
 
 ## Check 12 — Published document integrity (SHA-256 pin, then geometry)
@@ -126,8 +131,51 @@ For any PDF this repo publishes, **text extraction is necessary but not sufficie
   - **On a legitimate redesign:** update `EXPECTED_SHA256` **and re-derive the anchor words + threshold** for the new layout — the current threshold is calibrated against the current layout. Do not just re-run.
   - Requires `pdfplumber` (`python3 -m pip install pdfplumber`). The script **exits 2 and refuses to pass** if the dependency is missing — never let this check silently skip.
 
+## Check 13 — No specific time commitments
+**Rationale:** CoreFlow cannot yet honour a named turnaround, and a published clock ("within one business day") is a promise a referring office will hold us to on day one. Speed as a *quality* is fine — "fast", "without delay", "we move fast on authorizations", "we don't sit on referrals". Speed as a *clock* is not.
+
+- **FAIL** on a number — digit or number-word — within five words of hour / day / business day / week, anywhere in the visible text of any built page.
+  - Run: `npm run check-time` (`scripts/check-no-time-commitments.mjs`) — must print PASS.
+- **One carve-out, by exact string, for a legal reason:** 45 CFR Part 92 (Section 1557) requires the non-discrimination grievance notice to state the period in which a complainant may file. That is a deadline the federal rule imposes on the *reader*, not a turnaround CoreFlow is promising, and deleting it would be a compliance defect. It is scoped to the one phrase so any **new** timeframe still fails. Do not widen it.
+- **Does not cover:**
+  - Prose that *means* "one business day" without the words — "we confirm by close of business" passes. That is the Marketing Copy reviewer's job, and it is the most likely thing to slip through.
+  - **Anything outside the repo.** The Formstack confirmation screen and the referral auto-reply email are not scanned and have historically carried the same promise. Tracked in `docs/stage2/blockers.md` — only John can fix those.
+  - Minutes and months, deliberately: "the infusion takes about an hour" is a clinical duration, not a turnaround.
+
+## Check 14 — No MUSC outside bio blocks
+This is Check 3's script. It is listed separately here because it runs separately; see **Check 3** for the full rule, including that it replaced the old approved-sentence list and must not be reverted.
+
+- Run: `npm run check-musc` (`scripts/check-musc-bio-only.mjs`) — must print PASS.
+
+## Check 15 — No fabricated testimonials or attributed quotes
+**Rationale:** the providers and patients pages shipped invented quotes from invented people ("Margaret R., Summerville, SC"). A fabricated patient endorsement is not a copy problem, it is a misrepresentation. The old guard was an HTML comment asking a human to notice; this one cannot be talked out of it.
+
+- **FAIL**, outside `bio` blocks, on: any `<blockquote>` or `<cite>`; a dash-attributed personal name ("— Dr. James W."); or a quoted run of 60+ characters.
+  - Run: `npm run check-testimonials` (`scripts/check-no-testimonials.mjs`) — must print PASS.
+- Two legitimate non-quote callouts formerly used `<blockquote>` and are now `.note-box` (the Privacy patient notice and the patients-page "one way to ask your doctor" script). Keep them that way — the check is absolute precisely so there is no allowlist to grow.
+- **Does not cover:** a real, consented testimonial. The check cannot tell a true quote from an invented one, so it forbids the shape. When CoreFlow has a consented quote, revisit this check *deliberately*, add the markup pattern, and record the consent at the same time.
+- Also not covered: a testimonial rendered as an image, or a paraphrase without quote marks ("prescribers tell us we're the easiest partner they work with").
+
+## Check 16 — Nursing language (no CRNI, no implied employment)
+**Rationale:** this one is legal exposure, not style. The nurses are **not CoreFlow employees**. Copy saying "CoreFlow nurses" or "our nurses" asserts an employment relationship that does not exist, which bears on liability, on payer representations, and on the nurses' own status. Separately, CRNI is removed everywhere it describes a nurse.
+
+- **FAIL** on: `CRNI`; `CoreFlow nurse(s)`; `CoreFlow's nurse(s)`; `CoreFlow RN(s)`; `CoreFlow-credentialed RN(s)/nurse(s)`; `our nurse(s)`; "we employ … nurses"; "nurses we employ"; "staff/employed/in-house nurses".
+  - Run: `npm run check-nursing` (`scripts/check-nursing-language.mjs`) — must print PASS.
+- **Deliberately allowed:** "CoreFlow nursing partner", "our nursing partners", "credentialed nursing partners", "the nursing team caring for your patient", "the infusion nurse assigned to your patient", "experienced infusion nurses", "your nurse", and "CoreFlow's clinical standards" — standards do belong to CoreFlow; nurses do not. Note the patterns match `nurse`/`nurses` and never `nursing`.
+- Choose the replacement per sentence. Do not find-and-replace one phrase across the site.
+- **Does not cover:** structural implication without the words — "Meet the CoreFlow team" over a grid of nurse photos passes this and still implies employment. Compliance owns that, as a blocker not a style note. Recruiting copy on `/careers` can also imply employment with no banned phrase in it.
+
+## Check 17 — Conditions and drugs come only from `_data/`
+**Rationale:** Greg's confirmed disease list is still coming and the drug map is an unvetted intake spreadsheet, so both will be replaced wholesale. A single name typed into a template means that replacement silently half-lands — which is how a therapy CoreFlow cannot service stays published. (This check caught exactly that on its first run: the condition-search hint named two conditions in the template.)
+
+- **FAIL** if: the rendered item set on either finder page differs from `_data/therapies.json` / `_data/conditions.json`; either finder template contains a literal drug or condition name; or any therapy marked `"status": "unconfirmed"` appears anywhere in built HTML.
+  - Run: `npm run check-data` (`scripts/check-data-driven.mjs`) — must print PASS.
+- **Does not cover:** whether the data is *clinically correct*. It checks provenance, not truth — a wrong drug in the JSON renders happily. That is the Clinical/Pharmacy reviewer's job and Greg's sign-off. It also does not police therapy names in ordinary prose elsewhere on the site; only the two finder templates are held to the no-literals rule.
+
 ## Output format
-Print a table: rows = the 8 pages, columns = Checks 1–7, cells = PASS/FAIL (with a one-line note on any FAIL). Checks 8, 9, 10, 11, and 12 are build-level, not per-page — report each as a single PASS/FAIL line beneath the table. Add a final summary line: overall PASS only if every cell **and** all five build-level checks are PASS. (There are 12 checks total.)
+Print a table: rows = the 10 primary pages, columns = Checks 1–7, cells = PASS/FAIL (with a one-line note on any FAIL). Checks 8–17 are build-level, not per-page — report each as a single PASS/FAIL line beneath the table. Add a final summary line: overall PASS only if every cell **and** all ten build-level checks are PASS. (**There are 17 checks total.**)
+
+`npm run verify` runs the build plus every scripted check in order and exits non-zero on the first failure. Checks 2, 5, 6, 7 and the human half of 4 are still judgement calls — run them by hand. A green `npm run verify` is **not** a green verify-coreflow.
 
 ## When you find a recurring issue
 If the same class of problem appears twice across runs, add a new grep-able check to this file so future runs catch it automatically — improve the system, not just the instance.

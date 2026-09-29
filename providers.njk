@@ -8,6 +8,18 @@ activeNav: providers
 permalink: "/providers.html"
 robots: "noindex, nofollow"
 ---
+{#- NOINDEX — READ BEFORE REMOVING, AND SEE docs/stage2/blockers.md.
+    The `robots` line below was added for ONE reason: this page carried a
+    fabricated testimonial, and noindex contained the risk of an invented
+    endorsement being indexed. THAT TESTIMONIAL WAS DELETED on 2026-09-29, and
+    verify-coreflow Check 15 now makes it impossible to reintroduce the markup.
+    The stated precondition is therefore gone.
+
+    It was NOT removed in the same pass because that is John's call, not the
+    agent's — this page is a primary audience page and re-indexing it is an SEO
+    decision with a business consequence. The recommendation is to delete the
+    `robots` line and add the page to sitemap.xml. Do both in one commit.
+-#}
 <section class="hero hero--photo" style="background-image:url('hero-providers.jpg')">
  <div class="container">
  <span class="hero__eyebrow">For Prescribers</span>
@@ -23,7 +35,7 @@ robots: "noindex, nofollow"
 
 <section class="section">
  <div class="container" style="max-width:760px">
- <p>Our CRNI-eligible registered nurses administer therapy in the patient's home. Our clinical team manages intake, prior authorization, payer coordination, and post-visit documentation. And then, we communicate back to your office at every stage.</p>
+ <p>Experienced infusion nurses administer therapy in the patient's home. Our clinical team manages intake, prior authorization, payer coordination, and post-visit documentation. And then, we communicate back to your office at every stage.</p>
  </div>
 </section>
 
@@ -32,7 +44,7 @@ robots: "noindex, nofollow"
  <h2 class="section-title">Three ways to send a referral.</h2>
  <p class="lead">Choose whichever fits your workflow. All three reach the same clinical intake team.</p>
  <div class="grid grid--3 mt-6">
- <div class="card"><h3>Online</h3><p>Submit a secure referral form at coreflowrx.com/refer, hosted by Formstack under a signed BAA for HIPAA-compliant intake. Confirmation within one business day.</p><a class="btn btn--secondary" href="refer.html">Submit Online →</a></div>
+ <div class="card"><h3>Online</h3><p>Submit a secure referral form at coreflowrx.com/refer, hosted by Formstack under a signed BAA for HIPAA-compliant intake. We acknowledge receipt promptly.</p><a class="btn btn--secondary" href="refer.html">Submit Online →</a></div>
  <div class="card"><h3>Fax</h3><p>Download our referral cover sheet and fax to <strong>{{ site.fax }}</strong>. Include current orders, diagnosis, and insurance information.</p><a class="btn btn--secondary" href="coreflow-fax-cover-sheet.pdf" download>Download Cover Sheet →</a></div>
  <div class="card"><h3>Phone</h3><p><strong>{{ site.phone }}</strong><br>{{ site.hours }}<br>For urgent or time-sensitive referrals.</p><a class="btn btn--secondary" href="tel:{{ site.phoneTel }}">Call now →</a></div>
  </div>
@@ -43,10 +55,10 @@ robots: "noindex, nofollow"
  <div class="container">
  <h2 class="section-title">What happens after you refer.</h2>
  <div class="grid grid--2 mt-6">
- <div class="card"><div class="card__head"><span class="card__step" aria-hidden="true">1</span><svg class="card__icon" aria-hidden="true" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"></path><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg></div><h3>Day 1 - Acknowledgment</h3><p>We confirm receipt of the referral within one business day and contact your office if anything is missing.</p></div>
- <div class="card"><div class="card__head"><span class="card__step" aria-hidden="true">2</span><svg class="card__icon" aria-hidden="true" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="M9 12l2 2 4-4"></path></svg></div><h3>Days 1–3 - Insurance &amp; Authorization</h3><p>We verify benefits, initiate prior authorization if required, and resolve coverage issues before they reach your desk.</p></div>
- <div class="card"><div class="card__head"><span class="card__step" aria-hidden="true">3</span><svg class="card__icon" aria-hidden="true" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"></rect><path d="M16 2v4"></path><path d="M8 2v4"></path><path d="M3 10h18"></path></svg></div><h3>Days 2–5 - Medication &amp; Scheduling</h3><p>We procure the prescribed therapy through our contracted distributors and cold-chain infrastructure. We schedule the first infusion visit at a time that works for the patient.</p></div>
- <div class="card"><div class="card__head"><span class="card__step" aria-hidden="true">4</span><svg class="card__icon" aria-hidden="true" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"></path><path d="M5 9.5V21h14V9.5"></path></svg></div><h3>Ongoing - Infusion &amp; Documentation</h3><p>A CoreFlow RN administers therapy in the patient's home. After each visit, a clinical note is returned to your office in the same format, every time.</p></div>
+ <div class="card"><div class="card__head"><span class="card__step" aria-hidden="true">1</span><svg class="card__icon" aria-hidden="true" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"></path><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg></div><h3>Acknowledgment</h3><p>We confirm receipt of the referral and contact your office if anything is missing.</p></div>
+ <div class="card"><div class="card__head"><span class="card__step" aria-hidden="true">2</span><svg class="card__icon" aria-hidden="true" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="M9 12l2 2 4-4"></path></svg></div><h3>Insurance &amp; Authorization</h3><p>We verify benefits, initiate prior authorization if required, and resolve coverage issues before they reach your desk.</p></div>
+ <div class="card"><div class="card__head"><span class="card__step" aria-hidden="true">3</span><svg class="card__icon" aria-hidden="true" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"></rect><path d="M16 2v4"></path><path d="M8 2v4"></path><path d="M3 10h18"></path></svg></div><h3>Medication &amp; Scheduling</h3><p>We procure the prescribed therapy through our contracted distributors and cold-chain infrastructure. We schedule the first infusion visit at a time that works for the patient.</p></div>
+ <div class="card"><div class="card__head"><span class="card__step" aria-hidden="true">4</span><svg class="card__icon" aria-hidden="true" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"></path><path d="M5 9.5V21h14V9.5"></path></svg></div><h3>Infusion &amp; Documentation</h3><p>The infusion nurse assigned to your patient administers therapy in the home. After each visit, a clinical note is returned to your office in the same format, every time.</p></div>
  </div>
  </div>
 </section>
@@ -55,7 +67,7 @@ robots: "noindex, nofollow"
  <div class="container">
  <h2 class="section-title">Clinical standards you can verify.</h2>
  <div class="grid grid--3">
- <div class="card card--soft"><h3>Credentialed RNs</h3><p>Care is delivered by credentialed local nursing partners who live and work in your patient's community. Every nurse meets CoreFlow's clinical standards (CRNI-eligible credentialing required) and every visit is supervised under our clinical protocols.</p></div>
+ <div class="card card--soft"><h3>Credentialed RNs</h3><p>Care is delivered by credentialed local nursing partners who live and work in your patient's community. Every nurse must clear CoreFlow's credentialing and competency requirements before taking an assignment, and every visit is supervised under our clinical protocols.</p></div>
  <div class="card card--soft"><h3>SC Board of Pharmacy</h3><p>Resident Pharmacy Permit under Reg 99-43(B). Permit #PH-042891.</p></div>
  <div class="card card--soft"><h3>URAC &amp; ACHC (pursuing)</h3><p>Actively pursuing URAC Specialty Pharmacy v5.0 and ACHC IRX-NO797, anticipated Q4 2026. Accreditation has been initiated and has not yet been awarded.</p></div>
  <div class="card card--soft"><h3>Cold chain</h3><p>Commercially manufactured, pre-compounded medications. USP 659/1079 cold chain. Temperature-monitored storage and delivery.</p></div>
@@ -65,24 +77,14 @@ robots: "noindex, nofollow"
  </div>
 </section>
 
-<section class="section">
- <div class="container">
- <div class="callout-dark">
- <!-- TODO: replace token with final approved MUSC wording once confirmed -->
- <h2 style="text-transform:uppercase">Trusted by MUSC Health</h2>
- <p>Selected as a home infusion partner by South Carolina's academic medical center.</p>
- </div>
- </div>
-</section>
-
 <section class="section section--soft">
  <div class="container container--narrow">
  <h2 class="section-title">The CoreFlow Commitment.</h2>
- <p class="lead">Three things we're built to do better than anyone else in the space.</p>
+ <p class="lead">Three things we're built to do well.</p>
  <div class="guarantee mt-6">
- <div class="guarantee__item"><h3>Easy to refer</h3><p>One streamlined referral, three ways to send it. We confirm receipt within one business day and clear insurance and prior auth before it reaches your desk.</p></div>
- <div class="guarantee__item"><h3>Speed to service</h3><p>Our goal is to offer your patient an in-home infusion appointment within 24 hours of insurance approval. Fast when they want it, flexible when they don't.</p></div>
- <div class="guarantee__item"><h3>We close the loop</h3><p>After every infusion, the nursing note comes back to your office. "Your patient got their infusion, tolerated it well, here's the follow-up plan." You never have to chase us.</p></div>
+ <div class="guarantee__item"><h3>Easy to refer</h3><p>One streamlined referral, three ways to send it. We acknowledge it promptly and clear insurance and prior auth before it reaches your desk.</p></div>
+ <div class="guarantee__item"><h3>Speed to service</h3><p>We don't sit on referrals. We move fast on authorizations and offer the earliest appointment we can once coverage clears. Fast when they want it, flexible when they don't.</p></div>
+ <div class="guarantee__item"><h3>We close the loop</h3><p>After every infusion, the nursing note comes back to your office: what was given, how your patient tolerated it, and the follow-up plan. You never have to chase us.</p></div>
  </div>
  </div>
 </section>
@@ -90,25 +92,14 @@ robots: "noindex, nofollow"
 <section class="section">
  <div class="container container--narrow">
  <h2 class="section-title">Named, credentialed, accountable.</h2>
- <p>Unlike national pharmacy networks where your referral enters a queue, CoreFlow's clinical team is named, licensed, and reachable.</p>
+ <p>CoreFlow's clinical team is named, licensed, and reachable — your office talks to the same people every time.</p>
  <div class="grid grid--2 mt-6">
  <!-- TODO: real clinician names withheld until CoreFlow is ready to publish them -->
  <div class="card"><h3>Dr. [NAME], PharmD, RPh</h3><p><em>Pharmacist-in-Charge</em><br>Licensed by the SC Board of Pharmacy</p></div>
- <div class="card"><h3>[NAME], BSN, RN, CRNI</h3><p><em>Director of Nursing</em><br>CRNI-credentialed</p></div>
+ <div class="card"><h3>[NAME], BSN, RN</h3><p><em>Director of Nursing</em><br>Licensed registered nurse</p></div>
  </div>
- <p class="mt-4">Your patient will be cared for by nurses supervised by people whose names you can look up.</p>
+ <p class="mt-4">Your office reaches the same licensed pharmacist-in-charge and director of nursing every time, and the nurses in the home work under their clinical protocols.</p>
  <p>And one point of contact: from intake through discharge, your office works with one CoreFlow clinical coordinator. Not a call center. Not a different person every time.</p>
- </div>
-</section>
-
-<section class="section section--soft">
- <div class="container">
- <h2 class="section-title">What prescribers say.</h2>
- <!-- PLACEHOLDER — not a real patient or provider quote. Page is noindexed. Replace with consented quote before removing noindex. -->
- <blockquote>
- <p><em>"CoreFlow's intake team has been the easiest pharmacy partner I've worked with in my career. They confirm the referral quickly, keep my office updated, and the clinical notes come back the same day."</em></p>
- <p>— Dr. James W., Rheumatology, Charleston, SC</p>
- </blockquote>
  </div>
 </section>
 
@@ -123,16 +114,17 @@ robots: "noindex, nofollow"
  <li>Nursing assessment and clinical observations</li>
  <li>Next scheduled visit</li>
  </ul>
- <p>Notes are returned within 24 hours of each visit. Format is consistent across all patients and visits — designed for easy integration into your EHR.</p>
+ <p>Notes are returned promptly after each visit. Format is consistent across all patients and visits — designed for easy integration into your EHR.</p>
  </div>
 </section>
 
 <section class="section section--soft">
  <div class="container">
  <h2 class="section-title">Conditions and therapies we support.</h2>
- <p class="lead">We administer home infusion therapy for a range of diagnoses. If your patient's condition isn't listed, call us and we'll confirm formulary fit before you refer.</p>
+ <p class="lead">We administer home infusion therapy for a range of diagnoses. If your patient's condition isn't listed, call us and we'll confirm formulary fit before you refer. You can also search <a href="drugs-we-provide.html">the drugs we provide</a>, or browse <a href="diseases-we-treat.html">the conditions we're confirming</a>.</p>
+ <p class="note-box"><strong>About the searchable drug list.</strong> <a href="drugs-we-provide.html">Drugs we provide</a> covers the specialty biologics we have confirmed so far. It is not the whole of what we can source, and some specialties are still being confirmed. For the therapy areas below that it doesn't list — and for anything else — call <a href="tel:{{ site.phoneTel }}">{{ site.phone }}</a> and we'll confirm before you refer.</p>
  <div class="grid grid--2 mt-6">
- <div class="card"><h3>Neuroimmunology &amp; immunodeficiency (IVIG/SCIG)</h3><p>IVIG and SCIG for CIDP, multifocal motor neuropathy, and other neuroimmune indications, plus CVID, XLA, and hypogammaglobulinemia. We're built for high-volume immunology prescribers who want to move stable patients out of the infusion center and into the home.</p></div>
+ <div class="card"><h3>Neuroimmunology (IVIG)</h3><p>IVIG for CIDP, multifocal motor neuropathy, and other neuroimmune indications. For immune-deficiency indications and for SCIG, call <a href="tel:{{ site.phoneTel }}">{{ site.phone }}</a> and we'll confirm what we can source before you refer.</p></div>
  <div class="card"><h3>Infectious disease</h3><p>IV antibiotics, antifungals, and antivirals for conditions including osteomyelitis, cellulitis, endocarditis, and septic arthritis managed post-hospitalization.</p></div>
  <div class="card"><h3>Hematology</h3><p>Iron replacement therapy for iron-deficiency anemia, chemotherapy-related anemia, and IBD-associated anemia.</p></div>
  <div class="card"><h3>Rheumatology and immunology</h3><p>Biologic infusions for appropriate indications per your prescribing authority and plan coverage.</p></div>

@@ -1,0 +1,200 @@
+{
+  "_status": "SEED — NOT A SERVICE CLAIM. Greg is supplying the real list. These entries are structural scaffolding, seeded from immunoglobulin indications that map onto CoreFlow’s Neurology, Immunology, Rheumatology and Dermatology rows, plus gastroenterology entries. Three seeded conditions were REMOVED on clinical review — see _removedOnClinicalReview below and docs/stage2/blockers.md.",
+  "_statusRules": {
+    "seed": "Renders on /diseases-we-treat behind the page-level 'under clinical review' notice, and the page is noindexed. It is NOT presented as a therapy CoreFlow has confirmed it can service.",
+    "confirmed": "Greg has signed the condition off. Renders as a serviced condition; once every entry is \"confirmed\", drop the page notice and the noindex."
+  },
+  "_howToUpdate": "Replace the conditions[] array with Greg's list and set status to \"confirmed\" on each. No template edit is needed — the page renders whatever is here.",
+  "conditions": [
+    {
+      "name": "Ankylosing Spondylitis",
+      "aliases": [
+        "axial spondyloarthritis"
+      ],
+      "specialties": [
+        "rheumatology"
+      ],
+      "status": "seed"
+    },
+    {
+      "name": "CIDP",
+      "full": "Chronic Inflammatory Demyelinating Polyneuropathy",
+      "aliases": [
+        "cidp",
+        "chronic inflammatory demyelinating polyneuropathy",
+        "polyneuropathy"
+      ],
+      "specialties": [
+        "neurology"
+      ],
+      "status": "seed"
+    },
+    {
+      "name": "Crohn's Disease",
+      "aliases": [
+        "crohns",
+        "crohn",
+        "ibd",
+        "inflammatory bowel disease"
+      ],
+      "specialties": [
+        "gastroenterology"
+      ],
+      "status": "seed"
+    },
+    {
+      "name": "Dermatomyositis",
+      "aliases": [
+        "myositis"
+      ],
+      "specialties": [
+        "rheumatology",
+        "dermatology"
+      ],
+      "status": "seed"
+    },
+    {
+      "name": "Multifocal Motor Neuropathy",
+      "aliases": [
+        "mmn",
+        "motor neuropathy"
+      ],
+      "specialties": [
+        "neurology"
+      ],
+      "status": "seed"
+    },
+    {
+      "name": "Multiple Sclerosis",
+      "aliases": [
+        "ms",
+        "rrms",
+        "ppms",
+        "spms"
+      ],
+      "specialties": [
+        "neurology"
+      ],
+      "status": "seed"
+    },
+    {
+      "name": "Myasthenia Gravis",
+      "aliases": [
+        "gmg",
+        "generalized myasthenia gravis"
+      ],
+      "specialties": [
+        "neurology"
+      ],
+      "status": "seed"
+    },
+    {
+      "name": "Myositis",
+      "aliases": [
+        "inflammatory myopathy",
+        "polymyositis"
+      ],
+      "specialties": [
+        "rheumatology"
+      ],
+      "status": "seed"
+    },
+    {
+      "name": "Pemphigus & Pemphigoid",
+      "aliases": [
+        "pemphigus",
+        "pemphigoid",
+        "pemphigus vulgaris",
+        "bullous pemphigoid"
+      ],
+      "specialties": [
+        "dermatology"
+      ],
+      "status": "seed"
+    },
+    {
+      "name": "Plaque Psoriasis",
+      "aliases": [
+        "psoriasis"
+      ],
+      "specialties": [
+        "dermatology"
+      ],
+      "status": "seed"
+    },
+    {
+      "name": "Primary Immune Deficiency",
+      "aliases": [
+        "pidd",
+        "cvid",
+        "xla",
+        "hypogammaglobulinemia",
+        "primary immunodeficiency"
+      ],
+      "specialties": [
+        "immunology"
+      ],
+      "status": "seed"
+    },
+    {
+      "name": "Psoriatic Arthritis",
+      "aliases": [
+        "psa"
+      ],
+      "specialties": [
+        "rheumatology",
+        "dermatology"
+      ],
+      "status": "seed"
+    },
+    {
+      "name": "Rheumatoid Arthritis",
+      "aliases": [
+        "ra"
+      ],
+      "specialties": [
+        "rheumatology"
+      ],
+      "status": "seed"
+    },
+    {
+      "name": "Secondary Immune Deficiency",
+      "aliases": [
+        "sid",
+        "secondary immunodeficiency"
+      ],
+      "specialties": [
+        "immunology"
+      ],
+      "status": "seed"
+    },
+    {
+      "name": "Stiff-Person Syndrome",
+      "aliases": [
+        "sps",
+        "stiff person"
+      ],
+      "specialties": [
+        "neurology"
+      ],
+      "status": "seed"
+    },
+    {
+      "name": "Ulcerative Colitis",
+      "aliases": [
+        "uc",
+        "ibd",
+        "inflammatory bowel disease"
+      ],
+      "specialties": [
+        "gastroenterology"
+      ],
+      "status": "seed"
+    }
+  ],
+  "_removedOnClinicalReview": {
+    "Guillain-Barré Syndrome": "PATIENT SAFETY. GBS is an acute, rapidly ascending neuromuscular emergency; IVIG for GBS is given inpatient with respiratory and autonomic monitoring. There is no home infusion pathway. Naming it on a home-infusion page risks routing an emergency toward the home. Chronic/relapsing disease is coded CIDP, which remains listed.",
+    "Immune Thrombocytopenia": "ITP is hematology, not oncology, but there is no hematology row in CoreFlow’s seven specialties, so it had nowhere correct to sit and was rendering beside rituximab in the Oncology group — which reads as \"we treat ITP with rituximab\" (off-label).",
+    "Alpha-1 Antitrypsin Deficiency": "Its only treatment is weekly IV alpha-1 augmentation, and no augmentation product exists anywhere in _data/therapies.json — not confirmed, not even flagged. The site would name a condition whose therapy it has no record of carrying, under a specialty that already renders empty."
+  }
+}

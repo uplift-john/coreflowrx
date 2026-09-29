@@ -1,0 +1,140 @@
+---
+layout: layout.njk
+title: "Diseases We Treat | CoreFlow Specialty Infusion | South Carolina"
+description: "Conditions prescribers ask us about, by name or specialty. Call CoreFlow Specialty Infusion to confirm we can service a referral before you send it."
+ogTitle: "Diseases We Treat | CoreFlow Specialty Infusion"
+ogDescription: "Browse conditions by name or specialty, and call to confirm before you refer."
+activeNav: diseases
+permalink: "/diseases-we-treat.html"
+pageScript: "finder.js"
+robots: "noindex, nofollow"
+---
+{#- Every condition rendered here comes from _data/conditions.json. Nothing on
+    this page hardcodes a condition name — verify-coreflow Check 17 enforces it.
+
+    NOTE FOR WHOEVER EDITS THIS NEXT: the condition list is a SEED, not a service
+    claim, pending Greg's confirmed list. Three reviewers blocked an earlier draft
+    for reading as settled, so the service framing is deliberately absent: the
+    page-level notice sits inside the hero above the list, the description says "ask us
+    about" rather than "supports", and every per-condition action is a phone call
+    to confirm — NOT a one-click referral.
+
+    `robots: noindex, nofollow` is set and the page is absent from sitemap.xml, but
+    do NOT over-trust that: this page is linked from the primary nav and the footer
+    on every page, so noindex holds back crawlers and nothing else. The on-page
+    framing is what actually protects a human visitor.
+
+    WHEN GREG'S LIST LANDS and every entry in _data/conditions.json reads
+    status "confirmed": delete the .note-box--review block, restore the
+    per-condition referral CTA, drop the robots line, and add the page to
+    sitemap.xml — in one commit. See docs/stage2/blockers.md. -#}
+{%- set conditionList = conditions.conditions -%}
+{%- set specialties = therapies.specialties -%}
+
+<section class="hero">
+ <div class="container">
+ <span class="hero__eyebrow">For Prescribers &amp; Office Staff</span>
+ <h1 class="hero__title">Diseases we treat</h1>
+
+ {#- The notice sits above the CTAs on purpose: a prescriber must meet the
+     caveat before the list, not one section below it. -#}
+ <div class="note-box note-box--review">
+  <p><strong>This list is under clinical review and is not final.</strong> These are the
+  conditions prescribers ask us about most &mdash; not a settled list of what we can service.
+  Call <a href="tel:{{ site.phoneTel }}">{{ site.phone }}</a> with the diagnosis and the therapy
+  and we'll tell you before you send anything.</p>
+ </div>
+
+ {% include "physician-order-notice.njk" %}
+ </div>
+</section>
+
+<section class="section section--tight" data-finder data-finder-noun="conditions">
+ <div class="container">
+
+  <form class="finder__controls" data-finder-controls data-finder-form hidden>
+   <div class="finder__field">
+    <label class="finder__label" for="condition-search">Search conditions</label>
+    <input class="finder__input" id="condition-search" type="search" autocomplete="off"
+           placeholder="Condition, abbreviation, or specialty"
+           aria-describedby="condition-search-hint"
+           data-finder-input>
+    <p class="finder__hint" id="condition-search-hint">Matches full condition names, the common abbreviations for them, and specialties.</p>
+   </div>
+   <button class="btn btn--secondary finder__clear" type="button" data-finder-clear disabled>Clear search</button>
+  </form>
+
+  {#- Chips target real per-specialty anchors so they still do something useful
+      without JS; with JS they filter in place instead of scrolling. -#}
+  <nav class="finder__chips" aria-label="Filter by specialty">
+   <ul class="finder__chip-list" role="list">
+   {#- Only specialties that actually have a condition get a chip: removing three
+       seed conditions on clinical review emptied Oncology and Pulmonology, and a
+       chip pointing at an anchor that no longer exists is a dead link. -#}
+   {%- for specialty in specialties %}
+   {%- if conditionList | inSpecialty(specialty.id) | length %}
+    <li><a class="finder__chip" href="#condition-{{ specialty.id }}" data-finder-filter="{{ specialty.id }}">{{ specialty.name }}</a></li>
+   {%- endif %}
+   {%- endfor %}
+   </ul>
+  </nav>
+
+  <p class="finder__status" role="status" aria-live="polite" data-finder-status>Showing all {{ conditionList | length }} conditions, grouped by specialty.</p>
+
+  <div class="note-box note-box--empty container--narrow text-center" hidden data-finder-empty>
+   <p><strong>No match on this page &mdash; and that is not the same as no.</strong>
+   Give us the diagnosis and the prescribed therapy and we'll tell you whether we can
+   service the referral before you send anything.</p>
+   <p><a class="btn btn--primary" href="tel:{{ site.phoneTel }}">Call {{ site.phone }} →</a></p>
+  </div>
+
+  {%- for specialty in specialties %}
+  {%- set inSpecialty = conditionList | inSpecialty(specialty.id) %}
+  {%- if inSpecialty | length %}
+  <section class="finder__group" id="condition-{{ specialty.id }}" data-finder-group="{{ specialty.id }}">
+   <h2 class="section-title section-title--group">{{ specialty.name }}</h2>
+   <ul class="condition-list" role="list">
+   {%- for condition in inSpecialty %}
+    <li class="condition" data-finder-item data-finder-key="{{ condition.name }}"
+        data-specialties="{{ condition.specialties | join(' ') }}"
+        data-search="{{ condition.name }} {{ condition.full }} {{ condition.aliases | join(' ') }} {{ condition.specialties | specialtyNames(specialties) | join(' ') }}">
+     <h3 class="condition__name">{{ condition.name }}</h3>
+     {%- if condition.full %}<p class="condition__full">{{ condition.full }}</p>{% endif %}
+     <p class="condition__tags"><span class="visually-hidden">Specialties: </span>
+     {%- for name in condition.specialties | specialtyNames(specialties) %}
+      <span class="condition__tag">{{ name }}</span>
+     {%- endfor %}
+     </p>
+     {#- Deliberately a phone call, not a referral link: nothing on this page is
+         confirmed, so a one-click referral would be the exact failure the notice
+         above warns about. Restore the referral CTA when Greg signs the list off. -#}
+     <p class="condition__action"><a href="tel:{{ site.phoneTel }}">Call to confirm {{ condition.name }} →</a></p>
+    </li>
+   {%- endfor %}
+   </ul>
+  </section>
+  {%- endif %}
+  {%- endfor %}
+
+ </div>
+</section>
+
+<section class="section section--soft">
+ <div class="container">
+  <h2 class="section-title">Don't see the diagnosis?</h2>
+  <p class="lead">Call us before you decide we can't help. We would rather answer the question
+  in a quick phone call than have you route the patient elsewhere by default.</p>
+  <div class="grid grid--3 mt-6">
+   <div class="card"><h3>Call and ask</h3><p><strong>{{ site.phone }}</strong><br>{{ site.hours }}</p><p>Give us the diagnosis and the prescribed therapy and we'll confirm whether we can service it.</p><a class="btn btn--secondary" href="tel:{{ site.phoneTel }}">Call now →</a></div>
+   <div class="card"><h3>Start from the drug</h3><p>If you already know the therapy, searching the confirmed drug list is the faster route.</p><a class="btn btn--secondary" href="drugs-we-provide.html">Drugs We Provide →</a></div>
+   <div class="card"><h3>Send a referral</h3><p>Once we've confirmed we can service it: online through our BAA-covered form, or by fax.</p><a class="btn btn--secondary" href="refer.html">Refer a Patient →</a></div>
+  </div>
+  <p class="footnote mt-4"><em>All therapies are subject to formulary availability, clinical suitability, and payer authorization. Listing a condition on this page does not mean a particular referral can be serviced &mdash; we confirm case by case.</em></p>
+ </div>
+</section>
+
+<section class="section">
+ <div class="container">
+  {% include "referral-checklist.njk" %}
+ </div>
+</section>

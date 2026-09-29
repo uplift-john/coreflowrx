@@ -35,7 +35,7 @@
   --color-gray-50: #F6F8F4;    /* Canvas */
   --color-gray-100: #e7ede2;
   --color-gray-200: #d5ddd2;
-  --color-gray-500: #6d7a72;
+  --color-gray-500: #5A6660;   /* darkened from #6d7a72 — was 4.49:1 on white, under AA */
   --color-gray-700: #3a4a46;
   --color-gray-900: #1F2A2E;   /* Ink */
   --color-focus: #E8B22B;
@@ -46,7 +46,7 @@
   --space-1: 0.25rem; --space-2: 0.5rem; --space-3: 0.75rem; --space-4: 1rem;
   --space-6: 1.5rem; --space-8: 2rem; --space-12: 3rem; --space-16: 4rem; --space-24: 6rem;
   --max-width: 1180px; --max-width-narrow: 760px;
-  --radius-sm: 4px; --radius-md: 8px; --radius-lg: 12px;
+  --radius-sm: 4px; --radius-md: 8px; --radius-lg: 12px; --radius-pill: 999px;
   --shadow-sm: 0 1px 3px rgba(23,88,104,.08);
   --shadow-md: 0 4px 12px rgba(23,88,104,.1);
   --shadow-lg: 0 8px 24px rgba(23,88,104,.12);
@@ -54,6 +54,12 @@
 }
 
 *,*::before,*::after{box-sizing:border-box}
+/* The UA's [hidden]{display:none} is a NORMAL author-origin-losing rule, so any
+   author `display` declaration beats it. .therapy/.condition are display:flex and
+   .finder__controls/.btn are flex — without this line finder.js sets item.hidden
+   and nothing visually hides. Verified: filtering "remicade" left 21 of 35 cards
+   on screen. Keep this above every component rule. */
+[hidden]{display:none!important}
 body{margin:0;font-family:var(--font-body);color:var(--color-gray-900);background:var(--color-white);line-height:1.6;-webkit-font-smoothing:antialiased}
 h1,h2,h3,h4,h5,h6{margin:0 0 var(--space-4);font-family:var(--font-heading);color:var(--color-navy-900);line-height:1.2}
 p{margin:0 0 var(--space-4)}
@@ -62,13 +68,14 @@ a:hover{color:var(--color-teal-500)}
 ul,ol{padding-left:var(--space-6);margin:0 0 var(--space-4)}
 img{max-width:100%;height:auto;display:block}
 address{font-style:normal}
-:focus-visible{outline:3px solid var(--color-focus);outline-offset:2px;border-radius:var(--radius-sm)}
+:focus-visible{outline:3px solid var(--color-focus);outline-offset:2px;box-shadow:0 0 0 8px var(--color-navy-900)}
 .skip-link{position:absolute;left:-10000px;top:0;background:var(--color-navy-900);color:var(--color-white);padding:var(--space-3) var(--space-4);z-index:1000;text-decoration:none;font-weight:600;border-radius:0 0 var(--radius-sm) 0}
 .skip-link:focus{left:var(--space-2);top:var(--space-2)}
 .container{max-width:var(--max-width);margin:0 auto;padding:0 var(--space-4)}
 .container--narrow{max-width:var(--max-width-narrow)}
 .section{padding:var(--space-12) 0}
 .section--soft{background:var(--color-gray-50)}
+.section--tight{padding-top:var(--space-6)}
 .text-center{text-align:center}
 .mt-4{margin-top:var(--space-4)} .mt-6{margin-top:var(--space-6)} .mb-0{margin-bottom:0}
 .grid{display:grid;gap:var(--space-6)}
@@ -79,24 +86,78 @@ address{font-style:normal}
 .split{display:grid;gap:var(--space-8)}
 @media(min-width:768px){.split{grid-template-columns:1fr 320px}}
 .site-header{border-bottom:1px solid var(--color-gray-200);background:var(--color-white);position:sticky;top:0;z-index:50}
-.site-header__inner{display:flex;align-items:center;justify-content:space-between;padding:var(--space-3) 0;gap:var(--space-4);flex-wrap:wrap}
-.brand{display:inline-flex;align-items:center;gap:var(--space-2);text-decoration:none}
-.brand__mark{height:40px;width:auto;flex-shrink:0}
-.header-phone{font-weight:600;color:var(--color-navy-900);text-decoration:none;font-size:.875rem;white-space:nowrap}
-.header-phone:hover{color:var(--color-teal-600)}
-.nav-toggle{display:flex;align-items:center;justify-content:center;background:none;border:1px solid var(--color-gray-200);border-radius:var(--radius-sm);width:40px;height:40px;cursor:pointer;padding:0}
+/* NOTE: this rule used to set `padding: var(--space-3) 0`, which overrode
+   .container's horizontal padding (same specificity, declared later) and left
+   the header flush to the viewport edge — the logo touched x=0 and the nav
+   toggle touched the right edge at 375px. Restore the gutter explicitly so the
+   header aligns with page content. */
+.site-header__inner{display:flex;align-items:center;justify-content:space-between;padding:var(--space-3) var(--space-4);gap:var(--space-3);flex-wrap:wrap}
+.brand{display:inline-flex;align-items:center;gap:var(--space-2);text-decoration:none;flex-shrink:0}
+/* Logo enlarged (was 40px). Steps up with the viewport; width:auto keeps the
+   730x200 aspect so the intrinsic width/height attrs only serve CLS. */
+.brand__mark{height:46px;width:auto;flex-shrink:0}
+@media(max-width:359px){.brand__mark{height:38px}.site-header__inner{gap:var(--space-2)}}
+@media(min-width:480px){.brand__mark{height:50px}}
+@media(min-width:768px){.brand__mark{height:54px}}
+@media(min-width:1024px){.brand__mark{height:52px}}
+
+/* ── Header contact block (phone / fax / email) ──────────────────────────
+   375px: phone only, as a tap-to-call pill. All three would cost ~117px the
+          row does not have; .site-header__inner wraps, so the toggle would
+          drop to a second row and double the sticky header rather than
+          vanish. Fax and email stay in the footer and on /contact.
+   768px: all three, icon + value, wrapping allowed.
+  1024px: all three with labels, on the header's first row.               */
+.header-contact{list-style:none;margin:0;padding:0;display:flex;align-items:center;gap:var(--space-3);flex-wrap:wrap;min-width:0}
+.header-contact__item--fax,.header-contact__item--email{display:none}
+.header-contact__link{display:inline-flex;align-items:center;gap:var(--space-2);min-height:44px;padding:0 var(--space-2);color:var(--color-navy-900);text-decoration:none;font-size:.875rem;font-weight:600;white-space:nowrap;border-radius:var(--radius-sm)}
+a.header-contact__link:hover{color:var(--color-teal-600);background:var(--color-gray-50)}
+.header-contact__icon{flex-shrink:0;color:var(--color-teal-600)}
+.header-contact__label{font-weight:600;color:var(--color-gray-700)}
+.header-contact__value{font-weight:600}
+/* Under 480px the number would crowd the toggle — keep the label, and let the
+   tel: href carry the number. Announced in full to AT via the value span. */
+@media(max-width:479px){.header-contact__item--phone .header-contact__value{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}}
+@media(min-width:768px){
+  .header-contact{gap:var(--space-2)}
+  .header-contact__item--fax{display:block}
+  .header-contact__link{font-size:.8125rem;padding:0 var(--space-1)}
+  .header-contact__label{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+}
+@media(min-width:1024px){
+  .header-contact{gap:var(--space-4);order:2;margin-left:auto}
+  .header-contact__item--email{display:block}
+  .header-contact__link{font-size:.875rem}
+  .header-contact__label{position:static;width:auto;height:auto;margin:0;overflow:visible;clip:auto;font-size:.75rem;text-transform:uppercase;letter-spacing:.04em;color:var(--color-gray-500)}
+}
+.nav-toggle{display:flex;align-items:center;justify-content:center;background:none;border:1px solid var(--color-gray-200);border-radius:var(--radius-sm);width:44px;height:44px;cursor:pointer;padding:0;flex-shrink:0}
 .nav-toggle__icon{display:block;width:20px;height:2px;background:var(--color-navy-900);position:relative}
 .nav-toggle__icon::before,.nav-toggle__icon::after{content:'';position:absolute;width:20px;height:2px;background:var(--color-navy-900);left:0}
 .nav-toggle__icon::before{top:-6px}.nav-toggle__icon::after{top:6px}
 .primary-nav{display:none;width:100%;order:3}
 .primary-nav.is-open{display:block}
 .primary-nav__list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:var(--space-1)}
-.primary-nav__list a{display:block;padding:var(--space-2) var(--space-3);color:var(--color-navy-900);text-decoration:none;font-size:.9375rem;border-radius:var(--radius-sm)}
+.primary-nav__list a{display:block;padding:var(--space-3);color:var(--color-navy-900);text-decoration:none;font-size:.9375rem;border-radius:var(--radius-sm)}
 .primary-nav__list a:not(.btn):hover,.primary-nav__list a:not(.btn)[aria-current="page"]{background:var(--color-gray-50);color:var(--color-teal-600)}
-@media(min-width:1024px){.nav-toggle{display:none}.primary-nav{display:block;width:auto;order:unset}.primary-nav__list{flex-direction:row;align-items:center;gap:var(--space-1)}.primary-nav__list a{padding:var(--space-2) var(--space-3)}}
+.primary-nav__cta{margin-top:var(--space-2)}
+.primary-nav__cta .btn{width:100%;justify-content:center}
+/* At 1024px the header becomes two rows: brand + contact on row 1, nav + the
+   Refer CTA on row 2. Six nav items plus three contact items will not fit on
+   one 1180px row without crowding, which the brief calls out explicitly. */
+@media(min-width:1024px){
+  .nav-toggle{display:none}
+  .site-header__inner{padding-bottom:0;row-gap:0}
+  .primary-nav{display:block;width:calc(100% + var(--space-8));margin:0 calc(-1 * var(--space-4));order:3;border-top:1px solid var(--color-gray-100)}
+  .primary-nav__list{padding:0 var(--space-4)}
+  .primary-nav__list{flex-direction:row;align-items:center;gap:var(--space-1);flex-wrap:wrap}
+  .primary-nav__list a{padding:var(--space-3) var(--space-3)}
+  .primary-nav__cta{margin-top:0;margin-left:auto;padding:0}
+  .primary-nav__cta .btn{width:auto}
+}
 .btn{display:inline-flex;align-items:center;gap:var(--space-2);padding:var(--space-3) var(--space-6);border-radius:var(--radius-sm);font-weight:600;font-size:.9375rem;text-decoration:none;border:2px solid transparent;cursor:pointer;transition:background var(--duration) var(--ease),color var(--duration) var(--ease),border-color var(--duration) var(--ease)}
-.btn--primary{background:var(--color-teal-500);color:var(--color-white);border-color:var(--color-teal-500)}
-.btn--primary:hover{background:var(--color-teal-600);border-color:var(--color-teal-600);color:var(--color-white)}
+/* Fill is Teal-600, not Teal-500: white on #338F8D is 3.85:1 and fails AA. */
+.btn--primary{background:var(--color-teal-600);color:var(--color-white);border-color:var(--color-teal-600)}
+.btn--primary:hover{background:var(--color-navy-900);border-color:var(--color-navy-900);color:var(--color-white)}
 .btn--secondary{background:transparent;color:var(--color-teal-600);border-color:var(--color-teal-600)}
 .btn--secondary:hover{background:var(--color-teal-600);color:var(--color-white)}
 .btn--onDark{background:var(--color-white);color:var(--color-navy-900);border-color:var(--color-white)}
@@ -111,6 +172,7 @@ address{font-style:normal}
 @media(min-width:768px){.hero{padding:var(--space-16) 0 var(--space-12)}.hero__title{font-size:2.75rem}}
 
 /* ── Homepage split hero ── */
+.hero--split{padding-bottom:var(--space-12)}
 .hero--split .container{display:grid;gap:var(--space-8);align-items:center}
 .hero--split .hero__text{max-width:540px}
 @media(min-width:768px){.hero--split .container{grid-template-columns:1fr 1fr}}
@@ -136,24 +198,19 @@ address{font-style:normal}
 
 /* ── Accent image strip ── */
 .image-strip{height:240px;overflow:hidden;position:relative}
-.image-strip::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(70,126,154,.72),rgba(70,126,154,.28) 55%,rgba(255,255,255,.12));pointer-events:none}
+.image-strip::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(23,88,104,.72),rgba(23,88,104,.28) 55%,rgba(255,255,255,.12));pointer-events:none}
 .image-strip img{width:100%;height:100%;object-fit:cover;display:block}
 @media(min-width:768px){.image-strip{height:320px}}
+
 .section-title{font-size:1.5rem;color:var(--color-navy-900);margin-bottom:var(--space-4)}
 .lead{font-size:1.125rem;color:var(--color-gray-700)}
-.proof-bar{background:var(--color-navy-900);color:var(--color-white);padding:var(--space-6) 0}
-.proof-bar__list{list-style:none;padding:0;margin:0;display:grid;gap:var(--space-4)}
-.proof-bar__list li{display:flex;align-items:flex-start;gap:var(--space-3);font-size:.875rem;line-height:1.5}
-.proof-bar__list strong{display:block;color:#7cb286;font-size:.9375rem}
-@media(min-width:768px){.proof-bar__list{grid-template-columns:repeat(3,1fr)}}
-@media(min-width:1024px){.proof-bar__list{grid-template-columns:repeat(5,1fr)}}
 .card{background:var(--color-white);border:1px solid var(--color-gray-200);border-radius:var(--radius-md);padding:var(--space-6);box-shadow:var(--shadow-sm);transition:box-shadow var(--duration) var(--ease)}
 .card:hover{box-shadow:var(--shadow-md)}
 .card h3{font-size:1.125rem;color:var(--color-navy-900);margin-bottom:var(--space-2)}
 .card p{color:var(--color-gray-700);margin-bottom:var(--space-2)}
 .card p:last-child{margin-bottom:0}
 .card--soft{background:var(--color-gray-50);border:1px solid var(--color-gray-100)}
-.card__step{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;background:var(--color-teal-100);color:var(--color-teal-600);border-radius:50%;font-weight:700;font-size:.875rem;margin-bottom:var(--space-3)}
+.card__step{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;background:var(--color-teal-100);color:var(--color-navy-900);border-radius:50%;font-weight:700;font-size:.875rem;margin-bottom:var(--space-3)}
 .callout-dark{background:var(--color-navy-900);color:var(--color-white);border-radius:var(--radius-lg);padding:var(--space-8)}
 .callout-dark h2{color:var(--color-white);font-size:1.5rem}
 .callout-dark p{color:var(--color-gray-200)}
@@ -169,7 +226,7 @@ address{font-style:normal}
 .form__row--half{display:grid;grid-template-columns:1fr;gap:var(--space-4)}
 @media(min-width:768px){.form__row--half{grid-template-columns:1fr 1fr}}
 .form label{font-weight:600;font-size:.875rem;color:var(--color-navy-900)}
-.form input,.form select,.form textarea{padding:var(--space-3);border:1px solid var(--color-gray-200);border-radius:var(--radius-sm);font-size:1rem;font-family:var(--font-body);color:var(--color-gray-900);background:var(--color-white);width:100%;transition:border-color var(--duration) var(--ease)}
+.form input,.form select,.form textarea{padding:var(--space-3);border:1px solid var(--color-gray-500);border-radius:var(--radius-sm);font-size:1rem;font-family:var(--font-body);color:var(--color-gray-900);background:var(--color-white);width:100%;transition:border-color var(--duration) var(--ease)}
 .form input:focus,.form select:focus,.form textarea:focus{border-color:var(--color-teal-500);outline:3px solid var(--color-focus);outline-offset:1px}
 .form textarea{min-height:120px;resize:vertical}
 .form .required{color:var(--color-error)}
@@ -181,8 +238,17 @@ details summary::-webkit-details-marker{display:none}
 details summary::before{content:'▸ ';color:var(--color-teal-500)}
 details[open] summary::before{content:'▾ '}
 details p{padding:var(--space-2) 0 var(--space-2) var(--space-4);color:var(--color-gray-700)}
-blockquote{margin:0 0 var(--space-4);padding:var(--space-4) var(--space-6);border-left:4px solid var(--color-teal-500);background:var(--color-gray-50);border-radius:0 var(--radius-sm) var(--radius-sm) 0}
-blockquote p{margin-bottom:var(--space-2)} blockquote p:last-child{margin-bottom:0}
+/* Informational callout. NOT for quotes — no <blockquote> ships (Invariant 3). */
+.note-box{margin:0 0 var(--space-4);padding:var(--space-4) var(--space-6);border-left:4px solid var(--color-teal-500);background:var(--color-gray-50);border-radius:0 var(--radius-sm) var(--radius-sm) 0;color:var(--color-gray-700)}
+.note-box p{margin-bottom:var(--space-2)} .note-box p:last-child{margin-bottom:0}
+.note-box--script{text-align:left;font-size:1.0625rem}
+/* Teal-600 on Warm-Gold-100 is 4.41:1 — under AA. Deep Teal is 6.66:1. */
+.note-box a:not(.btn){color:var(--color-navy-900);font-weight:600}
+.note-box--review :focus-visible,.note-box--empty :focus-visible,.form-phi-notice :focus-visible{outline-color:var(--color-navy-900)}
+.note-box a:not(.btn):hover{color:var(--color-teal-600)}
+/* :not(.btn) is load-bearing. `.note-box a` is (0,1,1) and outranks
+   `.btn--primary` (0,1,0) whatever the order, so without it the empty-state CTA
+   rendered navy-on-teal at 1.50:1 and vanished entirely on hover (1.00:1). */
 .footnote{font-size:.8125rem;color:var(--color-gray-500)}
 .visually-hidden{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 .site-footer{background:var(--color-navy-900);color:var(--color-gray-200);padding:var(--space-12) 0 var(--space-8)}
@@ -194,7 +260,7 @@ blockquote p{margin-bottom:var(--space-2)} blockquote p:last-child{margin-bottom
 .site-footer__grid{display:grid;gap:var(--space-8);margin-bottom:var(--space-8)}
 @media(min-width:768px){.site-footer__grid{grid-template-columns:repeat(3,1fr)}}
 @media(min-width:1024px){.site-footer__grid{grid-template-columns:1.5fr repeat(4,1fr)}}
-.site-footer__legal{font-size:.75rem;color:var(--color-gray-500);border-top:1px solid var(--color-navy-700);padding-top:var(--space-6);margin:0}
+.site-footer__legal{font-size:.75rem;color:var(--color-gray-200);border-top:1px solid var(--color-navy-700);padding-top:var(--space-6);margin:0}
 /* Form/compliance notices introduced in Pass A */
 .form-phi-notice{background:var(--color-amber-100);border-left:3px solid var(--color-amber-400);color:var(--color-gray-900);padding:var(--space-3) var(--space-4);border-radius:var(--radius-sm);margin-bottom:var(--space-4)}
 .form-fallback{font-size:.875rem;color:var(--color-gray-500);margin-top:var(--space-2)}
@@ -208,7 +274,7 @@ blockquote p{margin-bottom:var(--space-2)} blockquote p:last-child{margin-bottom
 .value-split{display:grid;gap:var(--space-6)}
 @media(min-width:768px){.value-split{grid-template-columns:1fr 1fr}}
 .value-split__card{padding:var(--space-8);border-radius:var(--radius-md);background:var(--color-gray-50);border:1px solid var(--color-gray-200)}
-.value-split__card h3{font-size:1.25rem}
+.value-split__card h2{font-size:1.25rem;margin-bottom:var(--space-4)}
 /* ── Process flow (vertical, alternating zigzag) ── */
 .flow{position:relative;max-width:940px;margin:var(--space-8) auto 0;display:flex;flex-direction:column}
 .flow__step{display:grid;grid-template-columns:1fr;justify-items:center;text-align:center;gap:var(--space-3);align-items:center}
@@ -237,5 +303,60 @@ blockquote p{margin-bottom:var(--space-2)} blockquote p:last-child{margin-bottom
   .flow__link::before{display:none}
   .flow__curve{display:block;height:100%;width:140px}
 }
-@media print{.site-header,.site-footer,.nav-toggle,.btn,.hero__cta,.cta-row{display:none!important}body{color:#000;background:#fff;font-size:11pt;line-height:1.5}.container{max-width:100%;padding:0}.section{padding:1rem 0}a{color:#000;text-decoration:underline}.callout-dark{background:#eee!important;color:#000!important}.callout-dark h2,.callout-dark p{color:#000!important}}
+@media print{.site-header,.site-footer,.nav-toggle,.btn,.hero__cta,.cta-row,.finder__controls,.finder__chips,.finder__status{display:none!important}body{color:#000;background:#fff;font-size:11pt;line-height:1.5}.container{max-width:100%;padding:0}.section{padding:1rem 0}a{color:#000;text-decoration:underline}.callout-dark{background:#eee!important;color:#000!important}.callout-dark h2,.callout-dark p{color:#000!important}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:0.01ms!important;animation-iteration-count:1!important;transition-duration:0.01ms!important}}
+
+/* =========================================================
+   Therapy / condition finder — /diseases-we-treat, /drugs-we-provide
+   Every value below is a :root token. Contrast verified at real palette
+   values: active chip is Deep Teal #175868 on white text (7.98:1); an
+   inactive chip is Teal-600 #2a7675 on white (5.32:1); tags are Gray-700
+   on Canvas (8.74:1). Active state is carried by a ✓ glyph AND weight AND
+   fill, never by colour alone.
+   ========================================================= */
+.finder__controls{display:flex;flex-wrap:wrap;align-items:flex-end;gap:var(--space-4);margin-bottom:var(--space-6)}
+.finder__field{flex:1 1 320px;min-width:0}
+.finder__label{display:block;font-weight:600;font-size:.875rem;color:var(--color-navy-900);margin-bottom:var(--space-1)}
+.finder__input{width:100%;padding:var(--space-3) var(--space-4);border:1px solid var(--color-gray-500);border-radius:var(--radius-sm);font-size:1rem;font-family:var(--font-body);color:var(--color-gray-900);background:var(--color-white);min-height:48px}
+.finder__input:focus{border-color:var(--color-teal-500);outline:3px solid var(--color-focus);outline-offset:1px}
+.finder__hint{flex:1 0 100%;order:9;font-size:.75rem;color:var(--color-gray-500);margin:var(--space-1) 0 0}
+.finder__clear{flex:0 0 auto}
+.finder__clear[disabled]{opacity:.45;pointer-events:none}
+.finder__chips{margin-bottom:var(--space-4)}
+.finder__chip-list{list-style:none;padding:0;margin:0;display:flex;flex-wrap:wrap;gap:var(--space-2)}
+.finder__chip{display:inline-flex;align-items:center;gap:var(--space-1);min-height:44px;padding:var(--space-2) var(--space-4);border:1px solid var(--color-teal-600);border-radius:var(--radius-pill);color:var(--color-teal-600);background:var(--color-white);text-decoration:none;font-size:.875rem;font-weight:600;white-space:nowrap}
+.finder__chip:hover{background:var(--color-teal-100);color:var(--color-navy-900)}
+.finder__chip[aria-pressed="true"]{background:var(--color-navy-900);border-color:var(--color-navy-900);color:var(--color-white);font-weight:700}
+.finder__chip[aria-pressed="true"]::before{content:"✓ ";font-weight:700}
+.finder__status{font-size:.875rem;color:var(--color-gray-700);margin:0 0 var(--space-6);font-weight:600}
+/* One alert modifier. Amber is this system's alert colour, reserved for genuine
+   alerts — the "pending confirmation" specialty blocks use a neutral .card--soft
+   so they don't read as validation errors on two real specialties. */
+.note-box--review,.note-box--empty{border-left-color:var(--color-amber-400);background:var(--color-amber-100);color:var(--color-gray-900)}
+.finder__empty,.note-box--empty{max-width:var(--max-width-narrow);margin-left:auto;margin-right:auto;margin-bottom:var(--space-6)}
+.finder__pending{margin-top:var(--space-2)}
+.finder__pending p:last-child{margin-bottom:0}
+.finder__group{margin-bottom:var(--space-8)}
+.finder__group:last-child{margin-bottom:0}
+.section-title--group{font-size:1.25rem;padding-bottom:var(--space-2);border-bottom:2px solid var(--color-gray-100)}
+
+/* Therapy and condition cards share one grid so both pages scan identically. */
+.therapy-list,.condition-list{list-style:none;padding:0;margin:0;display:grid;gap:var(--space-4);grid-template-columns:1fr}
+@media(min-width:768px){.therapy-list,.condition-list{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:1024px){.therapy-list,.condition-list{grid-template-columns:repeat(3,1fr)}}
+.therapy,.condition{display:flex;flex-direction:column;gap:var(--space-1);background:var(--color-white);border:1px solid var(--color-gray-200);border-left:3px solid var(--color-teal-500);border-radius:var(--radius-md);padding:var(--space-4);box-shadow:var(--shadow-sm)}
+.therapy__head{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:var(--space-2)}
+.therapy__name,.condition__name{font-family:var(--font-heading);font-size:1.125rem;font-weight:700;color:var(--color-navy-900);margin:0}
+.therapy__generic,.condition__full{font-size:.875rem;color:var(--color-gray-700);margin:0}
+.therapy__tag{background:var(--color-teal-100);border-color:var(--color-teal-100);color:var(--color-navy-900)}
+.therapy__tag,.condition__tag{display:inline-block;font-size:.75rem;font-weight:600;color:var(--color-gray-700);background:var(--color-gray-50);border:1px solid var(--color-gray-100);border-radius:var(--radius-sm);padding:var(--space-1) var(--space-2);margin:0}
+.condition__tags{display:flex;flex-wrap:wrap;gap:var(--space-1);margin:var(--space-1) 0 0}
+.therapy__products{margin:var(--space-2) 0 0;padding-left:var(--space-4);font-size:.875rem;color:var(--color-gray-700)}
+.therapy__action,.condition__action{margin:auto 0 0;padding-top:var(--space-3)}
+.therapy__action a,.condition__action a{display:inline-flex;align-items:center;min-height:44px;font-size:.875rem;font-weight:600;color:var(--color-teal-600);text-decoration:underline}
+.therapy__action a:hover,.condition__action a:hover{color:var(--color-navy-900)}
+
+.card--soft ul{margin:0}
+.card--soft li{margin-bottom:var(--space-2);color:var(--color-gray-700)}
+.card--soft li:last-child{margin-bottom:0}
+.value-split__links{font-size:.9375rem;color:var(--color-gray-700)}

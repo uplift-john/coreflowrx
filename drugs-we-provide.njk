@@ -1,0 +1,129 @@
+---
+layout: layout.njk
+title: "Drugs We Provide | CoreFlow Specialty Infusion | South Carolina"
+description: "Search the therapies CoreFlow Specialty Infusion provides by drug name, generic name, or specialty. Start a referral from the drug you're looking for."
+ogTitle: "Drugs We Provide | CoreFlow Specialty Infusion"
+ogDescription: "Find a therapy by brand or generic name and refer from the same page."
+activeNav: drugs
+permalink: "/drugs-we-provide.html"
+pageScript: "finder.js"
+---
+{#- Every therapy rendered here comes from _data/therapies.json. Nothing on this
+    page hardcodes a drug name — verify-coreflow Check 17 enforces that. Only
+    entries with status "confirmed" render; flagged entries are held in the data
+    file and listed in docs/stage2/blockers.md. -#}
+{%- set confirmed = therapies.therapies | whereStatus("confirmed") -%}
+
+<section class="hero">
+ <div class="container">
+ <span class="hero__eyebrow">For Prescribers &amp; Office Staff</span>
+ <h1 class="hero__title">Drugs we provide</h1>
+ <p class="hero__lead">Search by brand name, generic name, or specialty. If it's listed, it's on our formulary &mdash; we confirm coverage and clinical fit case by case before the first infusion. If it isn't listed, that isn't a no: call us and we'll check.</p>
+ <div class="hero__cta">
+  <a class="btn btn--primary" href="refer.html">Refer a Patient →</a>
+  <a class="btn btn--secondary" href="diseases-we-treat.html">Diseases We Treat →</a>
+ </div>
+ {% include "physician-order-notice.njk" %}
+ </div>
+</section>
+
+<section class="section" data-finder data-finder-noun="therapies">
+ <div class="container">
+
+  <form class="finder__controls" data-finder-controls data-finder-form hidden>
+   <div class="finder__field">
+    <label class="finder__label" for="therapy-search">Search therapies</label>
+    <input class="finder__input" id="therapy-search" type="search" autocomplete="off"
+           placeholder="Brand, generic, or specialty"
+           aria-describedby="therapy-search-hint"
+           data-finder-input>
+    <p class="finder__hint" id="therapy-search-hint">Matches brand names, generic names, and specialties as you type.</p>
+   </div>
+   <button class="btn btn--secondary finder__clear" type="button" data-finder-clear disabled>Clear search</button>
+  </form>
+
+  <nav class="finder__chips" aria-label="Filter by specialty">
+   <ul class="finder__chip-list" role="list">
+   {%- for specialty in therapies.specialties %}
+    <li><a class="finder__chip" href="#specialty-{{ specialty.id }}" data-finder-filter="{{ specialty.id }}">{{ specialty.name }}</a></li>
+   {%- endfor %}
+   </ul>
+  </nav>
+
+  <p class="finder__status" role="status" aria-live="polite" data-finder-status>Showing all {{ confirmed | length }} therapies.</p>
+
+  <div class="note-box note-box--empty container--narrow text-center" hidden data-finder-empty>
+   <p><strong>No match on this page &mdash; and that is not the same as no.</strong>
+   This list is what we have confirmed today, not the limit of what we can source.
+   We'll confirm formulary fit for your patient's therapy before you send the referral.</p>
+   <p><a class="btn btn--primary" href="tel:{{ site.phoneTel }}">Call {{ site.phone }} →</a></p>
+  </div>
+
+  {%- for specialty in therapies.specialties %}
+  {%- set inSpecialty = confirmed | inSpecialty(specialty.id) %}
+  <section class="finder__group" id="specialty-{{ specialty.id }}" data-finder-group="{{ specialty.id }}">
+   <h2 class="section-title section-title--group">{{ specialty.name }}</h2>
+   {%- if inSpecialty | length %}
+   <ul class="therapy-list" role="list">
+   {%- for therapy in inSpecialty %}
+    <li class="therapy" data-finder-item data-finder-key="{{ therapy.name }}"
+        data-specialties="{{ therapy.specialties | join(' ') }}"
+        data-search="{{ therapy.name }} {{ therapy.generic }} {{ therapy.class }} {{ therapy.aliases | join(' ') }} {{ therapy.specialties | specialtyNames(therapies.specialties) | join(' ') }}">
+     <div class="therapy__head">
+      <h3 class="therapy__name">{{ therapy.name }}</h3>
+      {%- if therapy.class | lower != therapy.generic | lower %}<p class="therapy__tag"><span class="visually-hidden">Drug class: </span>{{ therapy.class }}</p>{% endif %}
+     </div>
+     <p class="therapy__generic">{{ therapy.generic }}</p>
+     {%- set alsoIn = therapy.specialties | reject("equalto", specialty.id) | specialtyNames(therapies.specialties) %}
+     {%- if alsoIn | length %}
+     <p class="condition__tags"><span class="visually-hidden">Also listed under: </span>
+     {%- for name in alsoIn %}
+      <span class="condition__tag">{{ name }}</span>
+     {%- endfor %}
+     </p>
+     {%- endif %}
+     {%- if therapy.products | length %}
+     <ul class="therapy__products">
+     {%- for product in therapy.products %}
+      <li>{{ product.name }}{% if product.generic %} <span class="therapy__generic">{{ product.generic }}</span>{% endif %}</li>
+     {%- endfor %}
+     </ul>
+     {%- endif %}
+     <p class="therapy__action"><a href="refer.html">Refer a patient on {{ therapy.name }} →</a></p>
+    </li>
+   {%- endfor %}
+   </ul>
+   {%- else %}
+   <div class="card card--soft finder__pending">
+    <p><strong>We're not listing {{ specialty.name | lower }} therapies yet.</strong>
+    Our clinical team is still confirming what we carry for this specialty, so
+    rather than publish a list we can't stand behind, we'd rather you asked us.
+    Tell us the drug and we'll answer straight away.</p>
+    <p><a class="btn btn--secondary" href="tel:{{ site.phoneTel }}">Call {{ site.phone }} →</a></p>
+   </div>
+   {%- endif %}
+  </section>
+  {%- endfor %}
+
+ </div>
+</section>
+
+<section class="section section--soft">
+ <div class="container">
+  <h2 class="section-title">Don't see your therapy?</h2>
+  <p class="lead">A therapy missing from this page is not a declined referral. This page lists
+  what is confirmed today, and it grows as we contract for new products.</p>
+  <div class="grid grid--3 mt-6">
+   <div class="card"><h3>Call and ask</h3><p><strong>{{ site.phone }}</strong><br>{{ site.hours }}</p><p>We'll confirm formulary fit and coverage for the specific therapy before you send anything.</p><a class="btn btn--secondary" href="tel:{{ site.phoneTel }}">Call now →</a></div>
+   <div class="card"><h3>Fax the order</h3><p>Send the order and we'll come back to your office on fit and coverage.</p><p>Fax <strong>{{ site.fax }}</strong></p><a class="btn btn--secondary" href="coreflow-fax-cover-sheet.pdf" download>Download Cover Sheet →</a></div>
+   <div class="card"><h3>Start from the diagnosis</h3><p>Working from the condition rather than the drug? The condition list is the other way in.</p><a class="btn btn--secondary" href="diseases-we-treat.html">Diseases We Treat →</a></div>
+  </div>
+  <p class="footnote mt-4"><em>All therapies are subject to formulary availability, clinical suitability, and payer authorization. Availability on this page does not guarantee that a particular referral can be serviced &mdash; we confirm case by case.</em></p>
+ </div>
+</section>
+
+<section class="section">
+ <div class="container">
+  {% include "referral-checklist.njk" %}
+ </div>
+</section>
