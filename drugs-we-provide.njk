@@ -18,16 +18,12 @@ pageScript: "finder.js"
  <div class="container">
  <span class="hero__eyebrow">For Prescribers &amp; Office Staff</span>
  <h1 class="hero__title">Drugs we provide</h1>
- <p class="hero__lead">Search by brand name, generic name, or specialty. If it's listed, it's on our formulary &mdash; we confirm coverage and clinical fit case by case before the first infusion. If it isn't listed, that isn't a no: call us and we'll check.</p>
- <div class="hero__cta">
-  <a class="btn btn--primary" href="refer.html">Refer a Patient →</a>
-  <a class="btn btn--secondary" href="diseases-we-treat.html">Diseases We Treat →</a>
- </div>
+ <p class="hero__lead">Search by brand, generic or specialty. If it's listed, it's on our formulary &mdash; and if it isn't, that isn't a no: <a href="tel:{{ site.phoneTel }}">call us</a> and we'll check.</p>
  {% include "physician-order-notice.njk" %}
  </div>
 </section>
 
-<section class="section" data-finder data-finder-noun="therapies">
+<section class="section section--tight" data-finder data-finder-noun="therapies">
  <div class="container">
 
   <form class="finder__controls" data-finder-controls data-finder-form hidden>

@@ -54,6 +54,10 @@
 }
 
 *,*::before,*::after{box-sizing:border-box}
+/* The header is position:sticky, so an in-page anchor otherwise lands underneath
+   it. This is what makes the no-JS specialty chips actually work. */
+html{scroll-padding-top:5.5rem}
+@media(min-width:1024px){html{scroll-padding-top:8.5rem}}
 /* The UA's [hidden]{display:none} is a NORMAL author-origin-losing rule, so any
    author `display` declaration beats it. .therapy/.condition are display:flex and
    .finder__controls/.btn are flex — without this line finder.js sets item.hidden
@@ -329,6 +333,22 @@ details p{padding:var(--space-2) 0 var(--space-2) var(--space-4);color:var(--col
 .finder__chip[aria-pressed="true"]{background:var(--color-navy-900);border-color:var(--color-navy-900);color:var(--color-white);font-weight:700}
 .finder__chip[aria-pressed="true"]::before{content:"✓ ";font-weight:700}
 .finder__status{font-size:.875rem;color:var(--color-gray-700);margin:0 0 var(--space-6);font-weight:600}
+/* Under 768px the hint duplicates the placeholder and costs ~42px between the
+   field and the first result, on the one viewport where that budget matters.
+   Kept in the accessibility tree via aria-describedby. */
+@media(max-width:767px){
+  .finder__hint{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+  .finder__controls{gap:var(--space-2);margin-bottom:var(--space-3)}
+  .finder__clear{padding:var(--space-2) var(--space-4);min-height:44px}
+  /* Seven chips wrapped to three rows (~148px). One scrolling row is ~44px. */
+  .finder__chip-list{flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scroll-snap-type:x proximity;padding-bottom:var(--space-2)}
+  .finder__chip{scroll-snap-align:start}
+  .finder__chips{margin-bottom:var(--space-2)}
+  .finder__status{margin-bottom:var(--space-3)}
+  .finder__group{margin-bottom:var(--space-6)}
+  .section--tight{padding-top:var(--space-4)}
+}
+
 /* One alert modifier. Amber is this system's alert colour, reserved for genuine
    alerts — the "pending confirmation" specialty blocks use a neutral .card--soft
    so they don't read as validation errors on two real specialties. */
@@ -339,6 +359,8 @@ details p{padding:var(--space-2) 0 var(--space-2) var(--space-4);color:var(--col
 .finder__group{margin-bottom:var(--space-8)}
 .finder__group:last-child{margin-bottom:0}
 .section-title--group{font-size:1.25rem;padding-bottom:var(--space-2);border-bottom:2px solid var(--color-gray-100)}
+.finder--searching .section-title--group{display:none}
+.finder--searching .finder__group{margin-bottom:var(--space-4)}
 
 /* Therapy and condition cards share one grid so both pages scan identically. */
 .therapy-list,.condition-list{list-style:none;padding:0;margin:0;display:grid;gap:var(--space-4);grid-template-columns:1fr}

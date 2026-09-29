@@ -90,6 +90,12 @@
       var filtering = !!query || !!activeSpecialty;
       var visibleItems = [];
 
+      // On a text query the specialty grouping is not what the user is navigating
+      // by, and a therapy listed in three specialties would paint three identical
+      // cards under a status line saying "1". Collapse to the first match per key;
+      // each card already carries its "Also listed under" tags.
+      var seenKey = query ? Object.create(null) : null;
+
       items.forEach(function (item) {
         var matchesText =
           !item._hasHaystack ||
@@ -101,6 +107,11 @@
           !item._hasSpecialties ||
           item._specialties.indexOf(activeSpecialty) !== -1;
         var visible = matchesText && matchesSpecialty;
+        if (visible && seenKey) {
+          var key = item.getAttribute("data-finder-key") || "";
+          if (seenKey[key]) visible = false;
+          else seenKey[key] = true;
+        }
         item.hidden = !visible;
         if (visible) visibleItems.push(item);
       });
@@ -129,6 +140,11 @@
       var pendingGroupVisible = groups.some(function (group) {
         return !group._items.length && !group.hidden;
       });
+      // During a text search the specialty grouping is not what the reader is
+      // navigating by — results are deduplicated across specialties — so the
+      // group headings are pure chrome between the field and the answer.
+      root.classList.toggle("finder--searching", !!query);
+
       if (empty) empty.hidden = shown !== 0 || pendingGroupVisible;
       // disabled, not hidden: the button keeps its box, so the input the user is
       // typing in does not resize under the caret on the first keystroke.

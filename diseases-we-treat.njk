@@ -42,7 +42,8 @@ robots: "noindex, nofollow"
   <p><strong>This list is under clinical review and is not final.</strong> These are the
   conditions prescribers ask us about most &mdash; not a settled list of what we can service.
   Call <a href="tel:{{ site.phoneTel }}">{{ site.phone }}</a> with the diagnosis and the therapy
-  and we'll tell you before you send anything.</p>
+  and we'll tell you before you send anything. If you already know the therapy,
+  <a href="drugs-we-provide.html">search the drugs we provide</a> instead.</p>
  </div>
 
  {% include "physician-order-notice.njk" %}
@@ -68,13 +69,8 @@ robots: "noindex, nofollow"
       without JS; with JS they filter in place instead of scrolling. -#}
   <nav class="finder__chips" aria-label="Filter by specialty">
    <ul class="finder__chip-list" role="list">
-   {#- Only specialties that actually have a condition get a chip: removing three
-       seed conditions on clinical review emptied Oncology and Pulmonology, and a
-       chip pointing at an anchor that no longer exists is a dead link. -#}
    {%- for specialty in specialties %}
-   {%- if conditionList | inSpecialty(specialty.id) | length %}
     <li><a class="finder__chip" href="#condition-{{ specialty.id }}" data-finder-filter="{{ specialty.id }}">{{ specialty.name }}</a></li>
-   {%- endif %}
    {%- endfor %}
    </ul>
   </nav>
@@ -90,9 +86,9 @@ robots: "noindex, nofollow"
 
   {%- for specialty in specialties %}
   {%- set inSpecialty = conditionList | inSpecialty(specialty.id) %}
-  {%- if inSpecialty | length %}
   <section class="finder__group" id="condition-{{ specialty.id }}" data-finder-group="{{ specialty.id }}">
    <h2 class="section-title section-title--group">{{ specialty.name }}</h2>
+   {%- if inSpecialty | length %}
    <ul class="condition-list" role="list">
    {%- for condition in inSpecialty %}
     <li class="condition" data-finder-item data-finder-key="{{ condition.name }}"
@@ -112,8 +108,17 @@ robots: "noindex, nofollow"
     </li>
    {%- endfor %}
    </ul>
+   {%- else %}
+   {#- Mirrors the empty-specialty block on /drugs-we-provide so the two sibling
+       pages answer the same click the same way. -#}
+   <div class="card card--soft finder__pending">
+    <p><strong>No {{ specialty.name | lower }} conditions listed yet.</strong>
+    This list is still being confirmed with our clinical team. Tell us the diagnosis
+    and the prescribed therapy and we'll answer straight away.</p>
+    <p><a class="btn btn--secondary" href="tel:{{ site.phoneTel }}">Call {{ site.phone }} →</a></p>
+   </div>
+   {%- endif %}
   </section>
-  {%- endif %}
   {%- endfor %}
 
  </div>

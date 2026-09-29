@@ -16,7 +16,7 @@ that were deliberately **not** actioned and why.
 | Design | BLOCK (4) | BLOCK (2 + 12 minor) | Both round-2 blocks were regressions I introduced; fixed |
 | Security / Code | BLOCK (3 + 12 minor) | BLOCK (1 + 9 minor) | `stripBlocks` comment hole closed |
 | Accessibility | BLOCK (6 + 9 minor) | BLOCK (1 + 5 minor) | Same regression Design found; fixed |
-| UX / UI | BLOCK (5 + 3 minor) | — | All five actioned and re-measured |
+| UX / UI | BLOCK (5 + 3 minor) | BLOCK (3 + 3 minor) | Round-2 blocks actioned; one criterion still partial |
 | Build / QA | BLOCK (1 + 2 minor) | **PASS** | 17/17 checks green |
 
 Round 2 found **three** genuinely new defects, two of which were regressions introduced
@@ -110,6 +110,25 @@ The header and the finder were checked in a real browser rather than argued from
 The **no side gutter** finding was a pre-existing bug the enlarged logo exposed:
 `.site-header__inner` set `padding: var(--space-3) 0`, which overrode `.container`'s
 horizontal padding at equal specificity.
+
+### UX round 2 — three more, all measured
+
+| | Before | After |
+|---|---|---|
+| Chrome between search field and first result (375px) | 330px — **no result visible while typing** | **158px**, result visible with the keyboard up |
+| Specialty chip row (375px) | 148px, wrapped to 3 rows | 52px, one scrolling row |
+| In-page anchors | landed **under** the sticky header | clear of it at both 71px and 118px |
+| Text search for a multi-specialty drug | announced "1", painted **3 identical cards** | 1 card, deduplicated |
+| Diseases page empty specialties | chips suppressed — Oncology silently ceased to exist | same "not listing these yet" block the drugs page uses; 7 chips / 7 anchors on both |
+
+The anchor offset mattered more than it sounds: the specialty chips are ordinary
+in-page anchors without JS, so every one of them landed its target underneath the sticky
+header — the no-JS fallback was decorative.
+
+**One criterion is still only partial.** At 375px with the soft keyboard up, the matching
+card is now visible but its "Refer a patient on X →" link sits ~30px below the fold.
+Closing that last gap means shortening the card itself (dropping the generic name or the
+specialty tags), which costs more than it buys. Recorded rather than papered over.
 
 ---
 
