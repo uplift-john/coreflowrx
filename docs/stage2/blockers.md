@@ -5,6 +5,41 @@ deliberate placeholder. Nothing here blocked the rest of the work from completin
 
 **Updated 2026-09-29 (post-review pass, branch `feature/post-review-2026-09`).**
 
+## ⚠ FIRST: this branch was cut from a 10-commit-stale `main`
+
+Discovered 2026-09-29 while checking merge readiness. `origin/main` was **10 commits
+ahead** of the local `main` this branch was based on, and all six files those commits
+touched are files this branch also changed. **Merging without reconciling would have
+reverted real work**, including:
+
+- **Both clinician bios** — Dr. Greg Regan (PharmD, RPh) and Lora Santi (BSN, RN), with
+  full paragraphs. This branch still had `[NAME]` placeholders.
+- **John's own permit fix**, already applied across four files ("applied for",
+  `Permit #TBD`).
+- **An `.onDark` wrapper + CSS** making the physician-order notice legible against the
+  dark providers hero.
+
+`origin/main` has been merged in and every conflict hand-resolved to keep both sides.
+Two things surfaced in the process:
+
+1. **`providers.njk` on `origin/main` has unbalanced markup** — the `.onDark` edit nested
+   the notice inside `.hero__cta` and dropped two closing `</div>`s (49 `<div>` vs 47
+   `</div>`), leaving the hero container unclosed. **That bug is live right now.** The
+   merge keeps the `.onDark` intent with the notice correctly placed after `.hero__cta`;
+   the file is now balanced at 43/43.
+2. **`Permit #TBD` was dropped.** Check 4 already forbids an incomplete permit number in
+   a regulated field ("e.g. `Permit Add #`") and `#TBD` is that shape. The *intent* —
+   applied for, not held — is John's and is kept everywhere. Say the word if you want the
+   literal `#TBD` back and I'll carve it out of the check explicitly.
+
+**Greg Regan's bio contains the only permitted MUSC reference on the site** — "most
+recently managing prior authorization operations for infusion services at MUSC" — which
+is exactly the employment-history usage Invariant 2 allows. It sits inside a
+`class="card bio"` block, which is what makes Check 3/14 permit it. Lora Santi's does too.
+**Do not move either bio out of a `.bio` block**; the check will fail the build.
+
+---
+
 ## Status at a glance
 
 John answered six items on 2026-09-29. Everything he answered is applied and verified;
@@ -399,11 +434,15 @@ HTML comment that was deleted along with the testimonial.
 
 ## 10. Placeholders reported, NOT filled
 
-- `about.njk` and `providers.njk` — `Dr. [NAME], PharmD, RPh` (Pharmacist-in-Charge) and
-  `[NAME], BSN, RN` (Director of Nursing). Deliberate withholdings; Check 4 *requires*
-  them. Supply real names when ready. **Note the `CRNI` credential was removed from both
-  listings** per the new nursing rule — restore the credential only if you decide CRNI
-  may appear on the site again, which Check 16 currently forbids.
+- **✅ RESOLVED — staff names are published.** `Dr. Greg Regan, PharmD, RPh`
+  (Pharmacist-in-Charge) and `Lora Santi, BSN, RN` (Director of Nursing) are live on
+  `about` and `providers`, carried in from `main`. Zero `[NAME]` placeholders remain
+  sitewide. Check 4 was **inverted** to match: it used to *require* the placeholder, and
+  now notes that a reappearing `[NAME]` means someone has reverted to a stale base.
+  **`CRNI` is not restored** on either listing — Check 16 forbids it sitewide. Say so if
+  you want that reconsidered.
+- Minor: Lora's card title reads "Director of Nursing" while her bio prose says "Director
+  of Infusion Nursing". Both are your wording; pick one.
 - `payers.njk` — NPI, NCPDP, permit number and payer participation all read "Available
   upon request".
 - **✅ PERMIT — RESOLVED 2026-09-29. John: there is no permit yet; every reference must

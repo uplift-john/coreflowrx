@@ -385,3 +385,18 @@ details p{padding:var(--space-2) 0 var(--space-2) var(--space-4);color:var(--col
 /* Placeholder note on a therapy whose brand-level products are still being
    confirmed — renders from _data/therapies.json, never hardcoded. */
 .therapy__note{font-size:.8125rem;color:var(--color-gray-900);background:var(--color-amber-100);border-left:3px solid var(--color-amber-400);border-radius:var(--radius-sm);padding:var(--space-2) var(--space-3);margin:var(--space-2) 0 0}
+
+/* Physician-order notice sits inside the dark hero on providers.njk.
+   Scoped to .onDark so the same include stays dark-on-light elsewhere
+   (refer.njk) — never restyle the include itself. */
+.onDark,
+.onDark p,
+.onDark strong,
+.onDark span {
+  color: #fff;
+}
+
+.onDark a {
+  color: #fff;
+  text-decoration: underline;
+}

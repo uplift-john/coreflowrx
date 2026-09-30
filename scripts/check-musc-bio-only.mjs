@@ -13,9 +13,11 @@
 // third party that CoreFlow cannot make unilaterally.
 //
 // WHAT IT DOES: after removing every element whose class list contains `bio`,
-// any remaining case-insensitive "musc" in built HTML fails. It also fails on a
-// MUSC mention in a source template comment, which is how the last wording TODO
-// survived three passes.
+// any remaining case-insensitive "musc" fails — in built HTML AND in source
+// templates, which get the same bio exemption because real bio copy lives there
+// (the Pharmacist-in-Charge's employment history is the canonical permitted
+// use). A MUSC mention in an HTML or Nunjucks COMMENT fails wherever it sits,
+// bio or not: that is how the last wording TODO survived three passes.
 //
 // WHAT IT DOES NOT COVER:
 //   • A logo or image OF MUSC. An <img> inside a bio block, or a file named
@@ -36,18 +38,36 @@ for (const { file, html } of builtPages()) {
   }
 }
 
-// Source templates: a MUSC mention in a comment never reaches the page but does
-// invite someone to put the claim back.
-for (const f of readdirSync(".").filter((f) => f.endsWith(".njk"))) {
+// Source templates get the same bio-block exemption as the built output — real
+// bio copy lives in source too (the Pharmacist-in-Charge's employment history is
+// the canonical permitted use). But a MUSC mention in an HTML COMMENT is still
+// flagged wherever it sits, including inside a bio: that is how the last
+// "replace token with final approved MUSC wording" TODO survived three passes,
+// and a comment is an invitation to put the claim back.
+const sources = [
+  ...readdirSync(".").filter((f) => f.endsWith(".njk")),
+  ...readdirSync("_includes")
+    .filter((f) => f.endsWith(".njk"))
+    .map((f) => `_includes/${f}`),
+];
+
+for (const f of sources) {
   const src = readFileSync(f, "utf8");
-  for (const m of src.matchAll(/musc/gi)) {
-    const around = src.slice(Math.max(0, m.index - 60), m.index + 60).replace(/\s+/g, " ");
-    problems.push(`${f} (source): MUSC reference — …${around}…`);
+
+  for (const c of src.matchAll(/<!--[\s\S]*?-->|\{#[\s\S]*?#\}/g)) {
+    if (/musc/i.test(c[0])) {
+      problems.push(
+        `${f} (source comment): MUSC reference — ${c[0].replace(/\s+/g, " ").slice(0, 110)}`
+      );
+    }
   }
-}
-for (const f of readdirSync("_includes").filter((f) => f.endsWith(".njk"))) {
-  const src = readFileSync(`_includes/${f}`, "utf8");
-  if (/musc/i.test(src)) problems.push(`_includes/${f} (source): MUSC reference`);
+
+  for (const m of stripBlocks(src, "bio").matchAll(/musc/gi)) {
+    const around = stripBlocks(src, "bio")
+      .slice(Math.max(0, m.index - 60), m.index + 60)
+      .replace(/\s+/g, " ");
+    problems.push(`${f} (source): MUSC outside a bio block — …${around}…`);
+  }
 }
 
 report("Check 14 · MUSC only inside individual bios", [...new Set(problems)]);

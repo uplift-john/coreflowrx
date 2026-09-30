@@ -16,7 +16,10 @@ permalink: "/providers.html"
  <a class="btn btn--onDark" href="refer.html">Refer a Patient →</a>
  <a class="btn btn--ghost" href="coreflow-fax-cover-sheet.pdf" download>Download Fax Cover Sheet →</a>
  </div>
- {% include "physician-order-notice.njk" %}
+ {#- .onDark makes the shared physician-order include legible against this dark
+     photo hero. Deliberately NOT used on refer/diseases/drugs, whose heroes are
+     light — never restyle the include itself. -#}
+ <div class="onDark">{% include "physician-order-notice.njk" %}</div>
  </div>
 </section>
 
@@ -55,7 +58,7 @@ permalink: "/providers.html"
  <h2 class="section-title">Clinical standards you can verify.</h2>
  <div class="grid grid--3">
  <div class="card card--soft"><h3>Credentialed RNs</h3><p>Care is delivered by credentialed local nursing partners who live and work in your patient's community. Every nurse must clear CoreFlow's credentialing and competency requirements before taking an assignment, and every visit is supervised under our clinical protocols.</p></div>
- <div class="card card--soft"><h3>SC Board of Pharmacy</h3><p>Resident Pharmacy Permit application submitted under Reg 99-43(B). Permit not yet issued — we will supply the number to your office as soon as it is.</p></div>
+ <div class="card card--soft"><h3>SC Board of Pharmacy</h3><p>Applied for a Resident Pharmacy Permit under Reg 99-43(B). Permit not yet issued — we will supply the number to your office as soon as it is.</p></div>
  <div class="card card--soft"><h3>URAC &amp; ACHC (pursuing)</h3><p>Actively pursuing URAC Specialty Pharmacy v5.0 and ACHC IRX-NO797, anticipated Q4 2026. Accreditation has been initiated and has not yet been awarded.</p></div>
  <div class="card card--soft"><h3>Cold chain</h3><p>Commercially manufactured, pre-compounded medications. USP 659/1079 cold chain. Temperature-monitored storage and delivery.</p></div>
  <div class="card card--soft"><h3>Documentation</h3><p>Clinical notes returned to your office after every visit. Made available to payer UM for PA and concurrent review.</p></div>
@@ -81,12 +84,11 @@ permalink: "/providers.html"
  <h2 class="section-title">Named, credentialed, accountable.</h2>
  <p>CoreFlow's clinical team is named, licensed, and reachable — your office talks to the same people every time.</p>
  <div class="grid grid--2 mt-6">
- <!-- TODO: real clinician names withheld until CoreFlow is ready to publish them -->
- <div class="card"><h3>Dr. [NAME], PharmD, RPh</h3><p><em>Pharmacist-in-Charge</em><br>Licensed by the SC Board of Pharmacy</p></div>
- <div class="card"><h3>[NAME], BSN, RN</h3><p><em>Director of Nursing</em><br>Licensed registered nurse</p></div>
+ <div class="card"><h3>Dr. Greg Regan, PharmD, RPh</h3><p><em>Pharmacist-in-Charge</em><br>Licensed by the SC Board of Pharmacy</p></div>
+ <div class="card"><h3>Lora Santi, BSN, RN</h3><p><em>Director of Nursing</em><br>Licensed registered nurse</p></div>
  </div>
- <p class="mt-4">Your office reaches the same licensed pharmacist-in-charge and director of nursing every time, and the nurses in the home work under their clinical protocols.</p>
- <p>And one point of contact: from intake through discharge, your office works with one CoreFlow clinical coordinator. Not a call center. Not a different person every time.</p>
+ <p class="mt-4">Your patient will be cared for by nurses working under clinical protocols owned by people whose names you can look up.</p>
+ <p>And one point of contact: from intake through discharge, your office works with the CoreFlow clinical team. Not a call center.</p>
  </div>
 </section>
 
