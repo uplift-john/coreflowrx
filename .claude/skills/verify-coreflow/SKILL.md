@@ -9,7 +9,7 @@ Never report a change complete based on a successful edit alone. Run **every** c
 
 Produce a **PASS/FAIL table by check and by page** at the end. Do not declare done until every row is PASS. The 10 primary pages are: `index`, `providers`, `patients`, `payers`, `refer`, `about`, `careers`, `contact`, `diseases-we-treat`, `drugs-we-provide`.
 
-Most of the content checks are now **scripted**, one script per check under `scripts/`, and `npm run verify` runs the build plus all of them in order. Read the count from this file: **there are 18 checks.** Run the scripts rather than re-deriving the greps — and never merge two checks into one script, because a merged check can be passed by weakening either half.
+Most of the content checks are now **scripted**, one script per check under `scripts/`, and `npm run verify` runs the build plus all of them in order. Read the count from this file: **there are 19 checks.** Run the scripts rather than re-deriving the greps — and never merge two checks into one script, because a merged check can be passed by weakening either half.
 
 ## Check 1 — Build
 Run `npx @11ty/eleventy`. Requires zero errors and zero broken templates. The site must build to `_site/`. If the build fails, nothing else can pass — fix first.
@@ -33,6 +33,7 @@ CoreFlow is **pre-launch and pursuing** URAC Specialty Pharmacy v5.0 and ACHC IR
 - **FAIL** on anything else.
   - Run: `npm run check-musc` (`scripts/check-musc-bio-only.mjs`) — must print PASS.
 - **Does not cover:** a logo or image of MUSC; an unnamed but obvious reference ("South Carolina's academic medical center"); or whether the employment history in a bio is true. Those are the Compliance reviewer's.
+- **Check 19 guards the same risk generally.** Check 3 names one organisation; Check 19 catches the *shape* of a third-party relationship claim, whoever it names.
 
 ## Check 4 — Legal flags
 - **Testimonials: superseded by Check 15.** The old rule here asked for an HTML-comment flag on each sample quote. Flagging a fabricated quote is no longer sufficient — as of 2026-09-29 the fabricated testimonials are **deleted** and Check 15 forbids the markup entirely. Do not re-add a "flag it" allowance.
@@ -183,8 +184,16 @@ This is Check 3's script. It is listed separately here because it runs separatel
 - **Does not cover:** whether the application was in fact submitted (that is John's word), or accreditation (Check 2).
 - **When the permit is issued:** update every reference together, then relax the two rules above and pin the real number in place of `#PH-042891` — in the same commit.
 
+## Check 19 — No named third-party business relationship claims
+**Rationale:** this file's own closing rule says that when the same class of problem appears twice, add a grep-able check instead of fixing the instance. This class appeared twice in a single pass. **MUSC Health** was asserted as a home infusion partner in five places (Check 3 now confines it to bios), and **Council Capital** — *"CoreFlow was established as a joint venture with Council Capital, a healthcare-focused private equity firm"* — sat on `/about` with nothing in the repo behind it, until John removed it on 2026-09-29. Both are representations **about a third party** that CoreFlow cannot make unilaterally. Check 3 guards one company by name; this one guards the shape, so the next one fails the build instead of waiting for someone to notice.
+
+- **FAIL**, outside `bio` blocks, on the grammatical shapes such a claim takes when it names an organisation: `joint venture with X`, `in partnership with X`, `partnered with X`, `backed/funded/owned/established by X`, `selected/chosen/endorsed/trusted/approved by X`, `X selected/chose/trusts CoreFlow`, `preferred|exclusive|approved … partner for X`, and any mention of `private equity`.
+  - Run: `npm run check-third-party` (`scripts/check-third-party-claims.mjs`) — must print PASS.
+- **Deliberately allowed:** vendor *processing* disclosures, which the Privacy Policy requires — "hosted by Formstack under a signed BAA" is a data-handling fact, not a relationship claim.
+- **Does not cover:** an unnamed but obvious reference ("South Carolina's academic medical centre"), or whether a claim is *true*. A real, authorised partnership must be added here deliberately, with the authorisation recorded alongside — that is the point of the check, not a gap in it.
+
 ## Output format
-Print a table: rows = the 10 primary pages, columns = Checks 1–7, cells = PASS/FAIL (with a one-line note on any FAIL). Checks 8–18 are build-level, not per-page — report each as a single PASS/FAIL line beneath the table. Add a final summary line: overall PASS only if every cell **and** all eleven build-level checks are PASS. (**There are 18 checks total.**)
+Print a table: rows = the 10 primary pages, columns = Checks 1–7, cells = PASS/FAIL (with a one-line note on any FAIL). Checks 8–19 are build-level, not per-page — report each as a single PASS/FAIL line beneath the table. Add a final summary line: overall PASS only if every cell **and** all twelve build-level checks are PASS. (**There are 19 checks total.**)
 
 `npm run verify` runs the build plus every scripted check in order and exits non-zero on the first failure. Checks 2, 5, 6, 7 and the human half of 4 are still judgement calls — run them by hand. A green `npm run verify` is **not** a green verify-coreflow.
 

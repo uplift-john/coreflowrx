@@ -17,13 +17,13 @@ instruction to build the skeleton and take Greg's input later.
 | §1 | Empty Immunology row | **RESOLVED** — `"immunology"` added to IVIG. Pulmonology still empty. |
 | §2 | Greg's condition list | **placeholder** — Greg. Page is seed-marked, noindex, off the sitemap. |
 | §3 | 12 held-back drugs | **placeholder** — Greg. None renders; flipping `status` publishes. |
-| §4 | `providers.njk` service lines | **partly resolved** — hydration and hematology removed. Infectious disease still unbacked. |
+| §4 | `providers.njk` service lines | **RESOLVED** — hydration, hematology and infectious disease all removed. The two remaining cards are backed by `_data/`. |
 | §5 | info@ / help@ mailboxes | **RESOLVED** — both live and monitored. BAA on help@ still to confirm. |
 | §6 | Timeframe promise outside the repo | **OPEN — John.** After-hours on-call line: resolved. |
 | §7 | `noindex` on providers/patients | **RESOLVED** — dropped; both added to `sitemap.xml`. |
 | §8 | CSP / HSTS | **OPEN — deploy.** Last blocker to enforcing is cleared. |
 | §10 | Permit `#PH-042891` | **RESOLVED** — no permit yet; every reference now says applied-for. New Check 18 guards it. |
-| §11 | Council Capital, CEO bio | **OPEN — John.** |
+| §11 | Council Capital | **RESOLVED** — removed from the site. CEO bio still **OPEN — John.** |
 | §12 | Unidentified cover-sheet PDF | **OPEN — John.** |
 
 ---
@@ -204,12 +204,19 @@ IV vs SC scope, and render it on the card.
 hyperemesis gravidarum claim the clinical reviewer escalated by name) and "Hematology"
 (iron replacement, with no hematology specialty row behind it). Both cards are gone.
 
-**Still unbacked: "Infectious disease"** — IV antibiotics, antifungals and antivirals for
-osteomyelitis, cellulitis, endocarditis and septic arthritis. There is no infectious
-disease specialty, no anti-infective in `_data/therapies.json`, and no ID condition in
-`_data/conditions.json`. It is also the most operationally demanding line on the page
-(OPAT, PICC/midline management). **Either it is real — in which case it needs a specialty
-row and therapies with Greg's sign-off — or the card should come down too.**
+**John removed the third on 2026-09-29: "Infectious disease".** All three unbacked
+service lines are now gone. The section keeps two cards — Neuroimmunology (IVIG) and
+Rheumatology and immunology — **both of which the drug data now supports**, so the page
+and the finder it links to no longer contradict each other.
+
+The scoping note-box that existed to cover the unbacked lines was simplified accordingly:
+it no longer says "for the therapy areas below that it doesn't list", because there are
+none.
+
+**If infectious disease, hematology or hydration are services CoreFlow actually intends
+to offer,** they need a specialty row and therapies in `_data/therapies.json` with Greg's
+sign-off before the copy goes back. Re-adding the cards alone would recreate the
+contradiction.
 
 The Neuroimmunology card no longer claims SCIG or "built for high-volume immunology
 prescribers"; that half was withdrawn and routed to the phone.
@@ -430,10 +437,18 @@ HTML comment that was deleted along with the testimonial.
 
 Neither was introduced by this pass; both are published facts only you can source.
 
-- **`about.njk`** — *"CoreFlow was established as a joint venture with Council Capital, a
-  healthcare-focused private equity firm."* A named third-party corporate-structure
-  claim appearing nowhere in the repo. Confirm against a signed source, or soften to
-  "with backing from a healthcare-focused investment partner."
+- **✅ `about.njk` Council Capital — RESOLVED 2026-09-29.** John removed it. The sentence
+  claimed a corporate relationship with a named third party and had nothing in the repo
+  behind it. The preceding paragraph closes the narrative on its own.
+
+  **This was the second named-third-party claim to come off the site in one pass** (MUSC
+  was the first), so it earned a check rather than just a fix: **new Check 19** fails the
+  build on the *shape* of such a claim — `joint venture with X`, `in partnership with X`,
+  `backed by X`, `selected by X`, `preferred partner for X`, and any mention of `private
+  equity` — whoever it names. Check 3 guards MUSC by name; Check 19 guards the pattern, so
+  the next one fails the build instead of waiting for a reviewer. A genuine, authorised
+  partnership must be added to that script deliberately, with the authorisation recorded
+  next to it.
 - **`about.njk`** — *"Jason brings over 15 years of healthcare operations and strategy
   experience, most recently as a senior leader in specialty pharmacy services."* Specific
   number plus a prior-role claim. Jason is the only publishable name on the site, which
