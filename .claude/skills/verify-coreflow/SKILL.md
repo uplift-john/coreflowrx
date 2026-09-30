@@ -9,7 +9,7 @@ Never report a change complete based on a successful edit alone. Run **every** c
 
 Produce a **PASS/FAIL table by check and by page** at the end. Do not declare done until every row is PASS. The 10 primary pages are: `index`, `providers`, `patients`, `payers`, `refer`, `about`, `careers`, `contact`, `diseases-we-treat`, `drugs-we-provide`.
 
-Most of the content checks are now **scripted**, one script per check under `scripts/`, and `npm run verify` runs the build plus all of them in order. Read the count from this file: **there are 17 checks.** Run the scripts rather than re-deriving the greps — and never merge two checks into one script, because a merged check can be passed by weakening either half.
+Most of the content checks are now **scripted**, one script per check under `scripts/`, and `npm run verify` runs the build plus all of them in order. Read the count from this file: **there are 18 checks.** Run the scripts rather than re-deriving the greps — and never merge two checks into one script, because a merged check can be passed by weakening either half.
 
 ## Check 1 — Build
 Run `npx @11ty/eleventy`. Requires zero errors and zero broken templates. The site must build to `_site/`. If the build fails, nothing else can pass — fix first.
@@ -37,6 +37,7 @@ CoreFlow is **pre-launch and pursuing** URAC Specialty Pharmacy v5.0 and ACHC IR
 ## Check 4 — Legal flags
 - **Testimonials: superseded by Check 15.** The old rule here asked for an HTML-comment flag on each sample quote. Flagging a fabricated quote is no longer sufficient — as of 2026-09-29 the fabricated testimonials are **deleted** and Check 15 forbids the markup entirely. Do not re-add a "flag it" allowance.
 - No placeholder credentialing data may go live. **FAIL** on: dummy `1234567890` NPI/NCPDP values, an incomplete permit number (e.g. `Permit Add #`), or garbled/placeholder payer names (e.g. `HITS, IRN, MHITS`). These must be replaced with real, confirmed values or withheld behind "available upon request".
+- **The permit is handled by Check 18, not here.** John confirmed 2026-09-29 that no Resident Pharmacy Permit has been issued yet. `#PH-042891` must never reappear, and licensure must never be claimed as held.
   - Suggested: `grep -rniE "1234567890|permit add #|HITS, IRN, MHITS" _site/`
 - Staff names are withheld until CoreFlow is ready to publish them (John, 2026-07-13): every clinician/officer listing must use the `[NAME]` placeholder, keeping real credentials/titles. The CEO (Jason Clapsaddle) is the only publishable name. **FAIL** if the old fictional names appear anywhere — they were on providers, about, AND privacy (Privacy Officer), so sweep every page, not just team sections.
   - Suggested: `grep -rniE "Sarah Mitchell|Rachel Simmons" _site/`
@@ -172,8 +173,18 @@ This is Check 3's script. It is listed separately here because it runs separatel
   - Run: `npm run check-data` (`scripts/check-data-driven.mjs`) — must print PASS.
 - **Does not cover:** whether the data is *clinically correct*. It checks provenance, not truth — a wrong drug in the JSON renders happily. That is the Clinical/Pharmacy reviewer's job and Greg's sign-off. It also does not police therapy names in ordinary prose elsewhere on the site; only the two finder templates are held to the no-literals rule.
 
+## Check 18 — Licensure is never claimed as held
+**Rationale:** John confirmed on 2026-09-29 that CoreFlow has **no Resident Pharmacy Permit yet** — the application is submitted. Before that answer the site claimed one in four affirmative forms at once: "**We hold** a South Carolina Board of Pharmacy Resident Pharmacy Permit" (index), "Permit **issued** under Reg 99-43(B)" (about), "**issued by** the SC Board of Pharmacy" (payers), and "a **South Carolina-licensed** specialty infusion pharmacy" (payers hero) — plus a concrete number, `#PH-042891`, in the site-wide footer that already had a TODO against it. Claiming a pharmacy licence you do not hold is a regulatory misrepresentation, so it gets the same shape of guard as the accreditation claim in Check 2.
+
+- **FAIL** on any affirmative claim of holding a permit or pharmacy licence, on any permit number, and specifically on `#PH-042891`.
+- **FAIL** if a page's own `<main>` raises the Resident Pharmacy Permit without saying it is "not yet issued". Scoped to `<main>` deliberately: the footer carries the applied-for line on *every* page, so a footer match would make the rule trivially true everywhere.
+  - Run: `npm run check-licensure` (`scripts/check-licensure.mjs`) — must print PASS.
+- **Deliberately allowed — these describe PEOPLE, not the pharmacy:** "Licensed by the SC Board of Pharmacy" under the Pharmacist-in-Charge, "licensed registered nurse", "licensed physicians", "out-of-state licenses". A pharmacist holds a personal licence while the pharmacy's permit is pending.
+- **Does not cover:** whether the application was in fact submitted (that is John's word), or accreditation (Check 2).
+- **When the permit is issued:** update every reference together, then relax the two rules above and pin the real number in place of `#PH-042891` — in the same commit.
+
 ## Output format
-Print a table: rows = the 10 primary pages, columns = Checks 1–7, cells = PASS/FAIL (with a one-line note on any FAIL). Checks 8–17 are build-level, not per-page — report each as a single PASS/FAIL line beneath the table. Add a final summary line: overall PASS only if every cell **and** all ten build-level checks are PASS. (**There are 17 checks total.**)
+Print a table: rows = the 10 primary pages, columns = Checks 1–7, cells = PASS/FAIL (with a one-line note on any FAIL). Checks 8–18 are build-level, not per-page — report each as a single PASS/FAIL line beneath the table. Add a final summary line: overall PASS only if every cell **and** all eleven build-level checks are PASS. (**There are 18 checks total.**)
 
 `npm run verify` runs the build plus every scripted check in order and exits non-zero on the first failure. Checks 2, 5, 6, 7 and the human half of 4 are still judgement calls — run them by hand. A green `npm run verify` is **not** a green verify-coreflow.
 

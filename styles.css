@@ -382,3 +382,6 @@ details p{padding:var(--space-2) 0 var(--space-2) var(--space-4);color:var(--col
 .card--soft li{margin-bottom:var(--space-2);color:var(--color-gray-700)}
 .card--soft li:last-child{margin-bottom:0}
 .value-split__links{font-size:.9375rem;color:var(--color-gray-700)}
+/* Placeholder note on a therapy whose brand-level products are still being
+   confirmed — renders from _data/therapies.json, never hardcoded. */
+.therapy__note{font-size:.8125rem;color:var(--color-gray-900);background:var(--color-amber-100);border-left:3px solid var(--color-amber-400);border-radius:var(--radius-sm);padding:var(--space-2) var(--space-3);margin:var(--space-2) 0 0}

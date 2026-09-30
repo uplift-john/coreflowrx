@@ -8,7 +8,7 @@
     "serve": "eleventy --serve",
     "check-links": "node scripts/check-links.mjs",
     "check-pdf": "python3 scripts/check-pdf-geometry.py _site/coreflow-fax-cover-sheet.pdf",
-    "verify": "eleventy && npm run check-links && npm run check-leaks && npm run check-contact && npm run check-time && npm run check-musc && npm run check-testimonials && npm run check-nursing && npm run check-data && npm run check-pdf",
+    "verify": "eleventy && npm run check-links && npm run check-leaks && npm run check-contact && npm run check-time && npm run check-musc && npm run check-testimonials && npm run check-nursing && npm run check-data && npm run check-licensure && npm run check-pdf",
     "deploy": "npm run build && wrangler deploy",
     "preview": "npm run build && wrangler dev",
     "check-leaks": "node scripts/check-leak-allowlist.mjs",
@@ -17,7 +17,8 @@
     "check-musc": "node scripts/check-musc-bio-only.mjs",
     "check-testimonials": "node scripts/check-no-testimonials.mjs",
     "check-nursing": "node scripts/check-nursing-language.mjs",
-    "check-data": "node scripts/check-data-driven.mjs"
+    "check-data": "node scripts/check-data-driven.mjs",
+    "check-licensure": "node scripts/check-licensure.mjs"
   },
   "devDependencies": {
     "@11ty/eleventy": "^3.0.0",

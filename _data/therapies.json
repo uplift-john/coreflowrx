@@ -50,6 +50,7 @@
       "specialties": [
         "dermatology",
         "neurology",
+        "immunology",
         "oncology",
         "rheumatology"
       ],
@@ -57,7 +58,8 @@
       "products": [],
       "_tagNotes": [
         "gastroenterology removed: no established GI indication for immune globulin"
-      ]
+      ],
+      "note": "Specific immunoglobulin products are still being confirmed. If you need a particular brand, call us and we'll check availability before you refer."
     },
     {
       "name": "Remicade",
@@ -418,6 +420,6 @@
       "products": []
     }
   ],
-  "_clinicalReview": "Reviewed 2026-09-29. Entries were only ever moved toward \"unconfirmed\" — nothing was added or re-tagged into a new claim. Two known gaps are deliberately NOT fixed here because fixing them would mean asserting a clinical fact nobody has confirmed: (1) IVIG is not tagged \"immunology\", which is why the Immunology row renders empty — almost certainly wrong for an IVIG-heavy pharmacy, but it is Greg’s call; (2) no specific immunoglobulin products are named. Both are at the top of docs/stage2/blockers.md.",
+  "_clinicalReview": "Reviewed 2026-09-29. Entries were only ever moved toward \"unconfirmed\" — nothing was invented. John confirmed the IVIG immunology tag on 2026-09-29, which resolves the empty Immunology row. STILL OPEN with Greg: the specific immunoglobulin products (IVIG renders as the generic entry the intake map supplied, with a visible note saying so), whether SCIG is in scope, the 12 unconfirmed entries below, and the missing hematology row. See docs/stage2/blockers.md.",
   "_missingField": "There is no \"route\" field. Route is the single question that disqualified seven entries, yet no card states it. Add route once Greg confirms IV vs SC scope, and render it."
 }

@@ -66,7 +66,7 @@ notice, and the patients-page "one way to ask your doctor" script (its quote mar
 also removed so no long-quote pattern survives). A third — a paraphrase of what a nursing
 note says, in quotes on `providers` — was unquoted.
 
-→ **Recommendation on the `noindex`:** see `blockers.md` §7. Not actioned; it is yours.
+→ **The `noindex` that contained this risk is now removed** (John, 2026-09-29). Both pages are indexed and in `sitemap.xml`; Check 15 is what holds the line instead.
 
 ### Invariant 4 — Nursing language
 
@@ -348,22 +348,71 @@ now routes to business hours and 911.
 
 ---
 
+## John's answers, applied 2026-09-29
+
+Six items came back after the review rounds. All applied and verified.
+
+| Answer | What changed |
+|---|---|
+| **Add immunology to IVIG — yes** | `_data/therapies.json`. Immunology now renders IVIG instead of "we're not listing these yet". Only Pulmonology remains pending. |
+| **Both mailboxes are live and monitored** | §5 closed. The BAA on help@ — which receives PHI via the NPP — is the one sub-item left. |
+| **There is an on-call phone** | `refer.njk` restored an accurate after-hours path: "call … to reach our on-call line. For a medical emergency, call 911." No clock, no claim about who answers. |
+| **Drop the noindex — yes** | `robots` removed from `providers.njk` and `patients.njk`; both added to `sitemap.xml`; the obsolete explanatory comments deleted. |
+| **No permit yet — say we've applied** | Six locations, plus a new check. See below. |
+| **Remove hydration & supportive care, and hematology** | Both cards deleted from `providers.njk`. This also removed the hyperemesis gravidarum claim the clinical reviewer had escalated by name. |
+
+### The permit answer was bigger than the number
+
+Asking for "applied for" surfaced that the site claimed the licence in **four affirmative
+forms at once**, not just via the number:
+
+- `index.njk` — "**We hold** a South Carolina Board of Pharmacy Resident Pharmacy Permit"
+- `about.njk` — "Resident Pharmacy Permit **issued** under Reg 99-43(B)"
+- `payers.njk` — "**issued by** the SC Board of Pharmacy", plus a hero calling CoreFlow
+  "a **South Carolina-licensed** specialty infusion pharmacy"
+- the site-wide footer — "**Licensed by** the South Carolina Board of Pharmacy · Permit
+  **#PH-042891**"
+
+All six locations now state that the application is submitted and the permit is not yet
+issued. **New Check 18** guards it: no claim of holding a permit or pharmacy licence, no
+permit number, no `#PH-042891`, and any page whose `<main>` raises the Resident Pharmacy
+Permit must say it is not yet issued. Individual licences — the Pharmacist-in-Charge,
+nurses, prescribers — are deliberately allowed, since a person can be licensed while the
+pharmacy's permit is pending. Checks go from 17 to **18**.
+
+### Placeholders, per "build the skeleton"
+
+Everything needing Greg is now a marked placeholder rather than a blocker:
+
+- **IVIG products** — renders the generic entry the intake map supplied, plus a visible
+  note: *"Specific immunoglobulin products are still being confirmed. If you need a
+  particular brand, call us and we'll check availability before you refer."* It comes from
+  a `note` field in `_data/therapies.json`, so nothing is invented and a staffer searching
+  for a brand gets an answer instead of silence. Delete the note when `products` is filled.
+- **The condition list** — 16 seed conditions behind an "under clinical review" notice,
+  `noindex`, off the sitemap, with "Call to confirm" instead of a referral CTA.
+- **12 held-back drugs** — render nowhere; flipping one `status` to `"confirmed"` publishes
+  it with no template change.
+- **Pulmonology** — the neutral "we're not listing these yet" card with a call button.
+
+Each carries its exit criteria next to it, so Greg's input lands as data edits rather than
+a rebuild.
+
+---
+
 ## What was deliberately NOT changed
 
-Each of these is on `blockers.md` with reasoning:
+Three of the original five were resolved by John's answers above — the IVIG tag, the
+noindex, and the permit. What remains:
 
-1. **IVIG's missing `immunology` tag** — adding it asserts a clinical fact. Greg's call.
-2. **`providers.njk`'s five service lines** (infectious disease, hematology, hydration)
-   have no backing in the drug data. They are John's pre-existing published business
-   claims and a specialty-biologic intake map is not proof CoreFlow can't run OPAT. A
-   scoping note was added instead; reconciliation is escalated — including **hyperemesis
-   gravidarum home hydration, escalated by name** as the highest-risk claim on the site.
-3. **`noindex` on `/providers` and `/patients`** — the brief was explicit that removing it
-   is John's decision. An explanatory comment was added to both files, because the only
-   in-repo record of *why* the noindex existed was the HTML comment deleted along with
-   the testimonial.
-4. **"Council Capital joint venture" and the CEO's "over 15 years"** — unverifiable
-   third-party and biographical claims, already published on `main`. Escalated.
-5. **Permit `#PH-042891`** — published site-wide while `payers.njk` withholds it *and*
-   carries a TODO saying it needs credentialing confirmation. Escalated; the legal line
-   is John's.
+1. **`providers.njk`'s "Infectious disease" card.** Hydration and hematology came down;
+   this one stayed. There is no ID specialty, no anti-infective in the drug data and no ID
+   condition — and it is the most operationally demanding line on the page (OPAT,
+   PICC/midline management). Either it is real and needs a specialty row with Greg's
+   sign-off, or it should come down with the other two.
+2. **"Council Capital joint venture" and the CEO's "over 15 years".** Unverifiable
+   third-party and biographical claims, already published on `main`. Removing a true
+   statement about company ownership is as wrong as keeping a false one, so both are
+   escalated rather than cut.
+3. **Greg's four sections** (`blockers.md` §0–§3) are placeholders by instruction, not
+   oversights.

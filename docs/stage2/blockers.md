@@ -4,7 +4,29 @@ Everything here is awaiting your input, an off-repo action only you can perform,
 deliberate placeholder. Nothing here blocked the rest of the work from completing.
 
 **Updated 2026-09-29 (post-review pass, branch `feature/post-review-2026-09`).**
-Items 0–6 are new or changed in this pass. Items 7+ carry forward from Pass A.
+
+## Status at a glance
+
+John answered six items on 2026-09-29. Everything he answered is applied and verified;
+everything that needs Greg is now a **marked placeholder** rather than a blocker, per his
+instruction to build the skeleton and take Greg's input later.
+
+| | Item | State |
+|---|---|---|
+| §0 | IVIG product names / SCIG | **placeholder** — Greg. Renders the generic entry with a visible on-page note. |
+| §1 | Empty Immunology row | **RESOLVED** — `"immunology"` added to IVIG. Pulmonology still empty. |
+| §2 | Greg's condition list | **placeholder** — Greg. Page is seed-marked, noindex, off the sitemap. |
+| §3 | 12 held-back drugs | **placeholder** — Greg. None renders; flipping `status` publishes. |
+| §4 | `providers.njk` service lines | **partly resolved** — hydration and hematology removed. Infectious disease still unbacked. |
+| §5 | info@ / help@ mailboxes | **RESOLVED** — both live and monitored. BAA on help@ still to confirm. |
+| §6 | Timeframe promise outside the repo | **OPEN — John.** After-hours on-call line: resolved. |
+| §7 | `noindex` on providers/patients | **RESOLVED** — dropped; both added to `sitemap.xml`. |
+| §8 | CSP / HSTS | **OPEN — deploy.** Last blocker to enforcing is cleared. |
+| §10 | Permit `#PH-042891` | **RESOLVED** — no permit yet; every reference now says applied-for. New Check 18 guards it. |
+| §11 | Council Capital, CEO bio | **OPEN — John.** |
+| §12 | Unidentified cover-sheet PDF | **OPEN — John.** |
+
+---
 
 ---
 
@@ -26,15 +48,30 @@ product and doesn't find it assumes the answer is no, and routes the patient els
 
 The page is already built to absorb the answer: every therapy in `_data/therapies.json`
 has an empty `products: []` array. Drop the brand names in and they render as sub-items.
-**No template change, no rebuild.** Until then "IVIG" renders exactly as the intake map
-supplied it, and no product name has been invented.
+**No template change, no rebuild.**
+
+**Placeholder now live (2026-09-29):** the IVIG card carries a visible note —
+*"Specific immunoglobulin products are still being confirmed. If you need a particular
+brand, call us and we'll check availability before you refer."* It renders from the `note`
+field in `_data/therapies.json`, so no product name is invented and a staffer searching
+for a brand gets a real answer instead of silence. **Delete the `note` field when the
+`products` array is filled in.**
 
 ---
 
-## 1. ⚠ Immunology is empty, and that is almost certainly wrong — not merely unverified
+## 1. ✅ RESOLVED — Immunology is populated
 
-**This is a statement, not a question.** For an IVIG-heavy pharmacy, primary and
-secondary immune deficiency is the core indication.
+**John confirmed 2026-09-29: add `"immunology"` to IVIG.** Done. `/drugs-we-provide` now
+renders IVIG under Immunology, and the page no longer tells an immunology prescriber that
+CoreFlow has nothing for them. The rest of this section is kept as the record of why.
+
+**Pulmonology is still empty** and needs Greg — after removing Leqvio (an error) and four
+subcutaneous-only respiratory biologics, nothing is left. The genuine home-infusion
+pulmonology class, alpha-1 antitrypsin augmentation, appears nowhere.
+
+---
+
+### Original finding (for the record)
 
 The intake map lists **only Leqvio** under Immunology. Leqvio (inclisiran) is a
 subcutaneous lipid-lowering agent with no immunology relevance whatsoever — a probable
@@ -47,11 +84,8 @@ Immune Deficiency** under immunology, and `providers.njk` headlines
 hypogammaglobulinemia."* So the site says it is built for immunodeficiency and, one
 click later, that it has no confirmed immunology therapy.
 
-**The one-line fix is almost certainly to add `"immunology"` to IVIG's `specialties`
-array in `_data/therapies.json`.** It was deliberately **not** done in this pass: adding
-a specialty tag is asserting a clinical fact, and the standing rule is to flag rather
-than guess. Two reviewers independently said it should be added. **Your call — it is a
-single word.**
+**The fix was to add `"immunology"` to IVIG's `specialties` array** — John confirmed it,
+and it is applied.
 
 Pulmonology is empty for the same reason: after removing Leqvio (an error) and four
 subcutaneous-only respiratory biologics, nothing is left. The genuine home-infusion
@@ -164,7 +198,25 @@ IV vs SC scope, and render it on the card.
 
 ---
 
-## 4. `providers.njk` claims five service lines the drug data cannot corroborate
+## 4. ⚠ PARTLY RESOLVED — `providers.njk` service lines
+
+**John removed two on 2026-09-29:** "Hydration and supportive care" (which carried the
+hyperemesis gravidarum claim the clinical reviewer escalated by name) and "Hematology"
+(iron replacement, with no hematology specialty row behind it). Both cards are gone.
+
+**Still unbacked: "Infectious disease"** — IV antibiotics, antifungals and antivirals for
+osteomyelitis, cellulitis, endocarditis and septic arthritis. There is no infectious
+disease specialty, no anti-infective in `_data/therapies.json`, and no ID condition in
+`_data/conditions.json`. It is also the most operationally demanding line on the page
+(OPAT, PICC/midline management). **Either it is real — in which case it needs a specialty
+row and therapies with Greg's sign-off — or the card should come down too.**
+
+The Neuroimmunology card no longer claims SCIG or "built for high-volume immunology
+prescribers"; that half was withdrawn and routed to the phone.
+
+---
+
+### Original finding (for the record)
 
 `providers.njk` → "Conditions and therapies we support" advertises:
 
@@ -211,7 +263,7 @@ claim come back.**
 
 ---
 
-## 5. Email: `info@` vs `help@` — RESOLVED, but two mailboxes now need staffing
+## 5. ✅ RESOLVED — email split, and both mailboxes are live
 
 You chose **two roles** (2026-09-29):
 
@@ -225,14 +277,13 @@ You chose **two roles** (2026-09-29):
 site-wide footer carries the public address on every page, including the legal ones,
 which is intended).
 
-**What you still need to do off-repo:**
-- **Both mailboxes must be live and monitored.** Two support addresses on one site only
-  works if both are watched.
-- **`notice-of-privacy-practices` routes HIPAA rights requests and privacy complaints to
-  help@, so that mailbox will receive PHI.** It must sit on a mail platform under a
-  **signed BAA**, and it must **not** be the same inbox GoHighLevel delivers
-  contact/careers form submissions into.
-- Confirm the A2P/10DLC campaign record still matches the published Terms text.
+**John confirmed 2026-09-29: both mailboxes are live and monitored.** ✅
+
+**One sub-item still open:** `notice-of-privacy-practices` routes HIPAA rights requests and
+privacy complaints to help@, so **that mailbox will receive PHI**. It must sit on a mail
+platform under a **signed BAA**, and it must **not** be the same inbox GoHighLevel
+delivers contact/careers submissions into. Also worth confirming the A2P/10DLC campaign
+record still matches the published Terms text.
 
 ---
 
@@ -254,15 +305,22 @@ Please check all three and replace any clock with a responsiveness statement. Th
 now says "we acknowledge every referral promptly" and "we move fast on authorizations" —
 match that language so the site and the confirmation don't contradict each other.
 
-Related: the site no longer claims an after-hours clinical triage path. `refer.njk` used
-to say "call and follow the prompts", which contradicted the published Mon–Fri hours.
-**If an after-hours clinical line does exist, tell me and I'll put it back accurately.**
+**✅ After-hours: resolved.** John confirmed 2026-09-29 that an on-call phone exists.
+`refer.njk` now reads *"For urgent clinical matters outside business hours, call (854)
+888-9070 to reach our on-call line. For a medical emergency, call 911."* — no clock, no
+promise about who answers. **If the routing works differently (a separate number, a
+prompt to follow, a pager), say so and I'll match the wording to it.**
 
 ---
 
-## 7. RECOMMENDATION — remove `noindex` from `/providers` and `/patients`
+## 7. ✅ RESOLVED — `noindex` removed from `/providers` and `/patients`
 
-**This is a recommendation for you to decide, deliberately not actioned.**
+**John approved 2026-09-29.** The `robots` lines are gone from both files, both pages are
+in `sitemap.xml` (`/providers` at 0.9, `/patients` at 0.8), and the now-obsolete
+explanatory comments were removed. `/diseases-we-treat` remains noindex and off the
+sitemap — that one is deliberate and unrelated (see §2).
+
+### Why it was safe (for the record)
 
 Both pages carry `robots: "noindex, nofollow"` and are absent from `sitemap.xml`. The
 documented reason was containment: each page carried a **fabricated testimonial**
@@ -341,14 +399,30 @@ HTML comment that was deleted along with the testimonial.
   may appear on the site again, which Check 16 currently forbids.
 - `payers.njk` — NPI, NCPDP, permit number and payer participation all read "Available
   upon request".
-- **⚠ Permit `#PH-042891` is published in the site-wide footer and on `providers.html`,
-  while `payers.njk` withholds it as "available upon request" AND carries an in-repo TODO
-  saying it "needs confirmation with the credentialing team."** The site therefore
-  publishes a regulated identifier its own source flags as unconfirmed, on every page,
-  while refusing to state it to payers. Under the "no dummy regulated data" rule it
-  cannot ship both ways. **This was not changed** — it is published on `main` today and
-  the legal line is yours. Either confirm the number with credentialing and state it in
-  the payers table, or drop it from `_data/site.json`'s `legalLine` until confirmed.
+- **✅ PERMIT — RESOLVED 2026-09-29. John: there is no permit yet; every reference must
+  say we have applied for it.** Applied. This turned out to be bigger than the number:
+  the site was claiming the licence in four affirmative forms at once.
+
+  | Where | Was | Now |
+  |---|---|---|
+  | footer (`site.json` `legalLine`) | "Licensed by the South Carolina Board of Pharmacy · Permit #PH-042891" | "Resident Pharmacy Permit application submitted to the South Carolina Board of Pharmacy under Reg 99-43(B) · permit not yet issued" |
+  | `index` | "**We hold** a South Carolina Board of Pharmacy Resident Pharmacy Permit" | "Our application **is with** the Board … the permit **has not yet been issued**" |
+  | `about` | "Resident Pharmacy Permit **issued** under Reg 99-43(B)" | "application submitted … **Permit not yet issued**" |
+  | `providers` | "Resident Pharmacy Permit under Reg 99-43(B). **Permit #PH-042891**." | "application submitted … not yet issued — we will supply the number as soon as it is" |
+  | `payers` hero | "a **South Carolina-licensed** specialty infusion pharmacy" | "a South Carolina specialty infusion pharmacy" |
+  | `payers` licensure card + table | "**issued by** the SC Board of Pharmacy" | "application submitted … **Permit not yet issued**" |
+
+  **New `verify-coreflow` Check 18** now fails the build on any claim of holding a permit
+  or pharmacy licence, on any permit number, on `#PH-042891` specifically, and on any page
+  whose `<main>` raises the Resident Pharmacy Permit without saying it is not yet issued.
+  Individual licences ("Licensed by the SC Board of Pharmacy" under the
+  Pharmacist-in-Charge, "licensed registered nurse", "licensed physicians") are
+  deliberately allowed — a pharmacist can hold a personal licence while the pharmacy's
+  permit is pending.
+
+  **When the permit is issued:** update every row above together, relax the two rules in
+  `scripts/check-licensure.mjs`, and pin the real number in place of `#PH-042891` — all in
+  one commit.
 
 ---
 

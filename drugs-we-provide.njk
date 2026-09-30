@@ -78,6 +78,7 @@ pageScript: "finder.js"
      {%- endfor %}
      </p>
      {%- endif %}
+     {%- if therapy.note %}<p class="therapy__note">{{ therapy.note }}</p>{% endif %}
      {%- if therapy.products | length %}
      <ul class="therapy__products">
      {%- for product in therapy.products %}
