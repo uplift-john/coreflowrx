@@ -1,81 +1,70 @@
 #!/usr/bin/env node
-// verify-coreflow Check 18 — Licensure is stated currently and not over-stated.
+// verify-coreflow Check 18 — No pharmacy licensure claims of any kind.
 //
-// THIS CHECK WAS INVERTED ON 2026-10-01. Do not restore the previous version.
+// THIS CHECK HAS NOW BEEN INVERTED TWICE. Read the history before touching it,
+// because each version asserts the opposite of the one before and restoring an
+// old one would publish a false statement.
 //
-// Until 2026-09-30 CoreFlow held no pharmacy permit, and this check's whole job
-// was to FAIL on any claim of holding one (and on a fabricated number,
-// #PH-042891, that had been sitting in the footer). Its own closing note said:
-// "WHEN THE PERMIT IS ISSUED: update every reference together, then relax rules
-// 1 and 3 here in the same commit and pin the real number in rule 2's place."
+//   v1 (to 2026-09-30) — CoreFlow held no permit. FAIL on any claim of holding
+//      one, and on the fabricated number #PH-042891.
+//   v2 (2026-10-01)    — SC Board of Pharmacy permit 24402 issued 2026-09-30.
+//      FAIL on stale pre-issuance language, on a published expiry, on any
+//      disciplinary assertion.
+//   v3 (2026-10-01, this one) — leadership removed licensure from the site
+//      entirely. The permit is real and current; it is simply not advertised.
+//      The reasoning: a pharmacy that is open is necessarily permitted, so
+//      stating it adds nothing a prescriber or payer did not already assume.
 //
-// The permit issued. SC Board of Pharmacy pharmacy permit 24402 was issued to
-// CoreFlow Rx LLC on 2026-09-30, active, permit holder Jason Clapsaddle,
-// supervising pharmacist Gregory Edward Regan. So the old rules now assert the
-// opposite of the truth and have been replaced. The number itself is pinned by
-// Check 20, which is a SEPARATE script on purpose: a merged check can be passed
-// by weakening either half.
+// So this is NOT the v1 rule returning. v1 said "do not claim what you do not
+// have." v3 says "do not discuss licensure at all." The permit exists.
 //
-// WHAT IT DOES NOW, over built HTML:
-//   1. FAIL on retired PRE-ISSUANCE language ("permit not yet issued", "applied
-//      for a permit", "application submitted"). This is a regression guard, not
-//      a style rule: this repo has twice had stale pre-issuance copy come back
-//      via a feature branch cut from an out-of-date main. Understating licensure
-//      is less dangerous than overstating it, but on a payer credentialing page
-//      it is still wrong, and it is the failure mode with actual precedent here.
-//   2. FAIL on a published EXPIRATION DATE. Permits renew; a published expiry
-//      goes stale by itself and invites "is this still current?" from the exact
-//      reader we least want asking. The permit number lets anyone verify status
-//      directly with the Board.
-//   3. FAIL on "no disciplinary action" / "no disciplinary history". It is true,
-//      and it is also what someone with something to explain would write. The
-//      Board record is public; let it speak.
+// WHAT IT DOES:
+//   FAIL, over visible text, on any reference to the pharmacy's own licensure:
+//   "Board of Pharmacy", "pharmacy permit", a bare "permit", "licensure",
+//   "Reg 99-43", "Resident Pharmacy Permit", "we are licensed", "licensed
+//   pharmacy", "state-licensed" / "SC-licensed".
+//
+// DELIBERATELY ALLOWED — these are about OTHER PEOPLE, not this pharmacy, and
+// every one of them is load-bearing copy:
+//   • "licensed physicians and other providers eligible to prescribe" — the
+//     prescriber-order gate on five pages. Removing it would weaken a real
+//     control, not a marketing line.
+//   • "licensed providers to submit patient referrals" (terms).
+//   • "permitted by law" / "as permitted by HIPAA" — the regex is \bpermit\b,
+//     which does not match "permitted". This is why the rule is a word boundary
+//     and not a substring.
 //
 // WHAT IT DOES NOT COVER:
-//   • The permit NUMBER, and licensure-vs-accreditation wording — Check 20.
-//   • Whether the permit is still active today. That is off-repo; the Board's
-//     public lookup is the source. Re-verify before any renewal window.
-//   • Accreditation claims — Check 2. Accreditation is NOT licensure and the
-//     two must never blur; Check 2 is unchanged and stays unchanged.
-//   • Individual licences. "Licensed by the SC Board of Pharmacy" under the
-//     Pharmacist-in-Charge, "licensed registered nurse", "licensed physicians"
-//     and "out-of-state licenses" describe PEOPLE and remain allowed.
+//   • A permit NUMBER specifically, including inside HTML comments — Check 20,
+//     which scans raw bytes. Kept separate because a merged check can be passed
+//     by weakening either half.
+//   • Accreditation — Check 2.
+//   • Whether permit 24402 is current. It is not published, so nothing on the
+//     site goes stale; but nothing on the site will warn you either. Off-repo.
+//
+// IF THE POLICY IS REVERSED, rewrite this in the same commit as the copy.
 import { builtPages, visibleText, report } from "./lib-html-text.mjs";
 
-// NOTE on rule 1: matches "issued", never "awarded". "Accreditation has been
-// initiated and has not yet been awarded." is the REQUIRED accreditation
-// disclaimer (Check 2) and must survive this check untouched.
-const STALE = [
-  [/\bpermit (?:is |has |had )?not yet (?:been )?issued\b/gi, 'retired pre-issuance language "permit not yet issued"'],
-  [/\bnot yet (?:been )?issued\b/gi, 'retired pre-issuance language "not yet issued"'],
-  [/\bapplied for\b[^.]{0,60}\b(?:permit|licen[cs]e)\b/gi, 'retired "applied for a permit" language'],
-  [/\b(?:permit|licen[cs]e)\b[^.]{0,40}\bapplied for\b/gi, 'retired "permit applied for" language'],
-  [/\bpermit\b[^.]{0,60}\bapplication submitted\b/gi, 'retired "application submitted" language'],
-  [/\bhave applied\b[^.]{0,80}\bBoard of Pharmacy\b/gi, 'retired "have applied ... Board of Pharmacy" language'],
-];
-
-const EXPIRY = [
-  [/\b(?:0?6\/30\/2027|2027-06-30)\b/g, 'publishes the permit expiration date'],
-  [/\bJune\s+30,?\s+2027\b/gi, 'publishes the permit expiration date'],
-  [/\b(?:permit|licen[cs]e)\b[^.]{0,60}\b(?:expires?|expiration|expiry|valid through|valid until)\b/gi, 'publishes a permit expiration'],
-  [/\b(?:expires?|expiration|expiry)\b[^.]{0,40}\b(?:permit|licen[cs]e)\b/gi, 'publishes a permit expiration'],
-];
-
-const DISCIPLINE = [
-  [/\bno disciplinary\b/gi, 'publishes a "no disciplinary action" assertion'],
-  [/\bdisciplinary (?:action|history|record)\b/gi, 'raises disciplinary history'],
+const CLAIMS = [
+  [/\bBoard of Pharmacy\b/gi, 'references the Board of Pharmacy'],
+  [/\bpharmacy permit\b/gi, 'references a pharmacy permit'],
+  [/\bpermit\b/gi, 'uses the word "permit"'],
+  [/\blicensur\w*/gi, 'uses the word "licensure"'],
+  [/\bReg\.?\s?99-43/gi, 'cites Reg 99-43 (the permit regulation)'],
+  [/\bResident Pharmacy\b/gi, 'references the Resident Pharmacy Permit'],
+  [/\bwe are licensed\b/gi, 'claims CoreFlow is licensed'],
+  [/\blicensed\s+(?:specialty\s+|home\s+|infusion\s+|retail\s+)*pharmacy\b/gi, 'describes CoreFlow as a licensed pharmacy'],
+  [/\b(?:state|South Carolina|SC)[\s‐‑-]licensed\b/gi, 'describes CoreFlow as state-licensed'],
 ];
 
 const problems = [];
 for (const { file, html } of builtPages()) {
   const text = visibleText(html);
-  for (const [re, label] of [...STALE, ...EXPIRY, ...DISCIPLINE]) {
+  for (const [re, label] of CLAIMS) {
     for (const m of text.matchAll(re)) {
-      // "not yet been awarded" is the accreditation disclaimer — never flag it.
-      if (/awarded/i.test(m[0])) continue;
       const around = text.slice(Math.max(0, m.index - 70), m.index + 90).replace(/\s+/g, " ");
       problems.push(`${file}: ${label} — …${around}…`);
     }
   }
 }
-report("Check 18 · licensure stated currently, no expiry, no discipline claim", [...new Set(problems)]);
+report("Check 18 · no pharmacy licensure claims of any kind", [...new Set(problems)]);

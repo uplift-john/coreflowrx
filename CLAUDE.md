@@ -25,11 +25,14 @@ Eleventy's input dir is `.`, so **page templates live in the repo root** as `*.n
   non-PHI form pages only.
 - `_data/site.json` — the **single source of truth for contact & brand facts** (referenced as
   `site.*`): name, url, phone `(854) 888-9070`, fax, hours, address, CEO, logo, themeColor
-  `#175868`, legalLine, and the licensure facts: `legalEntity` "CoreFlow Rx LLC" (the name the
-  SC Board of Pharmacy issues the permit under), `permitAuthority`, `permitNumber` **24402**
-  (issued 2026-09-30, active). The retired `#PH-042891` was never a real permit number — do
-  not reintroduce it; verify-coreflow Check 20 fails the build on it. Never publish the permit
-  expiration date. Edit facts here, not in page markup.
+  `#175868`, `legalEntity` "CoreFlow RX, LLC", and legalLine. Edit facts here, not in page markup.
+  **Licensure and accreditation are deliberately absent from this site** (leadership, 2026-10-01):
+  no SC Board of Pharmacy permit, no URAC/ACHC pursuit, anywhere. The permit is real and current
+  (24402, issued 2026-09-30) — it is simply not advertised, on the reasoning that an operating
+  pharmacy is necessarily permitted. verify-coreflow Checks 2, 18 and 20 fail the build on any
+  accreditation claim, any licensure wording, and any permit number (including 24402 and the
+  fabricated `#PH-042891`). Reversing the policy means rewriting those three checks in the same
+  commit as the copy.
 - Assets (hero JPGs, logos, `favicon.svg`, `styles.css`, `robots.txt`, `sitemap.xml`) live in the
   root and are passthrough-copied.
 - `_site/` = build output — **never edit by hand**. `docs/`, `scripts/`, `.claude/`, `.agents/`

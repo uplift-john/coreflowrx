@@ -643,3 +643,87 @@ the `PharmD` / `RPh` suffixes. These are published professional-credential claim
 - **Whether permit 24402 is still active.** Off-repo. Re-verify with the Board before the renewal
   window. The expiration date is deliberately unpublished (see `CHANGES-LICENSURE.md`), so nothing
   on the site goes stale on its own — but nothing on the site will warn you either.
+
+---
+
+# Pass: licensure & accreditation REMOVED (2026-10-01, later same day)
+
+Leadership reversed the licensure announcement. Items 14–20 above were written when the permit was
+being published; the five below supersede or amend them.
+
+## 21. ⚠ Does South Carolina require a pharmacy to display its licence? — UNRESOLVED
+
+The site now states **no** licensure anywhere. Before the work I flagged, and leadership proceeded:
+
+- Some states, and some **payer contracts**, require a licensed pharmacy to display licence
+  information on its public website. **Whether South Carolina does is not established anywhere in
+  this repo, and I did not assert either way.**
+- Separately, `/payers` no longer carries the state licence number, which is the one field a
+  **credentialing team actively looks up**. They must now request it. The page still says
+  documentation is available on request, so there is a path — it is just slower.
+
+**→ John: worth one question to counsel.** If SC or a payer contract does require display, this is
+a compliance defect rather than a positioning choice, and the decision should be revisited. Nothing
+else in this pass depends on the answer.
+
+## 22. "Accreditation" still appears twice in the Privacy Policy — deliberate, your call
+
+`privacy.njk` lists **"legal, regulatory, accreditation, and recordkeeping obligations"** as a data
+retention category, in two places (purpose of use, and retention period).
+
+**Left in place deliberately.** It is boilerplate about what obligations *can* apply to a pharmacy,
+not a claim that CoreFlow holds or seeks an accreditation — and rewriting legal retention text to
+satisfy a grep is the wrong trade. verify-coreflow Check 2 is scoped to claim *shapes* specifically
+so this survives.
+
+**→ John: if leadership wants the word gone from the site entirely, say so and I will reword both.**
+It is a small edit, but it is legal-page text, so I did not make it unilaterally.
+
+## 23. Supersedes item 15 — entity name RESOLVED
+
+Item 15 asked whether "CoreFlow Specialty Infusion" is a registered trade name of the LLC, because
+licensure claims had to match the Board record exactly.
+
+**That constraint is gone** — there are no licensure claims. `site.legalEntity` is now
+**`CoreFlow RX, LLC`** per John, which renders in the footer on all 17 pages and in the `/payers`
+"Legal entity name" row. The brand name remains in headings, the copyright line and marketing copy.
+
+**Still worth knowing, but no longer blocking:** whether the trade name is formally registered. If
+it is not, trading publicly under it is its own question, independent of this site.
+
+## 24. Amends item 14 — the permit number is now forbidden, not required
+
+Item 14 recorded that the fabricated `PH-042891` had shipped inside an HTML comment. Still true,
+still fixed. What changed is the rule around it:
+
+- Check 20 now fails the build on **any** permit number, including the **real** `24402`.
+- `24402` is correct and current. It is off-policy, not wrong. The check message says so explicitly
+  so nobody "fixes" a future failure by assuming the number is bad.
+- The earlier version of `check-permit-number.mjs`, which pinned 24402 as the only allowed number,
+  is in git history on this branch if the policy is ever reversed.
+
+## 25. Reversing this policy — what it costs
+
+If leadership changes its mind, the copy is the easy half. **Three checks must be rewritten in the
+same commit**, or the build fails on the very copy you are re-adding:
+
+| Check | Script | What to change |
+|---|---|---|
+| 2 | `scripts/check-no-accreditation.mjs` | Currently fails on `URAC`/`ACHC` anywhere. Would need to go back to requiring "pursuing" + "Q4 2026" + the exact disclaimer. |
+| 18 | `scripts/check-licensure.mjs` | Currently fails on any licensure wording. **This file has been inverted twice — read its version table before editing.** |
+| 20 | `scripts/check-permit-number.mjs` | Currently fails on any permit number including 24402. Would need to pin 24402 as the only allowed one. |
+
+`CLAUDE.md` and `AGENTS.md` both now state the policy and name these three checks.
+
+## 26. Carried forward, unchanged by this pass
+
+- **En dashes** (item 16) — still 4 in source, still an open question.
+- **The fax cover sheet PDF** (item 17) — still 2 em dashes, still SHA-256-pinned, still not fixed.
+  It contains **no** permit number, so it is unaffected by the licensure removal.
+- **Section 1557 taglines** (item 18) — still pending counsel.
+- **Greg Regan's published credentials** (item 19) — "Dr. … PharmD, RPh" is unchanged and still
+  unverified against the Board record. His card **did** lose its "Licensed by the SC Board of
+  Pharmacy" line in this pass, so the only remaining claim is the credential string itself.
+- **Cloudflare Access login wall** (item 14) — `coreflowrx.com` still 302s to
+  `coreflowrx.cloudflareaccess.com` for an unauthenticated fetch, so live bytes still cannot be
+  verified from here. **Still the largest open question in this file if the site is meant to be public.**

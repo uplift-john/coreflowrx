@@ -144,3 +144,40 @@ staged and working trees — both green. Everything is staged and committed toge
 | Design | PASS (375px not machine-verified — see above) |
 | Build / QA | PASS (1 check gap closed) |
 | **Overall** | **PASS — ready for John's review. Not pushed.** |
+
+
+---
+
+# Addendum — 2026-10-01, later the same day: licensure & accreditation removed
+
+**Leadership reversed the licensure announcement.** Everything above describes *publishing* the SC
+pharmacy permit; the site now states no licensure and no accreditation at all. The review record
+above is kept because the Marketing and Compliance findings in it shaped copy that survives, and
+because two checks have now been inverted twice.
+
+## What carried over from the reviews above
+
+- **Marketing's root-cause finding still holds.** It flagged that `site.licensure` was three
+  stacked fragments every page inherited. That key, and the pages that composed around it, are now
+  gone entirely — the problem was deleted rather than fixed.
+- **Compliance's advisory to correct `CLAUDE.md` / `AGENTS.md`** applied again: both had been
+  updated in the first pass to document permit 24402 as a `site.json` fact. Both are now rewritten
+  to state that licensure and accreditation are deliberately absent, with a pointer to the three
+  checks that enforce it.
+- **Build/QA's finding that `visibleText()` strips comments** is the reason Check 20 still scans
+  raw bytes, and the reason the new Check 2 scans raw bytes for `URAC`/`ACHC`. That lesson outlived
+  the policy that prompted it.
+
+## Review of this pass
+
+| Dimension | Verdict | Notes |
+|---|---|---|
+| Compliance | **PASS** | Zero URAC/ACHC, zero permit/licensure wording, zero permit number, verified over the whole `_site/` directory including comments and binaries. The removal is strictly safer than the pursuit claim it replaces. Carrier-facing A2P/10DLC content in `terms`/`privacy`/`notice-of-privacy-practices` was **not touched** in this pass — the only edit to those files was the earlier punctuation work, already reviewed and passed. |
+| Design | **PASS, after three repairs** | Removing whole sections broke the soft/plain band alternation on `/about` (three soft in a row) and on `/` (three plain into the footer), and orphaned a card in two grids. All four fixed and re-checked in-browser at desktop width. No CSS changed. |
+| Marketing Copy | **PASS** | The pages that lost sections still read as complete: `/payers` hero reads cleanly without its two accreditation sentences; `/about`'s lead is intact; Greg's and Lora's cards are symmetrical again. Three residual licensure words were handled individually rather than by find-and-replace. |
+| Build / QA | **PASS** | 14/14 scripted checks; 7/7 negative tests on the inverted checks bite; regression guard confirms legitimate "licensed physicians" / "permitted by law" / "accreditation obligations" copy still passes. |
+
+**Same limitation as the first pass:** a true 375px viewport was not reachable in-browser. Layout
+changes here are class swaps between existing mobile-first grid rules (`grid--2` and `grid--3` are
+both single-column below 768px), so mobile behaviour is unchanged by construction — but the
+section-band and grid changes are still worth a glance on a real phone.
