@@ -554,11 +554,12 @@ which rendered to `_site/payers.html:123` and is served to anyone who views page
 - **Also corrected:** `CLAUDE.md:28` and `AGENTS.md:28` both still documented
   `legalLine (SC BoP Permit #PH-042891)` as the source of truth. These are the files an agent reads
   first, so the stale number was a live reintroduction risk.
-- **Could not verify against production.** `coreflowrx.com` currently sits behind a **Cloudflare
-  Access login wall** — an unauthenticated fetch 302s to `coreflowrx.cloudflareaccess.com`. So the
-  live bytes could not be read to confirm how long it was exposed, or whether it still is.
-  **→ John: confirm whether that Access policy is intentional. If the marketing site is meant to be
-  public, it is currently gated to everyone, which is a much larger problem than the permit number.**
+- **Could not verify against production, and that is expected.** `coreflowrx.com` sits behind a
+  **Cloudflare Access login wall** — an unauthenticated fetch 302s to
+  `coreflowrx.cloudflareaccess.com`. **John confirmed 2026-10-01 that the gate is intentional and
+  staying.** So the live bytes could not be read to confirm how long `PH-042891` was exposed, and
+  that question is now moot: the only people who could have viewed source are people who passed
+  Access. The in-repo fix stands either way. See item 27 for the two live consequences of the gate.
 
 ## 15. Entity name — "CoreFlow Rx LLC" vs "CoreFlow Specialty Infusion"
 
@@ -726,6 +727,55 @@ same commit**, or the build fails on the very copy you are re-adding:
 - **Greg Regan's published credentials** (item 19) — "Dr. … PharmD, RPh" is unchanged and still
   unverified against the Board record. His card **did** lose its "Licensed by the SC Board of
   Pharmacy" line in this pass, so the only remaining claim is the credential string itself.
-- **Cloudflare Access login wall** (item 14) — `coreflowrx.com` still 302s to
-  `coreflowrx.cloudflareaccess.com` for an unauthenticated fetch, so live bytes still cannot be
-  verified from here. **Still the largest open question in this file if the site is meant to be public.**
+- **Cloudflare Access login wall** (item 14) — **RESOLVED as intentional**, see item 27.
+
+
+## 27. ✅ Cloudflare Access gate is INTENTIONAL — but it has two live consequences
+
+**John confirmed 2026-10-01: "we want the site gated still so that's fine."**
+
+The site is deliberately behind Cloudflare Access. It is not a misconfiguration and should not be
+"fixed" by a future reader. Two things follow from it, and the first is the one that matters.
+
+### a) ⚠ Carrier reviewers fetch `/terms` and `/privacy` ANONYMOUSLY
+
+This repo already carried the warning, at item 9: *"Cloudflare Access: if enabled, add bypass
+policies for `/terms` and `/privacy` (carrier reviewers fetch these anonymously) and a service token
+for the uptime monitor."* **Confirming the gate makes that item live rather than conditional.**
+
+`terms.njk`, `privacy.njk` and `notice-of-privacy-practices.njk` are the **A2P/10DLC registration
+documents**. A carrier or aggregator reviewing the campaign fetches those URLs with no credentials.
+If Access answers with a login page instead of the policy, the reviewer sees no program description,
+no message-frequency disclosure, no HELP/STOP, and no opt-in language — **and the campaign can be
+rejected for missing required elements that are, in fact, present.**
+
+**→ Add Access bypass policies for `/terms`, `/privacy` and `/notice-of-privacy-practices` before
+any A2P submission or re-review.** This is the single highest-value item left in this file.
+
+### b) Deploy verification cannot be a plain anonymous `curl`
+
+CLAUDE.md's publish step 7 says to confirm a change is live by fetching the page and checking the
+actual bytes. Behind Access, an anonymous fetch returns the login page, so that check now
+false-negatives every time. Use instead:
+
+- the **"Workers Builds" check-run** on the pushed commit (green = built and deployed), **and**
+- an authenticated browser load of the affected page, **or** a **service token** if you want it
+  scriptable (a service token also unblocks the uptime monitor noted in item 9).
+
+**A green Workers Builds run plus one authenticated page load is the real confirmation.** Do not
+read an anonymous 302 as a failed deploy.
+
+## 28. ✅ Extensionless referral link verified
+
+`diseases-we-treat.njk` links 18 condition rows to `https://coreflowrx.com/refer#referral-form` —
+absolute and **without** the `.html` the rest of the site's internal links use. I flagged that the
+Worker's default `html_handling` *should* map `/refer` to `refer.html` but that I could not confirm
+it live through the Access gate.
+
+**John confirmed 2026-10-01: tested and working.** No action.
+
+Two notes for whoever touches it next, neither a defect:
+- Being **absolute**, those links jump to production from a local `eleventy --serve` preview.
+- `scripts/check-links.mjs` (Check 11) validates **internal relative** links only, so it does not
+  test this one. The anchor target `id="referral-form"` does exist in built `/refer.html`, and that
+  much was verified here.
