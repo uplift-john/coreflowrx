@@ -651,20 +651,22 @@ the `PharmD` / `RPh` suffixes. These are published professional-credential claim
 Leadership reversed the licensure announcement. Items 14–20 above were written when the permit was
 being published; the five below supersede or amend them.
 
-## 21. ⚠ Does South Carolina require a pharmacy to display its licence? — UNRESOLVED
+## 21. ✅ RESOLVED — no licence display requirement for the website
 
-The site now states **no** licensure anywhere. Before the work I flagged, and leadership proceeded:
+**John confirmed 2026-10-01: "no license requirements for website."**
 
-- Some states, and some **payer contracts**, require a licensed pharmacy to display licence
-  information on its public website. **Whether South Carolina does is not established anywhere in
-  this repo, and I did not assert either way.**
-- Separately, `/payers` no longer carries the state licence number, which is the one field a
-  **credentialing team actively looks up**. They must now request it. The page still says
-  documentation is available on request, so there is a path — it is just slower.
+The concern raised before the removal was that some states, and some payer contracts, require a
+licensed pharmacy to display licence information on its public site. That does not apply here, so
+omitting the SC Board of Pharmacy permit is a **positioning choice, not a compliance defect**, and
+the removal stands as shipped.
 
-**→ John: worth one question to counsel.** If SC or a payer contract does require display, this is
-a compliance defect rather than a positioning choice, and the decision should be revisited. Nothing
-else in this pass depends on the answer.
+One practical consequence remains, and it is a trade-off rather than a problem: `/payers` no longer
+carries the state licence number, which is the field a **credentialing team would otherwise look up
+directly**. They now have to request it. The page still offers documentation on request, so the path
+exists — it is just slower. If credentialing teams start asking for it often, that is the signal to
+revisit, and reversing the policy is costed in item 25.
+
+**No further action. Nothing else in this pass depended on the answer.**
 
 ## 22. "Accreditation" still appears twice in the Privacy Policy — deliberate, your call
 

@@ -24,10 +24,12 @@ site is now silent on the subject.
 and ACHC, which required a disclaimer on every page to stop it reading as *holding* them. A claim
 that is absent cannot be misread.
 
-**One concern was raised before the work, and leadership proceeded:** removing the permit number
-from `/payers` costs a credentialing team the one field they actively look up, and some payer
-contracts and state rules expect a pharmacy to display its licence. Whether South Carolina
-requires it is **not** established in this repo and should go to counsel — see `blockers.md`.
+**One concern was raised before the work, and has since been closed.** Removing the permit number
+from `/payers` costs a credentialing team the one field they would otherwise look up directly, and
+some states and payer contracts require a licensed pharmacy to display licence information.
+**John confirmed on 2026-10-01 that there is no licence display requirement for the website**, so
+the omission is a positioning choice, not a compliance defect. The residual trade-off — credentialing
+teams must now request the number rather than read it — is recorded in `blockers.md` item 21.
 
 ---
 
