@@ -1,4 +1,4 @@
-// CoreFlow Rx — small progressive-enhancement script (no dependencies).
+// CoreFlow Rx small progressive-enhancement script (no dependencies).
 // Kept external so the Content-Security-Policy needs no inline script handlers.
 (function () {
   "use strict";

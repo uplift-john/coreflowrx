@@ -41,8 +41,8 @@
 <a href="#main" class="skip-link">Skip to main content</a>
 <header class="site-header">
  <div class="container site-header__inner">
- <a class="brand" href="index.html" aria-label="{{ site.name }} — Home"{% if activeNav == "home" %} aria-current="page"{% endif %}><img class="brand__mark" src="{{ site.logo }}" alt="{{ site.name }}" width="{{ site.logoWidth }}" height="{{ site.logoHeight }}"></a>
- {#- Contact values come from _data/site.json only — never hardcode them here.
+ <a class="brand" href="index.html" aria-label="{{ site.name }} home page"{% if activeNav == "home" %} aria-current="page"{% endif %}><img class="brand__mark" src="{{ site.logo }}" alt="{{ site.name }}" width="{{ site.logoWidth }}" height="{{ site.logoHeight }}"></a>
+ {#- Contact values come from _data/site.json only. Never hardcode them here.
      Phone is tel:, fax is deliberately plain text (a fax number must never be
      dialled as a voice call), email is mailto:. Below 768px only the phone
      survives in the bar; fax and email stay in the footer and on /contact. -#}

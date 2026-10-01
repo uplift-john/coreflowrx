@@ -2,7 +2,7 @@
   "_source": "CoreFlow intake spreadsheet, received 2026-09. NOT clinically vetted. Every clinical flag is itemised in docs/stage2/blockers.md.",
   "_statusRules": {
     "confirmed": "Renders on /drugs-we-provide as a therapy CoreFlow provides, and is in the type-ahead index.",
-    "unconfirmed": "Renders NOWHERE and is not in the search index. Present here only so the flag is tracked in one place. Flip to \"confirmed\" once Greg/John sign off — no template change is needed."
+    "unconfirmed": "Renders NOWHERE and is not in the search index. Present here only so the flag is tracked in one place. Flip to \"confirmed\" once Greg/John sign off; no template change is needed."
   },
   "_extensionPoint": "products[] is the brand-level slot. IVIG ships as the generic entry the intake map supplied; when Greg names the specific immunoglobulin products, add them to products[] and they render as sub-items. No rebuild, no template edit.",
   "specialties": [
@@ -224,7 +224,7 @@
       ],
       "status": "unconfirmed",
       "products": [],
-      "flag": "Indications are PNH and aHUS, which are hematology — there is no hematology row in CoreFlow’s seven specialties, so the oncology tag was a stand-in. Also carries a REMS with meningococcal vaccination requirements: confirm CoreFlow is REMS-certified."
+      "flag": "Indications are PNH and aHUS, which are hematology; there is no hematology row in CoreFlow’s seven specialties, so the oncology tag was a stand-in. Also carries a REMS with meningococcal vaccination requirements: confirm CoreFlow is REMS-certified."
     },
     {
       "name": "Ultomiris",
@@ -279,7 +279,7 @@
       ],
       "status": "unconfirmed",
       "products": [],
-      "flag": "Subcutaneous administration. The same IV-vs-SC question held back Skyrizi, Stelara, Xolair, Fasenra, Tezspire and Simponi Aria — it was not applied here. Confirm whether SC administration is in scope at all, then apply one answer to all seven."
+      "flag": "Subcutaneous administration. The same IV-vs-SC question held back Skyrizi, Stelara, Xolair, Fasenra, Tezspire and Simponi Aria; it was not applied here. Confirm whether SC administration is in scope at all, then apply one answer to all seven."
     },
     {
       "name": "Simponi Aria",
@@ -295,7 +295,7 @@
         "rheumatology"
       ],
       "status": "unconfirmed",
-      "flag": "Intake map reads \"Aria Simponi\" — transposed. Separately, Simponi Aria (IV golimumab) has neither a dermatology nor a gastroenterology indication, though the map tags both; subcutaneous Simponi has the UC indication, the IV does not. Fix the tags before flipping.",
+      "flag": "Intake map reads \"Aria Simponi\" (transposed). Separately, Simponi Aria (IV golimumab) has neither a dermatology nor a gastroenterology indication, though the map tags both; subcutaneous Simponi has the UC indication, the IV does not. Fix the tags before flipping.",
       "products": []
     },
     {
@@ -311,7 +311,7 @@
         "rheumatology"
       ],
       "status": "unconfirmed",
-      "flag": "No IV formulation exists — tildrakizumab is subcutaneous. Omit unless CoreFlow dispenses SC. Also tagged GI and rheumatology in the intake map; it is plaque-psoriasis only.",
+      "flag": "No IV formulation exists: tildrakizumab is subcutaneous. Omit unless CoreFlow dispenses SC. Also tagged GI and rheumatology in the intake map; it is plaque-psoriasis only.",
       "products": []
     },
     {
@@ -359,7 +359,7 @@
         "pulmonology"
       ],
       "status": "unconfirmed",
-      "flag": "No IV formulation exists — omalizumab is subcutaneous. Omit unless CoreFlow dispenses SC. Also tagged gastroenterology with no GI indication.",
+      "flag": "No IV formulation exists: omalizumab is subcutaneous. Omit unless CoreFlow dispenses SC. Also tagged gastroenterology with no GI indication.",
       "products": []
     },
     {
@@ -373,7 +373,7 @@
         "pulmonology"
       ],
       "status": "unconfirmed",
-      "flag": "No IV formulation exists — benralizumab is subcutaneous. Omit unless CoreFlow dispenses SC.",
+      "flag": "No IV formulation exists: benralizumab is subcutaneous. Omit unless CoreFlow dispenses SC.",
       "products": []
     },
     {
@@ -387,7 +387,7 @@
         "pulmonology"
       ],
       "status": "unconfirmed",
-      "flag": "No IV formulation exists — tezepelumab is subcutaneous. Omit unless CoreFlow dispenses SC.",
+      "flag": "No IV formulation exists: tezepelumab is subcutaneous. Omit unless CoreFlow dispenses SC.",
       "products": []
     },
     {
@@ -416,10 +416,10 @@
         "pulmonology"
       ],
       "status": "unconfirmed",
-      "flag": "Inclisiran is a subcutaneous lipid-lowering agent with no immunology or pulmonology relevance — there is no outcome in which this entry becomes correct. Recommend DELETING the entry outright rather than holding it. Raise the two empty specialties separately.",
+      "flag": "Inclisiran is a subcutaneous lipid-lowering agent with no immunology or pulmonology relevance; there is no outcome in which this entry becomes correct. Recommend DELETING the entry outright rather than holding it. Raise the two empty specialties separately.",
       "products": []
     }
   ],
-  "_clinicalReview": "Reviewed 2026-09-29. Entries were only ever moved toward \"unconfirmed\" — nothing was invented. John confirmed the IVIG immunology tag on 2026-09-29, which resolves the empty Immunology row. STILL OPEN with Greg: the specific immunoglobulin products (IVIG renders as the generic entry the intake map supplied, with a visible note saying so), whether SCIG is in scope, the 12 unconfirmed entries below, and the missing hematology row. See docs/stage2/blockers.md.",
+  "_clinicalReview": "Reviewed 2026-09-29. Entries were only ever moved toward \"unconfirmed\"; nothing was invented. John confirmed the IVIG immunology tag on 2026-09-29, which resolves the empty Immunology row. STILL OPEN with Greg: the specific immunoglobulin products (IVIG renders as the generic entry the intake map supplied, with a visible note saying so), whether SCIG is in scope, the 12 unconfirmed entries below, and the missing hematology row. See docs/stage2/blockers.md.",
   "_missingField": "There is no \"route\" field. Route is the single question that disqualified seven entries, yet no card states it. Add route once Greg confirms IV vs SC scope, and render it."
 }

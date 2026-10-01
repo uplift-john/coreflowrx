@@ -19,7 +19,7 @@ permalink: "/payers.html"
  <div class="container">
  <h2 class="section-title">Our clinical and quality framework.</h2>
  <div class="grid grid--2">
- <div class="card"><h3>Licensure</h3><p>SC Resident Pharmacy Permit applied for with the SC Board of Pharmacy under Reg 99-43(B). Permit not yet issued; status documentation available to credentialing teams on request.</p></div>
+ <div class="card"><h3>Licensure (state permit)</h3><p>{{ site.legalEntity }} holds {{ site.permitAuthority }} permit #{{ site.permitNumber }}, active and in good standing. Permit documentation is available to credentialing teams on request. State licensure is separate from accreditation; see the accreditation card.</p></div>
  <div class="card"><h3>Accreditation</h3><p>Actively pursuing URAC Specialty Pharmacy v5.0 and ACHC IRX-NO797 (specialty infusion without sterile compounding), anticipated Q4 2026. <em>Accreditation has been initiated and has not yet been awarded.</em> Status documentation available to payer credentialing teams upon request.</p></div>
  <div class="card"><h3>Nursing model</h3><p>All infusion services are administered by credentialed registered nurses contracted as nursing partners and working under CoreFlow clinical supervision. Credentialing and competency verification are required before any nurse accepts an assignment.</p></div>
  <div class="card"><h3>Cold chain &amp; pharmaceutical handling</h3><p>Medications sourced as commercially manufactured, pre-compounded products with no sterile compounding. Cold chain meets USP Chapter 659 and 1079. Temperature monitoring documented for every delivery.</p></div>
@@ -37,20 +37,25 @@ permalink: "/payers.html"
  <caption class="visually-hidden">Credentialing reference data</caption>
  <thead><tr><th scope="col">Field</th><th scope="col">Value</th></tr></thead>
  <tbody>
- <tr><th scope="row">Legal entity name</th><td>{{ site.name }}</td></tr>
+ <tr><th scope="row">Legal entity name</th><td>{{ site.legalEntity }}</td></tr>
  <tr><th scope="row">Business address</th><td>{{ site.address.street }}, {{ site.address.city }}, {{ site.address.state }} {{ site.address.zip }}</td></tr>
  <tr><th scope="row">Phone</th><td>{{ site.phone }}</td></tr>
  <tr><th scope="row">Fax</th><td>{{ site.fax }}</td></tr>
- <!-- PLACEHOLDER credentialing data withheld: NPI/NCPDP were dummy values and payer
-     participation names appeared garbled. Publish real values before launch.
-     PERMIT: John confirmed 2026-09-29 that no permit has been issued yet — every
-     reference sitewide now says the application is submitted. verify-coreflow
-     Check 18 fails the build on any claim of holding one, and on the old
-     #PH-042891 number. Update all of them together when the permit arrives. -->
+{#- PLACEHOLDER credentialing data withheld: NPI/NCPDP were dummy values and payer
+    participation names appeared garbled. Publish real, confirmed values before
+    these rows state anything other than "available upon request".
+    PERMIT: resolved. The SC Board of Pharmacy issued pharmacy permit 24402 to
+    CoreFlow Rx LLC on 2026-09-30, active and in good standing. The number lives
+    in _data/site.json as site.permitNumber and is rendered, never typed inline.
+    verify-coreflow Check 20 fails the build on any other permit number and on
+    licensure copy that reads as accreditation. Do not publish the expiration
+    date. This note is a Nunjucks comment, not an HTML comment, so it is stripped
+    at build instead of shipping in page source (the previous HTML version shipped
+    the retired PH-042891 number to every visitor who viewed source). -#}
  <tr><th scope="row">NPI (Type 2)</th><td>Available upon request</td></tr>
  <tr><th scope="row">NCPDP number</th><td>Available upon request</td></tr>
  <tr><th scope="row">Taxonomy code</th><td>333600000X (Pharmacy)</td></tr>
- <tr><th scope="row">State pharmacy license</th><td>Resident Pharmacy Permit application submitted under Reg 99-43(B). Permit not yet issued</td></tr>
+ <tr><th scope="row">State pharmacy license</th><td>SC Board of Pharmacy permit #{{ site.permitNumber }}, active and in good standing</td></tr>
  <tr><th scope="row">Payer participation</th><td>Available upon request</td></tr>
  </tbody>
  </table>

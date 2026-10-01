@@ -1,10 +1,10 @@
 {
-  "_status": "SEED — NOT A SERVICE CLAIM. Greg is supplying the real list. These entries are structural scaffolding, seeded from immunoglobulin indications that map onto CoreFlow’s Neurology, Immunology, Rheumatology and Dermatology rows, plus gastroenterology entries. Three seeded conditions were REMOVED on clinical review — see _removedOnClinicalReview below and docs/stage2/blockers.md.",
+  "_status": "SEED: NOT A SERVICE CLAIM. Greg is supplying the real list. These entries are structural scaffolding, seeded from immunoglobulin indications that map onto CoreFlow’s Neurology, Immunology, Rheumatology and Dermatology rows, plus gastroenterology entries. Three seeded conditions were REMOVED on clinical review. See _removedOnClinicalReview below and docs/stage2/blockers.md.",
   "_statusRules": {
     "seed": "Renders on /diseases-we-treat behind the page-level 'under clinical review' notice, and the page is noindexed. It is NOT presented as a therapy CoreFlow has confirmed it can service.",
     "confirmed": "Greg has signed the condition off. Renders as a serviced condition; once every entry is \"confirmed\", drop the page notice and the noindex."
   },
-  "_howToUpdate": "Replace the conditions[] array with Greg's list and set status to \"confirmed\" on each. No template edit is needed — the page renders whatever is here.",
+  "_howToUpdate": "Replace the conditions[] array with Greg's list and set status to \"confirmed\" on each. No template edit is needed; the page renders whatever is here.",
   "conditions": [
     {
       "name": "Ankylosing Spondylitis",
@@ -194,7 +194,7 @@
   ],
   "_removedOnClinicalReview": {
     "Guillain-Barré Syndrome": "PATIENT SAFETY. GBS is an acute, rapidly ascending neuromuscular emergency; IVIG for GBS is given inpatient with respiratory and autonomic monitoring. There is no home infusion pathway. Naming it on a home-infusion page risks routing an emergency toward the home. Chronic/relapsing disease is coded CIDP, which remains listed.",
-    "Immune Thrombocytopenia": "ITP is hematology, not oncology, but there is no hematology row in CoreFlow’s seven specialties, so it had nowhere correct to sit and was rendering beside rituximab in the Oncology group — which reads as \"we treat ITP with rituximab\" (off-label).",
-    "Alpha-1 Antitrypsin Deficiency": "Its only treatment is weekly IV alpha-1 augmentation, and no augmentation product exists anywhere in _data/therapies.json — not confirmed, not even flagged. The site would name a condition whose therapy it has no record of carrying, under a specialty that already renders empty."
+    "Immune Thrombocytopenia": "ITP is hematology, not oncology, but there is no hematology row in CoreFlow’s seven specialties, so it had nowhere correct to sit and was rendering beside rituximab in the Oncology group, which reads as \"we treat ITP with rituximab\" (off-label).",
+    "Alpha-1 Antitrypsin Deficiency": "Its only treatment is weekly IV alpha-1 augmentation, and no augmentation product exists anywhere in _data/therapies.json: not confirmed, not even flagged. The site would name a condition whose therapy it has no record of carrying, under a specialty that already renders empty."
   }
 }

@@ -1,4 +1,4 @@
-// CoreFlow Rx — therapy / condition finder. No dependencies, no build step.
+// CoreFlow Rx therapy / condition finder. No dependencies, no build step.
 //
 // Progressive enhancement contract:
 //   • Without JS the page is a complete, readable, grouped list. The specialty
@@ -7,7 +7,7 @@
 //     no-JS visitor is never offered a control that does nothing.
 //   • With JS the search field appears, the chips filter in place instead of
 //     scrolling, and every change is announced through one polite live region.
-//   • Focus is never moved on the user's behalf — it stays in the field they
+//   • Focus is never moved on the user's behalf; it stays in the field they
 //     are typing in, and the live region does the talking. The initial count
 //     is rendered server-side so nothing is announced on page load.
 //   • State is conveyed by text and markup, never by colour alone.
@@ -54,12 +54,12 @@
     }
 
     // A therapy is listed once per specialty it serves, so the DOM row count
-    // overstates it. Announcements count distinct entries — what the reader sees.
+    // overstates it. Announcements count distinct entries, which is what the reader sees.
     var total = distinct(items);
     var activeSpecialty = "";
     var announceTimer = null;
 
-    // Cache the haystack once. data-search is built server-side from _data/ —
+    // Cache the haystack once. data-search is built server-side from _data/:
     // name, generic, aliases, class and specialty names all live in it.
     items.forEach(function (item) {
       // Fail OPEN on a data gap: an item missing data-search or
@@ -128,8 +128,8 @@
         } else {
           // A group with no items at all is a specialty whose therapy list is
           // still pending clinical confirmation. It must survive a specialty
-          // filter that selects it — that visitor specifically needs to see the
-          // pending notice — but not a text query it cannot match.
+          // filter that selects it, because that visitor specifically needs to see the
+          // pending notice, but not a text query it cannot match.
           group.hidden = !!query || (!!activeSpecialty && activeSpecialty !== group._specialty);
         }
       });
@@ -141,7 +141,7 @@
         return !group._items.length && !group.hidden;
       });
       // During a text search the specialty grouping is not what the reader is
-      // navigating by — results are deduplicated across specialties — so the
+      // navigating by (results are deduplicated across specialties), so the
       // group headings are pure chrome between the field and the answer.
       root.classList.toggle("finder--searching", !!query);
 
@@ -160,7 +160,7 @@
         var activeChip = chips.filter(function (chip) {
           return chip.getAttribute("data-finder-filter") === activeSpecialty;
         })[0];
-        if (activeChip) scope = activeChip.textContent.replace(/^\u2713\s*/, "").trim() + " \u2014 ";
+        if (activeChip) scope = activeChip.textContent.replace(/^\u2713\s*/, "").trim() + ": ";
       }
 
       if (!filtering) {

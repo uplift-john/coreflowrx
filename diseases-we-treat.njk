@@ -10,14 +10,14 @@ pageScript: "finder.js"
 robots: "noindex, nofollow"
 ---
 {#- Every condition rendered here comes from _data/conditions.json. Nothing on
-    this page hardcodes a condition name — verify-coreflow Check 17 enforces it.
+    this page hardcodes a condition name. verify-coreflow Check 17 enforces it.
 
     NOTE FOR WHOEVER EDITS THIS NEXT: the condition list is a SEED, not a service
     claim, pending Greg's confirmed list. Three reviewers blocked an earlier draft
     for reading as settled, so the service framing is deliberately absent: the
     page-level notice sits inside the hero above the list, the description says "ask us
     about" rather than "supports", and every per-condition action is a phone call
-    to confirm — NOT a one-click referral.
+    to confirm, NOT a one-click referral.
 
     `robots: noindex, nofollow` is set and the page is absent from sitemap.xml, but
     do NOT over-trust that: this page is linked from the primary nav and the footer
@@ -27,7 +27,7 @@ robots: "noindex, nofollow"
     WHEN GREG'S LIST LANDS and every entry in _data/conditions.json reads
     status "confirmed": delete the .note-box--review block, restore the
     per-condition referral CTA, drop the robots line, and add the page to
-    sitemap.xml — in one commit. See docs/stage2/blockers.md. -#}
+    sitemap.xml, in one commit. See docs/stage2/blockers.md. -#}
 {%- set conditionList = conditions.conditions -%}
 {%- set specialties = therapies.specialties -%}
 
@@ -40,7 +40,7 @@ robots: "noindex, nofollow"
      caveat before the list, not one section below it. -#}
  <div class="note-box note-box--review">
   <p><strong>This list is under clinical review and is not final.</strong> These are the
-  conditions prescribers ask us about most &mdash; not a settled list of what we can service.
+  conditions prescribers ask us about most, not a settled list of what we can service.
   Call <a href="tel:{{ site.phoneTel }}">{{ site.phone }}</a> with the diagnosis and the therapy
   and we'll tell you before you send anything. If you already know the therapy,
   <a href="drugs-we-provide.html">search the drugs we provide</a> instead.</p>
@@ -78,7 +78,7 @@ robots: "noindex, nofollow"
   <p class="finder__status" role="status" aria-live="polite" data-finder-status>Showing all {{ conditionList | length }} conditions, grouped by specialty.</p>
 
   <div class="note-box note-box--empty container--narrow text-center" hidden data-finder-empty>
-   <p><strong>No match on this page &mdash; and that is not the same as no.</strong>
+   <p><strong>No match on this page. That is not the same as no.</strong>
    Give us the diagnosis and the prescribed therapy and we'll tell you whether we can
    service the referral before you send anything.</p>
    <p><a class="btn btn--primary" href="tel:{{ site.phoneTel }}">Call {{ site.phone }} →</a></p>
@@ -134,7 +134,7 @@ robots: "noindex, nofollow"
    <div class="card"><h3>Start from the drug</h3><p>If you already know the therapy, searching the confirmed drug list is the faster route.</p><a class="btn btn--secondary" href="drugs-we-provide.html">Drugs We Provide →</a></div>
    <div class="card"><h3>Send a referral</h3><p>Once we've confirmed we can service it: online through our BAA-covered form, or by fax.</p><a class="btn btn--secondary" href="refer.html">Refer a Patient →</a></div>
   </div>
-  <p class="footnote mt-4"><em>All therapies are subject to formulary availability, clinical suitability, and payer authorization. Listing a condition on this page does not mean a particular referral can be serviced &mdash; we confirm case by case.</em></p>
+  <p class="footnote mt-4"><em>All therapies are subject to formulary availability, clinical suitability, and payer authorization. Listing a condition on this page does not mean a particular referral can be serviced. We confirm case by case.</em></p>
  </div>
 </section>
 

@@ -9,7 +9,7 @@ Never report a change complete based on a successful edit alone. Run **every** c
 
 Produce a **PASS/FAIL table by check and by page** at the end. Do not declare done until every row is PASS. The 10 primary pages are: `index`, `providers`, `patients`, `payers`, `refer`, `about`, `careers`, `contact`, `diseases-we-treat`, `drugs-we-provide`.
 
-Most of the content checks are now **scripted**, one script per check under `scripts/`, and `npm run verify` runs the build plus all of them in order. Read the count from this file: **there are 19 checks.** Run the scripts rather than re-deriving the greps — and never merge two checks into one script, because a merged check can be passed by weakening either half.
+Most of the content checks are now **scripted**, one script per check under `scripts/`, and `npm run verify` runs the build plus all of them in order. Read the count from this file: **there are 21 checks.** Run the scripts rather than re-deriving the greps — and never merge two checks into one script, because a merged check can be passed by weakening either half.
 
 ## Check 1 — Build
 Run `npx @11ty/eleventy`. Requires zero errors and zero broken templates. The site must build to `_site/`. If the build fails, nothing else can pass — fix first.
@@ -38,7 +38,7 @@ CoreFlow is **pre-launch and pursuing** URAC Specialty Pharmacy v5.0 and ACHC IR
 ## Check 4 — Legal flags
 - **Testimonials: superseded by Check 15.** The old rule here asked for an HTML-comment flag on each sample quote. Flagging a fabricated quote is no longer sufficient — as of 2026-09-29 the fabricated testimonials are **deleted** and Check 15 forbids the markup entirely. Do not re-add a "flag it" allowance.
 - No placeholder credentialing data may go live. **FAIL** on: dummy `1234567890` NPI/NCPDP values, an incomplete permit number (e.g. `Permit Add #`), or garbled/placeholder payer names (e.g. `HITS, IRN, MHITS`). These must be replaced with real, confirmed values or withheld behind "available upon request".
-- **The permit is handled by Check 18, not here.** John confirmed 2026-09-29 that no Resident Pharmacy Permit has been issued yet. `#PH-042891` must never reappear, and licensure must never be claimed as held.
+- **The permit is handled by Checks 18 and 20, not here.** The SC Board of Pharmacy issued pharmacy permit **24402** to CoreFlow Rx LLC on **2026-09-30**. The real number is pinned by Check 20; the retired fabricated `#PH-042891` must never reappear.
   - Suggested: `grep -rniE "1234567890|permit add #|HITS, IRN, MHITS" _site/`
 - **Staff names: the withholding is OVER as of 2026-09-29 — this rule is inverted from its 2026-07-13 form.** John published the two real clinician names on `main`: **Dr. Greg Regan, PharmD, RPh** (Pharmacist-in-Charge) and **Lora Santi, BSN, RN** (Director of Nursing), each with a bio, alongside CEO **Jason Clapsaddle**. The old rule required a `[NAME]` placeholder in every clinician/officer listing; requiring that now would delete real published content. **There should be no `[NAME]` placeholders left in a team listing** — if one reappears, someone has reverted to a stale base (which is exactly what happened: a feature branch cut from a 10-commit-stale `main` still carried them).
   - **FAIL** if the old *fictional* names appear anywhere — they were on providers, about, AND privacy (Privacy Officer), so sweep every page, not just team sections.
@@ -176,15 +176,17 @@ This is Check 3's script. It is listed separately here because it runs separatel
   - Run: `npm run check-data` (`scripts/check-data-driven.mjs`) — must print PASS.
 - **Does not cover:** whether the data is *clinically correct*. It checks provenance, not truth — a wrong drug in the JSON renders happily. That is the Clinical/Pharmacy reviewer's job and Greg's sign-off. It also does not police therapy names in ordinary prose elsewhere on the site; only the two finder templates are held to the no-literals rule.
 
-## Check 18 — Licensure is never claimed as held
-**Rationale:** John confirmed on 2026-09-29 that CoreFlow has **no Resident Pharmacy Permit yet** — the application is submitted. Before that answer the site claimed one in four affirmative forms at once: "**We hold** a South Carolina Board of Pharmacy Resident Pharmacy Permit" (index), "Permit **issued** under Reg 99-43(B)" (about), "**issued by** the SC Board of Pharmacy" (payers), and "a **South Carolina-licensed** specialty infusion pharmacy" (payers hero) — plus a concrete number, `#PH-042891`, in the site-wide footer that already had a TODO against it. Claiming a pharmacy licence you do not hold is a regulatory misrepresentation, so it gets the same shape of guard as the accreditation claim in Check 2.
+## Check 18 — Licensure is stated currently, with no expiry and no discipline claim
+**This check was INVERTED on 2026-10-01 and the previous version must not be restored.** Until 2026-09-30 CoreFlow held no pharmacy permit and this check's entire job was to **fail on any claim of holding one**. The permit then issued, which is the event the old check's own closing line anticipated ("when the permit is issued… relax rules 1 and 3 and pin the real number"). The old rules now assert the opposite of the truth.
 
-- **FAIL** on any affirmative claim of holding a permit or pharmacy licence, on any permit number, and specifically on `#PH-042891`.
-- **FAIL** if a page's own `<main>` raises the Resident Pharmacy Permit without saying it is "not yet issued". Scoped to `<main>` deliberately: the footer carries the applied-for line on *every* page, so a footer match would make the rule trivially true everywhere.
+**The fact, from the SC Board of Pharmacy record:** pharmacy permit **24402**, licensee **CoreFlow Rx LLC**, first issued **2026-09-30**, status **Active**, permit holder Jason Clapsaddle, supervising pharmacist Gregory Edward Regan.
+
+- **FAIL** on retired **pre-issuance** language: "permit not yet issued", "applied for a permit", "permit applied for", "application submitted", "have applied … Board of Pharmacy". This is a **regression guard**, not a style rule — stale pre-issuance copy has twice returned to this repo via a feature branch cut from an out-of-date `main`. The regex matches "issued", never "awarded", so the required accreditation disclaimer ("has not yet been **awarded**") is untouched.
+- **FAIL** on a published **expiration date** (`06/30/2027`, `June 30, 2027`, "permit expires…"). Permits renew; a published expiry goes stale on its own and invites "is this still current?" from the one reader you least want asking. The permit number lets anyone verify status with the Board directly.
+- **FAIL** on **"no disciplinary action"** or any disciplinary-history assertion. It is true, and it is also exactly what someone with something to explain would write. Let the public Board record speak.
   - Run: `npm run check-licensure` (`scripts/check-licensure.mjs`) — must print PASS.
-- **Deliberately allowed — these describe PEOPLE, not the pharmacy:** "Licensed by the SC Board of Pharmacy" under the Pharmacist-in-Charge, "licensed registered nurse", "licensed physicians", "out-of-state licenses". A pharmacist holds a personal licence while the pharmacy's permit is pending.
-- **Does not cover:** whether the application was in fact submitted (that is John's word), or accreditation (Check 2).
-- **When the permit is issued:** update every reference together, then relax the two rules above and pin the real number in place of `#PH-042891` — in the same commit.
+- **Deliberately allowed — these describe PEOPLE, not the pharmacy:** "Licensed by the SC Board of Pharmacy" under the Pharmacist-in-Charge, "licensed registered nurse", "licensed physicians", "out-of-state licenses".
+- **Does not cover:** the permit NUMBER and licensure-vs-accreditation wording (**Check 20**); whether the permit is still active today (off-repo — re-verify with the Board before any renewal window); accreditation (**Check 2**, unchanged and staying unchanged).
 
 ## Check 19 — No named third-party business relationship claims
 **Rationale:** this file's own closing rule says that when the same class of problem appears twice, add a grep-able check instead of fixing the instance. This class appeared twice in a single pass. **MUSC Health** was asserted as a home infusion partner in five places (Check 3 now confines it to bios), and **Council Capital** — *"CoreFlow was established as a joint venture with Council Capital, a healthcare-focused private equity firm"* — sat on `/about` with nothing in the repo behind it, until John removed it on 2026-09-29. Both are representations **about a third party** that CoreFlow cannot make unilaterally. Check 3 guards one company by name; this one guards the shape, so the next one fails the build instead of waiting for someone to notice.
@@ -194,8 +196,29 @@ This is Check 3's script. It is listed separately here because it runs separatel
 - **Deliberately allowed:** vendor *processing* disclosures, which the Privacy Policy requires — "hosted by Formstack under a signed BAA" is a data-handling fact, not a relationship claim.
 - **Does not cover:** an unnamed but obvious reference ("South Carolina's academic medical centre"), or whether a claim is *true*. A real, authorised partnership must be added here deliberately, with the authorisation recorded alongside — that is the point of the check, not a gap in it.
 
+## Check 20 — Permit number is 24402, and licensure never reads as accreditation
+**Rationale, two failures with one subject.** (a) **A wrong permit number is worse than no permit number.** It is the field a payer credentialing team or state surveyor verifies against the Board's public register, and it fails publicly when it does not match. This repo already shipped one: a fabricated `#PH-042891` sat in the site-wide footer for weeks, and **survived in an HTML comment on `/payers.html` — served in page source — even after the visible copy was corrected.** (b) **A state license is not an accreditation.** CoreFlow holds permit 24402; it does **not** hold URAC or ACHC and is only pursuing both. The two facts sit near each other on `/`, `/about`, `/providers` and `/payers`, so the risk is not a bald false claim but a blurred sentence.
+
+- **FAIL** on any permit-number-shaped token in built HTML that is not `24402`, and by name on `PH-042891`.
+- **FAIL** on any sentence that mentions a permit / licence / the Board of Pharmacy **and** also contains **"accredited"**, **"certified"** or bare **"approved"**. Write **"licensed"** or **"permitted"**.
+- **FAIL** if the canonical sentence "Licensed by the South Carolina Board of Pharmacy" appears nowhere in the build — the facts must not silently vanish.
+  - Run: `npm run check-permit` (`scripts/check-permit-number.mjs`) — must print PASS.
+- **Separate script from Check 18 on purpose** — a merged check can be passed by weakening either half.
+- **All permit values live in `_data/site.json`** (`legalEntity`, `permitAuthority`, `permitNumber`, `licensure`, `legalLine`) and are rendered, never typed into markup.
+- **Does not cover:** whether 24402 is still active (off-repo); accreditation alone (Check 2); the **entity name** used in a licensure claim — the Board lists "CoreFlow Rx LLC" while the brand is "CoreFlow Specialty Infusion", and the brand name is legitimate in marketing copy, so this is a reviewer's call recorded in `docs/stage2/blockers.md`.
+
+## Check 21 — Zero em dashes (U+2014) in built HTML and built JS
+**Rationale:** a house style rule John set 2026-10-01. Mechanical, so it gets a script; worth a script because the em dash is the single easiest character to reintroduce by accident — word processors and AI-drafted copy insert them automatically.
+
+- **FAIL** on the literal `—` **and** on `&mdash;`, `&#8212;`, `&#x2014;`. The entity forms matter: the first pass of this work removed every literal em dash and **seven `&mdash;` entities still rendered em dashes on screen**, caught only because the check scans for them.
+- **Scans RAW HTML, not `visibleText()`** — deliberately. `visibleText()` strips comments, and `PH-042891` reached production inside an HTML comment precisely because comment content was never scanned. A comment is shipped to the browser and readable in page source.
+- **Also scans built JS.** `finder.js` built an aria-live announcement as `specialty + " \u2014 "` — an em dash injected into the DOM at runtime and read aloud by a screen reader, which no built-HTML scan can see.
+  - Run: `npm run check-em-dash` (`scripts/check-no-em-dashes.mjs`) — must print PASS.
+- **Does not cover:** **PDFs** — `coreflow-fax-cover-sheet.pdf` is SHA-256-pinned (Check 12) and contains **two** em dashes in its section labels; removing them needs regeneration and a new hash (logged in `blockers.md`). The **Formstack** referral workflow and **GoHighLevel** hosted forms (third-party iframes, not in `_site/`). Form confirmation screens, auto-reply emails, SMS templates. **`_headers`** — 3 em dashes remain in its `#` comments; it is deployed as Cloudflare header config but is never rendered as copy. **`styles.css`** — 20 em dashes remain in its CSS *comments* by decision (developer notes, never rendered); a future em dash in a `content:` pseudo-element **would** be visible copy and this check would not see it.
+- **EN dashes (U+2013) are explicitly NOT covered and must not be added to this check without asking John.** "2–6 messages per month" and "8:30 AM – 4:30 PM" are correct typography for numeric ranges; four remain in the build on purpose.
+
 ## Output format
-Print a table: rows = the 10 primary pages, columns = Checks 1–7, cells = PASS/FAIL (with a one-line note on any FAIL). Checks 8–19 are build-level, not per-page — report each as a single PASS/FAIL line beneath the table. Add a final summary line: overall PASS only if every cell **and** all twelve build-level checks are PASS. (**There are 19 checks total.**)
+Print a table: rows = the 10 primary pages, columns = Checks 1–7, cells = PASS/FAIL (with a one-line note on any FAIL). Checks 8–21 are build-level, not per-page — report each as a single PASS/FAIL line beneath the table. Add a final summary line: overall PASS only if every cell **and** all fourteen build-level checks are PASS. (**There are 21 checks total.**)
 
 `npm run verify` runs the build plus every scripted check in order and exits non-zero on the first failure. Checks 2, 5, 6, 7 and the human half of 4 are still judgement calls — run them by hand. A green `npm run verify` is **not** a green verify-coreflow.
 

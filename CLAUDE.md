@@ -25,7 +25,11 @@ Eleventy's input dir is `.`, so **page templates live in the repo root** as `*.n
   non-PHI form pages only.
 - `_data/site.json` — the **single source of truth for contact & brand facts** (referenced as
   `site.*`): name, url, phone `(854) 888-9070`, fax, hours, address, CEO, logo, themeColor
-  `#175868`, legalLine (SC BoP Permit #PH-042891). Edit facts here, not in page markup.
+  `#175868`, legalLine, and the licensure facts: `legalEntity` "CoreFlow Rx LLC" (the name the
+  SC Board of Pharmacy issues the permit under), `permitAuthority`, `permitNumber` **24402**
+  (issued 2026-09-30, active). The retired `#PH-042891` was never a real permit number — do
+  not reintroduce it; verify-coreflow Check 20 fails the build on it. Never publish the permit
+  expiration date. Edit facts here, not in page markup.
 - Assets (hero JPGs, logos, `favicon.svg`, `styles.css`, `robots.txt`, `sitemap.xml`) live in the
   root and are passthrough-copied.
 - `_site/` = build output — **never edit by hand**. `docs/`, `scripts/`, `.claude/`, `.agents/`

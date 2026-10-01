@@ -19,5 +19,8 @@
     "state": "SC",
     "zip": "29466"
   },
-  "legalLine": "Applied for licensure with the South Carolina Board of Pharmacy under Reg 99-43(B) · permit not yet issued"
+  "legalEntity": "CoreFlow Rx LLC",
+  "permitAuthority": "South Carolina Board of Pharmacy",
+  "permitNumber": "24402",
+  "legalLine": "CoreFlow Rx LLC · Licensed by the South Carolina Board of Pharmacy · Permit #24402"
 }

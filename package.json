@@ -8,7 +8,7 @@
     "serve": "eleventy --serve",
     "check-links": "node scripts/check-links.mjs",
     "check-pdf": "python3 scripts/check-pdf-geometry.py _site/coreflow-fax-cover-sheet.pdf",
-    "verify": "eleventy && npm run check-links && npm run check-leaks && npm run check-contact && npm run check-time && npm run check-musc && npm run check-third-party && npm run check-testimonials && npm run check-nursing && npm run check-data && npm run check-licensure && npm run check-pdf",
+    "verify": "eleventy && npm run check-links && npm run check-leaks && npm run check-contact && npm run check-time && npm run check-musc && npm run check-third-party && npm run check-testimonials && npm run check-nursing && npm run check-data && npm run check-licensure && npm run check-permit && npm run check-em-dash && npm run check-pdf",
     "deploy": "npm run build && wrangler deploy",
     "preview": "npm run build && wrangler dev",
     "check-leaks": "node scripts/check-leak-allowlist.mjs",
@@ -19,7 +19,9 @@
     "check-nursing": "node scripts/check-nursing-language.mjs",
     "check-data": "node scripts/check-data-driven.mjs",
     "check-licensure": "node scripts/check-licensure.mjs",
-    "check-third-party": "node scripts/check-third-party-claims.mjs"
+    "check-third-party": "node scripts/check-third-party-claims.mjs",
+    "check-permit": "node scripts/check-permit-number.mjs",
+    "check-em-dash": "node scripts/check-no-em-dashes.mjs"
   },
   "devDependencies": {
     "@11ty/eleventy": "^3.0.0",

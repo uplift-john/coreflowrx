@@ -9,7 +9,7 @@ permalink: "/drugs-we-provide.html"
 pageScript: "finder.js"
 ---
 {#- Every therapy rendered here comes from _data/therapies.json. Nothing on this
-    page hardcodes a drug name — verify-coreflow Check 17 enforces that. Only
+    page hardcodes a drug name. verify-coreflow Check 17 enforces that. Only
     entries with status "confirmed" render; flagged entries are held in the data
     file and listed in docs/stage2/blockers.md. -#}
 {%- set confirmed = therapies.therapies | whereStatus("confirmed") -%}
@@ -18,7 +18,7 @@ pageScript: "finder.js"
  <div class="container">
  <span class="hero__eyebrow">For Prescribers &amp; Office Staff</span>
  <h1 class="hero__title">Drugs we provide</h1>
- <p class="hero__lead">Search by brand, generic or specialty. If it's listed, it's on our formulary &mdash; and if it isn't, that isn't a no: <a href="tel:{{ site.phoneTel }}">call us</a> and we'll check.</p>
+ <p class="hero__lead">Search by brand, generic or specialty. If it's listed, it's on our formulary. If it isn't, that isn't a no: <a href="tel:{{ site.phoneTel }}">call us</a> and we'll check.</p>
  {% include "physician-order-notice.njk" %}
  </div>
 </section>
@@ -49,7 +49,7 @@ pageScript: "finder.js"
   <p class="finder__status" role="status" aria-live="polite" data-finder-status>Showing all {{ confirmed | length }} therapies.</p>
 
   <div class="note-box note-box--empty container--narrow text-center" hidden data-finder-empty>
-   <p><strong>No match on this page &mdash; and that is not the same as no.</strong>
+   <p><strong>No match on this page. That is not the same as no.</strong>
    This list is what we have confirmed today, not the limit of what we can source.
    We'll confirm formulary fit for your patient's therapy before you send the referral.</p>
    <p><a class="btn btn--primary" href="tel:{{ site.phoneTel }}">Call {{ site.phone }} →</a></p>
@@ -115,7 +115,7 @@ pageScript: "finder.js"
    <div class="card"><h3>Fax the order</h3><p>Send the order and we'll come back to your office on fit and coverage.</p><p>Fax <strong>{{ site.fax }}</strong></p><a class="btn btn--secondary" href="coreflow-fax-cover-sheet.pdf" download>Download Cover Sheet →</a></div>
    <div class="card"><h3>Start from the diagnosis</h3><p>Working from the condition rather than the drug? The condition list is the other way in.</p><a class="btn btn--secondary" href="diseases-we-treat.html">Diseases We Treat →</a></div>
   </div>
-  <p class="footnote mt-4"><em>All therapies are subject to formulary availability, clinical suitability, and payer authorization. Availability on this page does not guarantee that a particular referral can be serviced &mdash; we confirm case by case.</em></p>
+  <p class="footnote mt-4"><em>All therapies are subject to formulary availability, clinical suitability, and payer authorization. Availability on this page does not guarantee that a particular referral can be serviced. We confirm case by case.</em></p>
  </div>
 </section>
 

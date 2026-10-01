@@ -1,186 +1,146 @@
-# Post-review pass — review log
+# Review log — licensure announcement + em dash removal
 
-Branch `feature/post-review-2026-09` · 2026-09-29. Two rounds of eight parallel
-reviewer roles. Every BLOCK is listed with what was done about it, including the four
-that were deliberately **not** actioned and why.
+**Branch:** `feature/licensure-2026-10` · **Date:** 2026-10-01
+Four reviewers, each blocking only in its own domain.
+
+| Reviewer | Verdict | Blocking findings | All resolved? |
+|---|---|---|---|
+| Marketing Copy | **BLOCK** → resolved | 6 must-fix | Yes |
+| Compliance | **PASS** | 0 | n/a (3 advisories actioned) |
+| Design | **PASS** | 0 | n/a |
+| Build / QA | **PASS** | 0 | n/a (1 real gap actioned) |
+
+---
+
+## 1. Marketing Copy — BLOCK, then resolved
+
+Found a **root cause** rather than six separate nits: `site.licensure` in `_data/site.json` was
+written as three stacked fragments ("Licensed by… Permit #24402. Active and in good standing."),
+so every page that concatenated anything around it inherited the stack. On `/providers` that
+rendered as five fragments with the subject arriving third.
+
+**Fix applied to the cause:** pages now compose from the atoms (`legalEntity`, `permitAuthority`,
+`permitNumber`) instead of wrapping text around a pre-built sentence. The prescribed phrasing is
+still used verbatim where it stands alone. The now-unused `licensure` key was **deleted** — dead
+data in a single-source-of-truth file is a liability, because someone will later edit it believing
+it is live.
+
+| # | Finding | Resolution |
+|---|---|---|
+| 1 | `providers.njk:106` — em dash became a second "and", producing an "and … and" stack | Comma + participle: "consistent across all patients and visits, designed for easy integration into your EHR." |
+| 2 | `terms.njk:39` — colon before adverbial phrases of means reads stilted | Split: "…agree to receive text messages. You can do that on a referral form, on an intake or registration form, or by giving verbal consent…" Carrier meaning preserved. |
+| 3 | `index.njk` — lead-in sentence + 3-fragment string said the same fact twice ("holds an active… / Active and in good standing") | Rewritten to the prescribed phrasing with the entity as subject. Had already been tightened during the design pass; the duplication is gone. |
+| 4 | `providers.njk:61`, `about.njk:43` — "Issued to CoreFlow Rx LLC." landed after the status, subject third | Both recomposed from atoms, entity first. `about` narrative shortened so it no longer duplicates its own card verbatim. |
+| 5 | `payers.njk:22` — "licensed by the … Board of Pharmacy **as a pharmacy**" (repeat); "addressed below" is wrong on desktop, where the card sits to the *right* in `grid--2` | "CoreFlow Rx LLC holds South Carolina Board of Pharmacy permit #24402, active and in good standing. … State licensure is separate from accreditation; see the accreditation card." |
+| 6 | `payers.njk:58` — "South Carolina Board of Pharmacy **pharmacy** permit" stutter | "SC Board of Pharmacy permit #24402, active and in good standing" |
+
+**Advisories, all accepted:**
+- Five semicolons on patient/office-facing copy → periods. A semicolon is not 8th-grade register
+  (Check 6), and in `thanks.njk:12` it followed a bolded fragment.
+- `diseases-we-treat:81` / `drugs-we-provide:52` → "No match on this page. That is not the same as
+  no." The em dash carried a rhetorical beat that ", and" flattened.
+- `notice-of-privacy-practices:26` — "we **conduct** … business management" is a bad collocation →
+  "These include quality assessment, staff review, credentialing, and business management."
+- `index.njk` card title "Accreditation (separate, in progress)" → "Accreditation (in progress)";
+  the body sentence already does the verbal separation.
+
+**Called out as genuinely better rewrites:** `drugs-we-provide.njk:21` (dash-plus-colon pileup
+split into parallel sentences), the `privacy.njk` definition-list colons, the HIPAA
+fragment→clause promotions, and `non-discrimination.njk:41`.
+
+---
+
+## 2. Compliance — PASS
+
+Verified against the freshly built `_site/`, all seven items clear:
+
+1. **Licensure never implies accreditation.** The only `accredited` in the build is inside Lora
+   Santi's bio describing a prior employer ("AAAHC-accredited surgery center"); the only `approved`
+   is "as soon as your insurance is approved" on `/patients`. Neither is a CoreFlow credential claim.
+2. **Permit number.** `Permit #24402` on all 17 pages; zero other permit-shaped tokens;
+   `grep -rln "042891" _site/` → nothing, binaries included. Every `<!-- -->` in all 17 built pages
+   was extracted and inspected — only the Plausible note and three form-provider notes remain, none
+   carrying regulated data.
+3. **No expiration date.** No `06/30/2027`, `2027-06-30`, "June 30", "expires", "valid through".
+   The issue date is also absent from published output.
+4. **No disciplinary assertion.** Zero hits for `disciplin|sanction|no action|unblemished|clean record`.
+5. **Entity name on licensure claims.** Every licensure sentence names `CoreFlow Rx LLC`.
+6. **A2P/10DLC elements survived.** Full diff of all three carrier documents read. Confirmed intact
+   in built output: program name, both program descriptions, "2–6 messages per month" / "1–5 messages
+   per referral submitted", bold "Message and data rates may apply.", bold **HELP** and **STOP**, and
+   the mobile-data non-sharing attestation (canonical two-sentence version untouched in `privacy.njk:58`).
+7. **Accreditation disclaimer verbatim** on all four pages that mention URAC/ACHC, each phrased as
+   *pursuing* with *anticipated Q4 2026*.
+
+**Advisories, all actioned:**
+- `CLAUDE.md:28` / `AGENTS.md:28` still documented `legalLine (SC BoP Permit #PH-042891)` as the
+  source of truth. Not published, but these are the files an agent reads first, so the stale number
+  was a live reintroduction risk. **Both corrected in this commit.**
+- `about.njk` / `providers.njk` separated licensure from accreditation visually but lacked the
+  explicit *verbal* separator that `/` and `/payers` carry. **Sentence added to both** — all four
+  pages now have parity.
+- Greg Regan's published credentials vs the Board record → recorded in `blockers.md` (pre-existing,
+  not introduced here).
+
+---
+
+## 3. Design — PASS
+
+Reviewed in-browser against a live Eleventy server.
+
+- The home "Clinical standards that matter." section renders as two balanced sibling cards with
+  clear separation between "State licensure" and "Accreditation (in progress)". Verified at desktop
+  width; one copy tightening was made on the spot after reading it rendered (repeated "active" and
+  three "South Carolina"s in the licensure card).
+- Footer stays balanced. The licensure line sits on its own row beneath the copyright, is visually
+  quiet, and does not crowd the five-column nav block.
+- `/payers` licensure card sits naturally in the existing `grid--2` beside the accreditation card.
+- **No new CSS.** `git diff` on `styles.css` is empty. Every new element reuses `.card`, `.grid`,
+  `.grid--2`, which are pre-existing.
+
+**Responsive — one honest limitation.** A true 375px viewport could not be reached: macOS enforces
+a minimum Chrome window width, and the extension kept capturing at a fixed viewport across three
+resize attempts. Rather than keep retrying, responsive behaviour was confirmed **structurally**,
+which is conclusive here: the new markup adds no CSS and uses `.grid--2`, whose mobile-first rule is
+`grid-template-columns:1fr` with two columns only above `@media(min-width:768px)` (`styles.css:86,88`).
+The licensure and accreditation cards therefore stack to a single column below 768px exactly as
+every other `.grid--2` on the site already does. **Worth a human glance on a real phone before merge.**
+
+---
+
+## 4. Build / QA — PASS
+
+| Check | Result |
+|---|---|
+| Eleventy build | 17 files, exit 0, zero warnings |
+| `npm run verify` | exit 0, **13 scripted PASS** |
+| SKILL.md self-consistency | `grep -c '^## Check'` = **21**; header count, "Checks 8–21", "all fourteen build-level" all agree |
+| Links / `action="#"` | PASS; zero `action=` of any kind (all forms are third-party iframes) |
+| Leak allowlist | PASS; the two new `scripts/*.mjs` do not render into `_site/` |
+| PDF hash + geometry | `sha256=7598d937…6012` matches the pin; gap 75.7pt (min 25.0) |
+| U+2014 in built HTML / JS | **0**, including `&mdash;`, `&#8212;`, `&#x2014;`, `—` |
+| `PH-042891` in `_site/` | **0 hits**, whole-directory |
+| `24402` placement | 23 hits = 17 footer + 6 dedicated; **zero hardcoded** — all from `{{ site.* }}` |
+| New checks genuinely fail | **9/9 negative tests exit 1** |
+| `_data/*.json` syntax | all parse |
+
+**Real gap found and closed.** `check-permit-number.mjs` originally scanned only `visibleText()`,
+which strips comments — so an injected `<!-- TODO permit #PH-042891 -->` **passed**. That is
+precisely the regression the check was written to prevent. A raw-HTML pass was added and the exact
+mutation now fails the build. Also actioned: `_headers`' three comment em dashes added to Check 21's
+documented non-coverage, and Checks 20/21 moved after Check 19 in the skill file.
+
+**Process note from the reviewer:** the tree was being edited while it ran, so it verified both the
+staged and working trees — both green. Everything is staged and committed together.
 
 ---
 
 ## Verdict matrix
 
-| Role | Round 1 | Round 2 | Notes |
-|---|---|---|---|
-| Marketing Copy | BLOCK (14) | BLOCK (6 + 11 minor) | All actioned or escalated; see "declined" below |
-| Compliance | BLOCK (6) | BLOCK (2 + 6 minor) | Both round-2 blocks actioned |
-| Clinical / Pharmacy | BLOCK | BLOCK (10 + 11 minor) | 3 conditions removed, 3 drugs held back, rest escalated |
-| Design | BLOCK (4) | BLOCK (2 + 12 minor) | Both round-2 blocks were regressions I introduced; fixed |
-| Security / Code | BLOCK (3 + 12 minor) | BLOCK (1 + 9 minor) | `stripBlocks` comment hole closed |
-| Accessibility | BLOCK (6 + 9 minor) | BLOCK (1 + 5 minor) | Same regression Design found; fixed |
-| UX / UI | BLOCK (5 + 3 minor) | BLOCK (3 + 3 minor) | Round-2 blocks actioned; one criterion still partial |
-| Build / QA | BLOCK (1 + 2 minor) | **PASS** | 17/17 checks green |
-
-Round 2 found **three** genuinely new defects, two of which were regressions introduced
-by round-1 fixes. That is the round earning its keep.
-
----
-
-## The three findings that mattered most
-
-### 1. The filter did not filter
-
-Found independently by Accessibility, Security and Design. `finder.js` set
-`item.hidden = true`, but `[hidden]` is a *normal author-origin-losing* UA rule, so
-`.therapy{display:flex}` beat it. **Verified in a browser before the fix: searching
-"remicade" left 21 of 35 cards on screen** under a status line reading "Showing 3 of 16",
-with whole group headings vanishing (those had no `display` declaration) while their
-cards stayed. The no-JS contract was broken the same way — the search form and Clear
-button rendered despite carrying `hidden`.
-
-One line fixed all of it. Re-verified after: "remicade" → exactly 3 cards in 3 groups.
-
-Firefox's UA sheet *does* use `!important` here, so this half-worked in one browser and
-not others — the kind of split that is very hard to diagnose later.
-
-### 2. Two compliance guards were one CSS class from being disabled
-
-`stripBlocks()` in `scripts/lib-html-text.mjs` feeds both the MUSC and testimonial checks.
-Security found two silent-pass paths, in two separate rounds:
-
-- **Round 1 — void elements.** `<img class="bio-photo">` sent the depth scan hunting a
-  `</img>` that can never exist; it fell through and returned everything *before* the tag.
-  One such tag in a page header would have made both checks print PASS on a page carrying
-  an explicit MUSC partnership claim **and** a fabricated testimonial.
-- **Round 2 — comments.** A commented-out tag inside a bio card
-  (`<!-- <div class="card__photo"> headshot pending -->`) pushed the depth counter to 2,
-  so the scan ran past the bio's real `</div>` and swallowed the rest of the wrapper —
-  again without throwing.
-
-Both closed. Unbalanced markup now **throws** rather than scanning a truncated document,
-and both repros are checked into the reasoning comments so the next person doesn't
-reintroduce them.
-
-### 3. A round-1 accessibility fix broke the empty-state CTA
-
-Design and Accessibility both caught it. Adding `.note-box a{color:navy}` for link
-contrast on the amber panels created a selector at specificity (0,1,1), which outranks
-`.btn--primary` (0,1,0) **regardless of source order**. The only call-to-action in the
-no-results state rendered navy-on-teal at **1.50:1**, and disappeared entirely on hover
-(1.00:1). Fixed with `:not(.btn)`.
-
----
-
-## Checks were attacked, not just written
-
-Security constructed inputs that violate each invariant and asked whether the check
-catches them. Several did not:
-
-| Evasion | Status |
+| Dimension | Verdict |
 |---|---|
-| `same-day`, `24-hour` (hyphens tokenised as one word) | fixed — split on hyphens |
-| `within a single business day` | fixed — added `single/whole/full` |
-| `&#8220;`-encoded curly quotes | fixed — all numeric entities decoded, `&amp;` last |
-| `— Margaret Rodriguez, Summerville SC` (no trailing initial) | fixed |
-| `"Great." (Margaret R., Summerville, SC)` — paren, not dash | fixed |
-| `<q>` instead of `<blockquote>` | fixed |
-| `our credentialed infusion nurses`, `Our RNs` | fixed — intervening words, case-insensitive |
-| `title="… within one business day"` (attribute text) | fixed — attributes now harvested |
-| A flagged drug named on a page outside the hardcoded 10 | fixed — iterates every built page |
-| `854.888.9071` (non-house phone format) | fixed — any phone shape, plus `tel:` validation |
-| A confidential image left at the repo root | fixed — images allowlisted by exact filename |
-
-**Verified by injecting six violations into a copy of the build** and confirming each one
-is caught. Two carve-outs remain, both legal, both scoped to exact strings: the 45 CFR §92
-grievance period and the two HHS OCR complaint numbers.
-
----
-
-## Measured, not reasoned about
-
-The header and the finder were checked in a real browser rather than argued from CSS.
-
-| | Before | After |
-|---|---|---|
-| Header at 320px | **wrapped to 2 rows, 127px** | single row, 69px |
-| Header at 375px | flush to viewport edge (no gutter) | 16px gutters, 71px, nothing overlaps |
-| Header at 1440px | 142px sticky (~18% of viewport) | 118px |
-| Diseases search field at 375px | 1.89 screenfuls down | **0.89** |
-| Card referral action tap target | 206×17 | 168×44 / 233×44 |
-| Filter "remicade" | 21 of 35 cards visible | exactly 3 |
-
-The **no side gutter** finding was a pre-existing bug the enlarged logo exposed:
-`.site-header__inner` set `padding: var(--space-3) 0`, which overrode `.container`'s
-horizontal padding at equal specificity.
-
-### UX round 2 — three more, all measured
-
-| | Before | After |
-|---|---|---|
-| Chrome between search field and first result (375px) | 330px — **no result visible while typing** | **158px**, result visible with the keyboard up |
-| Specialty chip row (375px) | 148px, wrapped to 3 rows | 52px, one scrolling row |
-| In-page anchors | landed **under** the sticky header | clear of it at both 71px and 118px |
-| Text search for a multi-specialty drug | announced "1", painted **3 identical cards** | 1 card, deduplicated |
-| Diseases page empty specialties | chips suppressed — Oncology silently ceased to exist | same "not listing these yet" block the drugs page uses; 7 chips / 7 anchors on both |
-
-The anchor offset mattered more than it sounds: the specialty chips are ordinary
-in-page anchors without JS, so every one of them landed its target underneath the sticky
-header — the no-JS fallback was decorative.
-
-**One criterion is still only partial.** At 375px with the soft keyboard up, the matching
-card is now visible but its "Refer a patient on X →" link sits ~30px below the fold.
-Closing that last gap means shortening the card itself (dropping the generic name or the
-specialty tags), which costs more than it buys. Recorded rather than papered over.
-
----
-
-## Declined, with reasons
-
-Four BLOCKs were not actioned. Each is on `blockers.md` for John.
-
-**1. Add `"immunology"` to IVIG's specialties.** Two reviewers asked for it; Clinical
-called the omission the reason the Immunology row renders empty. Not done: adding a
-specialty tag asserts a clinical fact about which indications CoreFlow services, the
-standing rule is to flag rather than guess, and the brief said explicitly to raise this
-with Greg rather than fix it. It is a one-word change when he confirms.
-
-Clinical's alternative — drop IVIG to `unconfirmed` — was also declined: the brief says
-*"Until he answers, render 'IVIG' as written and do not invent product names."* What
-**was** done is the copy half nobody had to guess at: `providers.njk` no longer claims
-"built for high-volume immunology prescribers" or SCIG, so the site no longer contradicts
-itself across three surfaces.
-
-**2. Delete `providers.njk`'s unbacked service lines** (infectious disease, hematology,
-hydration). These are pre-existing published business claims, and a specialty-**biologic**
-intake map is not evidence CoreFlow can't run OPAT. Deleting a live service line is a
-business decision. A scoping note-box was added and the reconciliation escalated —
-including hyperemesis gravidarum home hydration, escalated **by name** as Clinical asked.
-
-**3. Remove `noindex` from `/providers` and `/patients`.** The brief was explicit that
-this is John's call. Recommended in `blockers.md` §7 with reasoning, and an explanatory
-comment added to both files — the only in-repo record of *why* the noindex existed was
-the HTML comment deleted along with the testimonial that caused it.
-
-**4. Cut "Council Capital joint venture" and the CEO's "over 15 years".** Unverifiable
-third-party and biographical claims, already live on `main`. Removing a true statement
-about company ownership is as wrong as keeping a false one. Escalated.
-
-Marketing also asked to soften "nurses who live and work in your patient's community".
-Declined on a sourced basis: `verify-coreflow` Check 5 explicitly blesses local-community
-and "neighbors taking care of neighbors" language as approved brand copy. The separate
-claim that the network already exists everywhere *was* softened on `patients.njk`.
-
----
-
-## Still open, by owner
-
-**Greg** — the IVIG product list and SCIG scope; the confirmed condition list; the
-missing hematology row; 12 held-back drugs; the three seed conditions removed on clinical
-review.
-
-**John** — info@/help@ mailbox staffing (and a BAA for the one that will receive PHI);
-the Formstack confirmation screen and auto-reply, which almost certainly still carry the
-timeframe promise the site no longer does; the noindex decision; Council Capital and the
-CEO bio; permit `#PH-042891`; whether an after-hours clinical line exists.
-
-**Deploy** — the CSP is Report-Only with no reporting endpoint, so it currently enforces
-nothing and reports nowhere. The last blocker to flipping it is cleared: built pages now
-have zero inline `<script>` blocks.
+| Marketing Copy | PASS (after 6 must-fix + 4 advisories applied) |
+| Compliance | PASS (3 advisories applied) |
+| Design | PASS (375px not machine-verified — see above) |
+| Build / QA | PASS (1 check gap closed) |
+| **Overall** | **PASS — ready for John's review. Not pushed.** |

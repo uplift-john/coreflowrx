@@ -533,3 +533,113 @@ mistake. The shipped file is pinned by SHA-256 in `verify-coreflow` Check 12.
   have published silently — the same failure the PDF rule exists to prevent. Adding a new
   image now needs one line in `scripts/check-leak-allowlist.mjs`; the failure message
   prints the exact line to add.
+
+---
+
+# Pass: licensure announcement + em dash removal (2026-10-01, `feature/licensure-2026-10`)
+
+## 14. ⚠ SHIPPED ERROR — the fabricated permit number `PH-042891` was live in page source
+
+**Found 2026-10-01. Fixed in this branch. Not yet deployed.**
+
+`#PH-042891` was never a real permit number. It was withheld from visible copy on 2026-09-29
+("unconfirmed permit number"), but it **survived in an HTML comment** at `payers.njk:45-50`,
+which rendered to `_site/payers.html:123` and is served to anyone who views page source.
+`verify-coreflow` Check 18 passed the whole time, because it scanned `visibleText()` and
+`lib-html-text.mjs` strips comments.
+
+- **Fixed:** the comment is now a Nunjucks comment (`{#- -#}`), stripped at build. Zero hits in
+  `_site/`.
+- **Guarded:** new Check 20 fails the build on `PH-042891` in **raw** HTML, comments included.
+- **Also corrected:** `CLAUDE.md:28` and `AGENTS.md:28` both still documented
+  `legalLine (SC BoP Permit #PH-042891)` as the source of truth. These are the files an agent reads
+  first, so the stale number was a live reintroduction risk.
+- **Could not verify against production.** `coreflowrx.com` currently sits behind a **Cloudflare
+  Access login wall** — an unauthenticated fetch 302s to `coreflowrx.cloudflareaccess.com`. So the
+  live bytes could not be read to confirm how long it was exposed, or whether it still is.
+  **→ John: confirm whether that Access policy is intentional. If the marketing site is meant to be
+  public, it is currently gated to everyone, which is a much larger problem than the permit number.**
+
+## 15. Entity name — "CoreFlow Rx LLC" vs "CoreFlow Specialty Infusion"
+
+The Board licenses **CoreFlow Rx LLC**. The site brands as **CoreFlow Specialty Infusion**
+(`site.name`). Every **licensure claim** now uses the Board name; the brand name is unchanged
+everywhere else. No mass rename was performed.
+
+One row was changed on judgement: `/payers` → "Legal entity name" now renders `CoreFlow Rx LLC`
+rather than the brand name, because a credentialing team reading a field labelled *legal entity
+name* needs the registered entity.
+
+**→ John: is "CoreFlow Specialty Infusion" a registered trade name / DBA of CoreFlow Rx LLC?**
+Nothing in the repo attests to it. If it is, a `(d/b/a …)` note on the credentialing table would be
+worth adding. If it is **not**, trading publicly under an unregistered name is its own issue.
+
+## 16. En dashes — question, not a defect
+
+Four en dashes (U+2013) remain in site copy, **deliberately left in place**. All are correct
+typography for numeric ranges:
+
+| Location | Text |
+|---|---|
+| `_data/site.json:9` | `Mon–Fri, 8:30 AM – 4:30 PM ET` |
+| `terms.njk:43` | `2–6 messages per month` |
+| `terms.njk:43` | `1–5 messages per referral submitted` |
+
+The `terms.njk` pair is the **A2P/10DLC message-frequency disclosure**, a carrier-required element —
+changing it moves registered text.
+
+**→ John: you said em dashes specifically. Confirm whether you want en dashes touched too.**
+Check 21 explicitly does **not** cover them and carries a note not to extend it without asking.
+
+## 17. ⚠ The published fax cover sheet PDF contains two em dashes — NOT fixed
+
+`coreflow-fax-cover-sheet.pdf` is SHA-256-pinned (`7598d937…6012`, Check 12) and **cannot be edited
+here** — any change needs regeneration and a new hash, plus re-derived geometry anchors.
+
+Extracted text confirms **2 em dashes**, both section labels:
+- `SEND TO — COREFLOW RX FAX`
+- `FROM — REFERRING PRACTICE`
+
+It also contains 2 en dashes (`8:30am – 4:30pm ET, Mon–Fri`), consistent with item 16.
+
+**Deliberately not replaced.** Check 21 does not read PDFs and says so. **→ John: decide whether
+the document gets regenerated. If so, update `EXPECTED_SHA256` and re-derive the Check 12 anchor
+words and threshold in the same commit.**
+
+## 18. Pre-launch claim flagged rather than rewritten
+
+`non-discrimination.njk:28-33` — a Nunjucks comment stating the **Section 1557 taglines are pending
+a counsel-confirmed SC top-15 language list** and "must be inserted here before launch".
+
+This was **left alone**. It is not stale pre-launch copy that the permit issuance makes wrong — it is
+a genuinely open compliance item (45 CFR Part 92 requires taglines in the top 15 languages of the
+state). The comment is Nunjucks, so it does not ship. **→ Still open with counsel.**
+
+## 19. Greg Regan's published credentials vs the Board record
+
+Raised by the Compliance reviewer. **Pre-existing — not introduced or changed in this pass.**
+
+| Source | Reads |
+|---|---|
+| Board record | `Gregory Edward Regan, PH` (supervising pharmacist) |
+| `about.njk:32`, `providers.njk:87` | `Dr. Greg Regan, PharmD, RPh` — *Pharmacist-in-Charge* |
+
+The **title** is settled and consistent sitewide: **Pharmacist-in-Charge** is South Carolina's
+statutory term for the pharmacist of record, which is what the Board means by "supervising
+pharmacist". No "Director of Pharmacy" exists anywhere in the repo.
+
+What is **not** attested by the record excerpt is the credential string: the honorific "Dr.", and
+the `PharmD` / `RPh` suffixes. These are published professional-credential claims.
+**→ John/Greg: confirm the exact credentials as they should appear.**
+
+## 20. Not covered by any check — carried forward
+
+- **Formstack and GoHighLevel form copy.** Em dashes, timeframe promises and licensure wording
+  inside those third-party iframes are not in `_site/` and cannot be scanned. Only John can edit them.
+- **`styles.css` comments (20) and `_headers` comments (3)** still contain em dashes. Both are
+  deliberate and documented in Check 21's non-coverage list — neither is ever rendered as copy.
+  Note that an em dash in a `content:` pseudo-element **would** be visible copy and Check 21 would
+  not catch it; there are none today.
+- **Whether permit 24402 is still active.** Off-repo. Re-verify with the Board before the renewal
+  window. The expiration date is deliberately unpublished (see `CHANGES-LICENSURE.md`), so nothing
+  on the site goes stale on its own — but nothing on the site will warn you either.
